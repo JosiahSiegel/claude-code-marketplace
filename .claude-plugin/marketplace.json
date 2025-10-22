@@ -1,0 +1,47 @@
+{
+  "name": "claude-code-marketplace",
+  "description": "A curated collection of Claude Code plugins for plugin development, context optimization, and productivity tools",
+  "owner": {
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "context-solver",
+      "source": "./plugins/context-solver",
+      "description": "Optimal planning and context management for multi-file projects, website creation, and complex coding tasks. Provides file creation order optimization, context-efficient patterns, and extended thinking delegation.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "context",
+        "planning",
+        "multi-file",
+        "optimization",
+        "architecture",
+        "website",
+        "thinking",
+        "delegation"
+      ]
+    },
+    {
+      "name": "plugin-creator",
+      "source": "./plugins/plugin-creator",
+      "description": "Comprehensive guide and automated plugin creation tool for Claude Code. Creates complete plugin structures with commands, agents, skills, and GitHub-ready marketplace ZIPs.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "plugin-development",
+        "automation",
+        "skill",
+        "agent-skill",
+        "plugin-creation",
+        "marketplace",
+        "development-tools"
+      ]
+    }
+  ]
+}

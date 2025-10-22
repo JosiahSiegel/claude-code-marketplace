@@ -1,0 +1,20 @@
+{
+  "name": "plugin-creator",
+  "version": "1.0.0",
+  "description": "Comprehensive guide and automated plugin creation tool for Claude Code. Creates complete plugin structures with commands, agents, skills, and GitHub-ready marketplace ZIPs. Includes best practices, templates, and step-by-step guidance for plugin development.",
+  "author": {
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "plugin-development",
+    "automation",
+    "skill",
+    "agent-skill",
+    "plugin-creation",
+    "marketplace",
+    "development-tools",
+    "claude-code"
+  ]
+}
