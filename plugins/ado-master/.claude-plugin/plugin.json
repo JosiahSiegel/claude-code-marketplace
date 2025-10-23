@@ -1,0 +1,23 @@
+{
+  "name": "ado-master",
+  "version": "1.0.0",
+  "description": "Master Azure DevOps pipelines with expert knowledge of YAML pipelines, best practices, security, CLI operations, and industry standards",
+  "author": {
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
+  },
+  "keywords": [
+    "azure-devops",
+    "ado",
+    "pipelines",
+    "yaml",
+    "ci-cd",
+    "devops",
+    "azure-pipelines",
+    "azure-cli",
+    "best-practices",
+    "security",
+    "automation"
+  ],
+  "license": "MIT"
+}

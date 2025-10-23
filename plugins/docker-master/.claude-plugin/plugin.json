@@ -1,0 +1,21 @@
+{
+  "name": "docker-master",
+  "version": "1.0.0",
+  "description": "Master Docker across Windows, Linux, and macOS with expert knowledge of best practices, security, optimization, and industry standards",
+  "author": {
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
+  },
+  "keywords": [
+    "docker",
+    "containers",
+    "devops",
+    "docker-compose",
+    "containerization",
+    "best-practices",
+    "security",
+    "optimization",
+    "cross-platform"
+  ],
+  "license": "MIT"
+}

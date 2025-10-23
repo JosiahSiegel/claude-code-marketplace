@@ -66,6 +66,48 @@
         "automation",
         "devops"
       ]
+    },
+    {
+      "name": "docker-master",
+      "source": "./plugins/docker-master",
+      "description": "Master Docker across Windows, Linux, and macOS with expert knowledge of best practices, security, optimization, and industry standards",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "docker",
+        "containers",
+        "devops",
+        "docker-compose",
+        "containerization",
+        "best-practices",
+        "security",
+        "optimization",
+        "cross-platform"
+      ]
+    },
+    {
+      "name": "ado-master",
+      "source": "./plugins/ado-master",
+      "description": "Master Azure DevOps pipelines with expert knowledge of YAML pipelines, best practices, security, CLI operations, and industry standards",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "azure-devops",
+        "ado",
+        "pipelines",
+        "yaml",
+        "ci-cd",
+        "devops",
+        "azure-pipelines",
+        "azure-cli",
+        "best-practices",
+        "security",
+        "automation"
+      ]
     }
   ]
 }
