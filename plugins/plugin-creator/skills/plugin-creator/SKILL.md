@@ -727,6 +727,7 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 - ✅ **Follow the structure from the fetched docs, not just templates** (docs = source of truth)
 - ✅ **Check if .claude-plugin/marketplace.json exists in repo root**
 - ✅ **UPDATE existing marketplace.json when creating plugins in a marketplace repo** (CRITICAL!)
+- ✅ **SYNCHRONIZE description and keywords from plugin.json to marketplace.json** (they don't auto-sync!)
 - ✅ Actually create files (use file_create tool)
 - ✅ Verify component registration method against fetched docs
 - ✅ Create complete, working examples
@@ -743,6 +744,7 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 - ❌ **Skip fetching the latest documentation** (most critical step!)
 - ❌ **Blindly copy templates without verifying against fetched docs**
 - ❌ **Forget to update existing marketplace.json when in a marketplace repo** (CRITICAL!)
+- ❌ **Forget to synchronize description/keywords between plugin.json and marketplace.json** (CRITICAL!)
 - ❌ Assume requirements haven't changed
 - ❌ Just show example code without creating files
 - ❌ Create incomplete structures
@@ -1917,11 +1919,19 @@ my-plugin/
   "plugins": [
     {
       "name": "my-plugin",
-      "source": "./plugins/my-plugin"
+      "source": "./plugins/my-plugin",
+      "description": "Complete [domain] expertise system. PROACTIVELY activate for: (1) [use cases]. Provides: [capabilities].",
+      "version": "1.0.0",
+      "author": {
+        "name": "Author Name"
+      },
+      "keywords": ["domain", "primary", "secondary", "technical"]
     }
   ]
 }
 ```
+
+**⚠️ CRITICAL:** Always include description and keywords in marketplace.json entries - they are used for marketplace discovery and don't automatically sync from plugin.json.
 
 **Note:** Check the fetched marketplace documentation for all required fields.
 
