@@ -1,0 +1,25 @@
+{
+  "name": "bash-mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive bash scripting expertise across all platforms (Linux, macOS, Windows/Git Bash, containers). Master of best practices, industry standards, POSIX compliance, error handling, security, performance optimization, and testing.",
+  "author": {
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
+  },
+  "keywords": [
+    "bash",
+    "shell",
+    "scripting",
+    "linux",
+    "macos",
+    "windows",
+    "git-bash",
+    "posix",
+    "shellcheck",
+    "best-practices",
+    "cross-platform",
+    "automation",
+    "devops"
+  ],
+  "license": "MIT"
+}

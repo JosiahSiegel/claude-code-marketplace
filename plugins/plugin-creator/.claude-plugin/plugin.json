@@ -9,12 +9,23 @@
   "license": "MIT",
   "keywords": [
     "plugin-development",
+    "plugin-creation",
+    "create-plugin",
+    "add-skill",
+    "create-skill",
+    "add-command",
+    "create-command",
+    "add-agent",
+    "create-agent",
     "automation",
     "skill",
     "agent-skill",
-    "plugin-creation",
     "marketplace",
     "development-tools",
-    "claude-code"
+    "claude-code",
+    "build",
+    "make",
+    "new",
+    "package"
   ]
 }

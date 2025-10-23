@@ -1,6 +1,6 @@
 ---
 name: plugin-creator
-description: Comprehensive guide for creating Claude Code plugins that not only teaches but actually CREATES ready-to-use plugin ZIP files. Use when users want to create, update, or publish plugins - this skill will generate the complete directory structure, all necessary files, and GitHub-ready marketplace ZIPs with download links. ALWAYS fetches latest plugin documentation first to ensure all required fields (like owner in marketplace.json) are included.
+description: "PROACTIVELY activate when users want to: create/add/build plugins, skills, commands, agents, or any Claude Code components. Automatically creates complete plugin structures with all files and GitHub-ready ZIPs. Triggers: 'create plugin', 'add skill', 'create command', 'add agent', 'build component', 'make skill', 'new plugin', 'package skill'. ALWAYS fetches latest documentation first to ensure correct structure."
 license: MIT
 ---
 
@@ -169,8 +169,45 @@ Based on what you learned from the fetched documentation, use file_create to gen
 
 **Key principle:** Use the structure you learned from the fetched documentation, not assumptions from templates.
 
-**Step 4: Create GitHub-Ready Marketplace Structure**
-Also create a marketplace-ready version:
+**Step 4: Create GitHub-Ready Marketplace Structure AND Update Existing Marketplace**
+
+**CRITICAL: Always update the existing marketplace.json if working in a marketplace repository!**
+
+First, check if you're in a marketplace repo:
+```bash
+# Check if marketplace.json exists in the repo root
+if [[ -f .claude-plugin/marketplace.json ]]; then
+    echo "In marketplace repo - will update marketplace.json"
+fi
+```
+
+If in a marketplace repository:
+1. **Update the existing `.claude-plugin/marketplace.json`** to add the new plugin entry
+2. Use the Read tool to get current marketplace.json structure
+3. Add new plugin entry to the plugins array following the format from the fetched marketplace docs
+4. Preserve all existing plugins in the array
+5. Use Edit tool to update marketplace.json with the new entry
+
+Example of updating marketplace.json:
+```json
+{
+  "plugins": [
+    // ... existing plugins ...
+    {
+      "name": "new-plugin-name",
+      "source": "./plugins/new-plugin-name",
+      "description": "Plugin description from plugin.json",
+      "version": "1.0.0",
+      "author": {
+        "name": "Author Name"
+      },
+      "keywords": ["keyword1", "keyword2"]
+    }
+  ]
+}
+```
+
+Also create a standalone marketplace-ready version:
 
 ```bash
 cd /home/claude
@@ -179,7 +216,7 @@ mkdir -p PLUGIN_NAME-marketplace/plugins
 cp -r PLUGIN_NAME PLUGIN_NAME-marketplace/plugins/
 ```
 
-Copy plugin into marketplace structure and create marketplace.json.
+Copy plugin into marketplace structure and create standalone marketplace.json.
 
 **Step 5: Create ZIP Files**
 Package everything as downloadable ZIPs:
@@ -555,6 +592,8 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 **DO:**
 - ✅ **ALWAYS fetch latest plugin docs first** (plugins-reference and plugin-marketplaces)
 - ✅ **Follow the structure from the fetched docs, not just templates** (docs = source of truth)
+- ✅ **Check if .claude-plugin/marketplace.json exists in repo root**
+- ✅ **UPDATE existing marketplace.json when creating plugins in a marketplace repo** (CRITICAL!)
 - ✅ Actually create files (use file_create tool)
 - ✅ Verify component registration method against fetched docs
 - ✅ Create complete, working examples
@@ -570,11 +609,12 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 **DON'T:**
 - ❌ **Skip fetching the latest documentation** (most critical step!)
 - ❌ **Blindly copy templates without verifying against fetched docs**
+- ❌ **Forget to update existing marketplace.json when in a marketplace repo** (CRITICAL!)
 - ❌ Assume requirements haven't changed
 - ❌ Just show example code without creating files
 - ❌ Create incomplete structures
 - ❌ Skip creating ZIP files
-- ❌ Forget the marketplace.json
+- ❌ Forget the marketplace.json in standalone marketplace
 - ❌ Use placeholder content without customizing
 - ❌ Provide only directory links (users can't download directories!)
 - ❌ Forget to mention Windows path limitations

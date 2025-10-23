@@ -42,6 +42,30 @@
         "marketplace",
         "development-tools"
       ]
+    },
+    {
+      "name": "bash-mastery",
+      "source": "./plugins/bash-mastery",
+      "description": "Comprehensive bash scripting expertise across all platforms (Linux, macOS, Windows/Git Bash, containers). Master of best practices, industry standards, POSIX compliance, error handling, security, performance optimization, and testing.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "bash",
+        "shell",
+        "scripting",
+        "linux",
+        "macos",
+        "windows",
+        "git-bash",
+        "posix",
+        "shellcheck",
+        "best-practices",
+        "cross-platform",
+        "automation",
+        "devops"
+      ]
     }
   ]
 }
