@@ -7,10 +7,10 @@
   },
   "plugins": [
     {
-      "name": "context-solver",
-      "source": "./plugins/context-solver",
+      "name": "context-master",
+      "source": "./plugins/context-master",
       "description": "Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -28,10 +28,10 @@
       ]
     },
     {
-      "name": "plugin-creator",
-      "source": "./plugins/plugin-creator",
-      "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace).",
-      "version": "1.0.1",
+      "name": "plugin-master",
+      "source": "./plugins/plugin-master",
+      "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance, (7) Export skills for claude.ai web app. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, and comprehensive README. ALWAYS fetches latest official documentation to ensure correct structure.",
+      "version": "1.0.2",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -49,10 +49,10 @@
       ]
     },
     {
-      "name": "bash-mastery",
-      "source": "./plugins/bash-mastery",
+      "name": "bash-master",
+      "source": "./plugins/bash-master",
       "description": "Expert bash/shell scripting system across ALL platforms. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) System automation, (3) DevOps/CI/CD scripts, (4) Build/deployment automation, (5) Script review/debugging, (6) Converting commands to scripts. Provides: Google Shell Style Guide compliance, ShellCheck validation, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, security hardening, error handling, performance optimization, testing with BATS, and production-ready patterns.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -70,10 +70,31 @@
       ]
     },
     {
+      "name": "git-master",
+      "source": "./plugins/git-master",
+      "description": "Complete Git expertise system for ALL git operations. PROACTIVELY activate for: (1) ANY Git task (basic/advanced/dangerous), (2) Repository management, (3) Branch strategies and workflows, (4) Conflict resolution, (5) History rewriting/recovery, (6) Platform-specific operations (GitHub/Azure DevOps/Bitbucket), (7) Advanced commands (rebase/cherry-pick/filter-repo). Provides: complete Git command reference, safety guardrails for destructive operations, platform best practices, workflow strategies, reflog recovery techniques, and expert guidance for even the most risky operations. Always asks user preference for automatic commits vs manual control.",
+      "version": "1.0.2",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "git",
+        "vcs",
+        "version",
+        "control",
+        "github",
+        "azdo",
+        "bitbucket",
+        "workflow",
+        "rebase",
+        "recovery"
+      ]
+    },
+    {
       "name": "docker-master",
       "source": "./plugins/docker-master",
       "description": "Complete Docker expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize), (2) Dockerfile creation/review, (3) Docker Compose multi-container apps, (4) Container security scanning/hardening, (5) Performance optimization, (6) Production deployments, (7) Troubleshooting/debugging. Provides: current best practices (always researches latest), CIS Docker Benchmark compliance, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -94,7 +115,7 @@
       "name": "ado-master",
       "source": "./plugins/ado-master",
       "description": "Complete Azure DevOps and Azure Pipelines expertise system. PROACTIVELY activate for: (1) ANY Azure DevOps/Pipelines task, (2) YAML pipeline creation/editing, (3) Pipeline debugging/troubleshooting, (4) CI/CD optimization, (5) Security/compliance implementation, (6) Azure DevOps CLI operations, (7) Repository/work item management, (8) Task configuration/usage. Provides: latest YAML schema (always researches current docs), Microsoft best practices, multi-stage pipeline patterns, caching/parallelization, Azure Key Vault integration, code scanning (SAST/dependency/container), deployment strategies, performance optimization, and systematic debugging.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -108,6 +129,48 @@
         "cicd",
         "microsoft",
         "azure",
+        "devops"
+      ]
+    },
+    {
+      "name": "test-master",
+      "source": "./plugins/test-master",
+      "description": "Complete Vitest + Playwright + MSW testing system. PROACTIVELY activate for: (1) ANY testing task (unit/integration/E2E), (2) Test creation and scaffolding, (3) Test debugging and failure analysis, (4) Coverage analysis and optimization, (5) MSW mock management, (6) Test configuration (Vitest/Playwright), (7) CI/CD test setup, (8) Multi-project test architecture. Provides: intelligent test running, auto-scaffolding with boilerplate, MSW handler generation, coverage gap analysis, Playwright trace debugging, snapshot management, parallel execution optimization, and comprehensive test infrastructure setup. Ensures production-ready testing with Vitest 3.x, Playwright 1.56+, MSW 2.x, happy-dom across all modern JavaScript projects.",
+      "version": "1.0.2",
+      "author": {
+        "name": "Claude Code Marketplace"
+      },
+      "keywords": [
+        "testing",
+        "vitest",
+        "playwright",
+        "e2e",
+        "msw",
+        "mock",
+        "coverage",
+        "debug",
+        "integration",
+        "unit"
+      ]
+    },
+    {
+      "name": "powershell-master",
+      "source": "./plugins/powershell-master",
+      "description": "Complete PowerShell expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY PowerShell task (scripts/modules/cmdlets), (2) CI/CD automation (GitHub Actions/Azure DevOps/Bitbucket), (3) Cross-platform scripting, (4) Module discovery and management (PSGallery), (5) Azure/AWS/Microsoft 365 automation, (6) Script debugging and optimization, (7) Best practices and security. Provides: PowerShell 7+ features, popular module expertise (Az, Microsoft.Graph, PnP, AWS Tools), PSGallery integration, platform-specific guidance, CI/CD pipeline patterns, cmdlet syntax mastery, and production-ready scripting patterns.",
+      "version": "1.0.2",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "powershell",
+        "pwsh",
+        "script",
+        "automation",
+        "cicd",
+        "azure",
+        "modules",
+        "psgallery",
+        "crossplatform",
         "devops"
       ]
     }

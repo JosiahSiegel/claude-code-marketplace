@@ -4,7 +4,7 @@
 
 ## 📦 Available Plugins
 
-### [plugin-creator](./plugins/plugin-creator)
+### [plugin-master](./plugins/plugin-master)
 Comprehensive plugin development toolkit that enables Claude to autonomously create, package, and publish Claude Code plugins.
 
 **What it does:**
@@ -12,9 +12,9 @@ Comprehensive plugin development toolkit that enables Claude to autonomously cre
 - Creates marketplace-ready ZIP packages
 - Provides 5 slash commands, 1 specialized agent, and comprehensive documentation
 
-**Install:** `/plugin install plugin-creator@JosiahSiegel`
+**Install:** `/plugin install plugin-master@claude-code-marketplace`
 
-### [context-solver](./plugins/context-solver)
+### [context-master](./plugins/context-master)
 Optimal planning and context management for multi-file projects, reducing token usage by ~62% on average.
 
 **What it does:**
@@ -22,7 +22,7 @@ Optimal planning and context management for multi-file projects, reducing token 
 - Prevents redundant work through dependency-aware architecture
 - Provides extended thinking delegation patterns
 
-**Install:** `/plugin install context-solver@JosiahSiegel`
+**Install:** `/plugin install context-master@claude-code-marketplace`
 
 ## 🚀 Quick Start
 
@@ -33,19 +33,19 @@ Optimal planning and context management for multi-file projects, reducing token 
 
 **2. Install plugins:**
 ```bash
-/plugin install plugin-creator@JosiahSiegel
-/plugin install context-solver@JosiahSiegel
+/plugin install plugin-master@claude-code-marketplace
+/plugin install context-master@claude-code-marketplace
 ```
 
 **3. Start using:**
-- Plugin Creator: `"Create a Git workflow plugin"`
-- Context Solver: `/plan-project` before multi-file tasks
+- Plugin Master: `"Create a Git workflow plugin"`
+- Context Master: `/plan-project` before multi-file tasks
 
 ## 📖 Documentation
 
 Each plugin includes detailed documentation:
-- **plugin-creator**: See [`plugins/plugin-creator/README.md`](./plugins/plugin-creator/README.md)
-- **context-solver**: See [`plugins/context-solver/README.md`](./plugins/context-solver/README.md)
+- **plugin-master**: See [`plugins/plugin-master/README.md`](./plugins/plugin-master/README.md)
+- **context-master**: See [`plugins/context-master/README.md`](./plugins/context-master/README.md)
 
 ## 🤝 Contributing
 
