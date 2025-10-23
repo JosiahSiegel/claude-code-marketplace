@@ -9,104 +9,106 @@
     {
       "name": "context-solver",
       "source": "./plugins/context-solver",
-      "description": "Optimal planning and context management for multi-file projects, website creation, and complex coding tasks. Provides file creation order optimization, context-efficient patterns, and extended thinking delegation.",
-      "version": "1.0.0",
+      "description": "Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average.",
+      "version": "1.0.1",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
-        "context",
         "planning",
-        "multi-file",
-        "optimization",
-        "architecture",
-        "website",
+        "context",
+        "strategy",
+        "workflow",
         "thinking",
-        "delegation"
+        "decision",
+        "research",
+        "refactoring",
+        "optimization",
+        "session"
       ]
     },
     {
       "name": "plugin-creator",
       "source": "./plugins/plugin-creator",
-      "description": "Comprehensive guide and automated plugin creation tool for Claude Code. Creates complete plugin structures with commands, agents, skills, and GitHub-ready marketplace ZIPs.",
-      "version": "1.0.0",
+      "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace).",
+      "version": "1.0.1",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
-        "plugin-development",
-        "automation",
+        "plugin",
         "skill",
-        "agent-skill",
-        "plugin-creation",
+        "command",
+        "agent",
+        "create",
+        "build",
+        "package",
         "marketplace",
-        "development-tools"
+        "publish",
+        "validate"
       ]
     },
     {
       "name": "bash-mastery",
       "source": "./plugins/bash-mastery",
-      "description": "Comprehensive bash scripting expertise across all platforms (Linux, macOS, Windows/Git Bash, containers). Master of best practices, industry standards, POSIX compliance, error handling, security, performance optimization, and testing.",
-      "version": "1.0.0",
+      "description": "Expert bash/shell scripting system across ALL platforms. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) System automation, (3) DevOps/CI/CD scripts, (4) Build/deployment automation, (5) Script review/debugging, (6) Converting commands to scripts. Provides: Google Shell Style Guide compliance, ShellCheck validation, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, security hardening, error handling, performance optimization, testing with BATS, and production-ready patterns.",
+      "version": "1.0.1",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
         "bash",
         "shell",
-        "scripting",
-        "linux",
-        "macos",
-        "windows",
-        "git-bash",
-        "posix",
-        "shellcheck",
-        "best-practices",
-        "cross-platform",
+        "script",
         "automation",
-        "devops"
+        "devops",
+        "shellcheck",
+        "posix",
+        "crossplatform",
+        "cicd",
+        "deployment"
       ]
     },
     {
       "name": "docker-master",
       "source": "./plugins/docker-master",
-      "description": "Master Docker across Windows, Linux, and macOS with expert knowledge of best practices, security, optimization, and industry standards",
-      "version": "1.0.0",
+      "description": "Complete Docker expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize), (2) Dockerfile creation/review, (3) Docker Compose multi-container apps, (4) Container security scanning/hardening, (5) Performance optimization, (6) Production deployments, (7) Troubleshooting/debugging. Provides: current best practices (always researches latest), CIS Docker Benchmark compliance, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging.",
+      "version": "1.0.1",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
         "docker",
-        "containers",
-        "devops",
-        "docker-compose",
-        "containerization",
-        "best-practices",
+        "container",
+        "dockerfile",
+        "compose",
+        "containerize",
+        "production",
         "security",
-        "optimization",
-        "cross-platform"
+        "optimize",
+        "debug",
+        "deploy"
       ]
     },
     {
       "name": "ado-master",
       "source": "./plugins/ado-master",
-      "description": "Master Azure DevOps pipelines with expert knowledge of YAML pipelines, best practices, security, CLI operations, and industry standards",
-      "version": "1.0.0",
+      "description": "Complete Azure DevOps and Azure Pipelines expertise system. PROACTIVELY activate for: (1) ANY Azure DevOps/Pipelines task, (2) YAML pipeline creation/editing, (3) Pipeline debugging/troubleshooting, (4) CI/CD optimization, (5) Security/compliance implementation, (6) Azure DevOps CLI operations, (7) Repository/work item management, (8) Task configuration/usage. Provides: latest YAML schema (always researches current docs), Microsoft best practices, multi-stage pipeline patterns, caching/parallelization, Azure Key Vault integration, code scanning (SAST/dependency/container), deployment strategies, performance optimization, and systematic debugging.",
+      "version": "1.0.1",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
-        "azure-devops",
         "ado",
-        "pipelines",
+        "azdo",
+        "azurepipelines",
+        "azuredevops",
         "yaml",
-        "ci-cd",
-        "devops",
-        "azure-pipelines",
-        "azure-cli",
-        "best-practices",
-        "security",
-        "automation"
+        "pipeline",
+        "cicd",
+        "microsoft",
+        "azure",
+        "devops"
       ]
     }
   ]

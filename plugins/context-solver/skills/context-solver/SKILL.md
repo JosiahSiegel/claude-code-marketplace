@@ -1,11 +1,11 @@
 ---
 name: context-solver
-description: "MUST activate for: (1) Creating 3+ related files, (2) Building websites/applications, (3) Multi-file code projects, (4) Tasks requiring 5+ sequential steps, (5) Architecture/design planning before coding. Provides optimal file creation order, code organization strategies, context-efficient patterns, extended thinking delegation, and prevents redundant work. Essential for full-stack projects, documentation sets, API implementations, website creation, and any coding task spanning multiple files or components."
+description: "Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average. Essential for maintaining session performance and analytical depth."
 ---
 
 # Context Solver
 
-Optimal planning and context management for multi-file projects, website creation, and complex coding tasks.
+Universal context management and planning system for complex tasks, long coding sessions, and efficient workflow optimization.
 
 ---
 
@@ -42,28 +42,33 @@ Result: Done efficiently, no refactoring needed!
 
 ## Overview
 
-This skill provides planning strategies, file organization patterns, and context-efficient workflows for tasks that span multiple files or steps.
+This skill provides comprehensive context management, planning strategies, and workflow optimization for ANY complex coding task, not just multi-file projects.
 
 **MUST use this skill for:**
-- ✅ Creating 3+ related files (HTML, CSS, JS, docs, etc.)
-- ✅ Building complete websites or web applications
-- ✅ Multi-file code projects (APIs, full-stack apps, libraries)
-- ✅ Tasks requiring 5+ sequential tool calls
-- ✅ Architecture or design planning before implementation
+- ✅ ANY complex task requiring planning or strategy
+- ✅ Multi-file projects (HTML, CSS, JS, APIs, apps, docs)
+- ✅ Architecture or design decisions
+- ✅ Research tasks requiring analysis
+- ✅ Refactoring work
+- ✅ Long coding sessions (context optimization)
+- ✅ Tasks with 3+ sequential steps
 
 **What this skill provides:**
-- **Optimal file creation order** - Which files to create first, what depends on what
-- **Code organization strategies** - How to structure multi-file projects
-- **Context-efficient patterns** - Avoid redundant work and context bloat
-- **Planning frameworks** - Think through architecture before coding
-- **Extended thinking delegation** - Deep analysis without context cost (CLI tools)
+- **Optimal file creation order** - Which files to create first, dependency management
+- **Context-efficient workflows** - 62% average context savings
+- **Extended thinking delegation** - 23x context efficiency for deep analysis
+- **Passive deep thinking architecture** - Get analytical depth without context cost
+- **Progressive task decomposition** - Break complex tasks into manageable phases
+- **Planning frameworks** - Think before coding, prevent redundant work
+- **Session optimization** - Maintain performance in long interactions
 
 **This skill activates automatically for:**
-- Website creation requests ("build a website with...")
-- Multi-page applications ("create an app with...")
-- Documentation sets ("generate docs for...")
-- API implementations ("build an API with...")
-- Any request involving multiple related files
+- Complex tasks requiring planning ("build...", "create...", "implement...")
+- Architecture decisions ("should we use...", "which approach...")
+- Research requests ("research...", "analyze...", "compare...")
+- Refactoring work ("refactor...", "improve...", "optimize...")
+- Multi-step workflows (any task with 3+ steps)
+- Long coding sessions (automatic context monitoring)
 
 ---
 

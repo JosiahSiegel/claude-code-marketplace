@@ -226,7 +226,7 @@ This plugin includes comprehensive documentation:
 ## 🔍 Technical Details
 
 **Plugin Name:** plugin-creator
-**Version:** 1.0.0
+**Version:** 1.0.1
 **Author:** Josiah Siegel
 **License:** MIT
 **Repository:** https://github.com/JosiahSiegel/claude-code-marketplace

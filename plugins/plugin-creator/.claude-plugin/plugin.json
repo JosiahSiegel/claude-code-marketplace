@@ -1,31 +1,22 @@
 {
   "name": "plugin-creator",
-  "version": "1.0.0",
-  "description": "Comprehensive guide and automated plugin creation tool for Claude Code. Creates complete plugin structures with commands, agents, skills, and GitHub-ready marketplace ZIPs. Includes best practices, templates, and step-by-step guidance for plugin development.",
+  "version": "1.0.1",
+  "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace). ALWAYS fetches latest official documentation to ensure correct structure. Includes plugin-architect agent for design review and optimization.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
   },
   "license": "MIT",
   "keywords": [
-    "plugin-development",
-    "plugin-creation",
-    "create-plugin",
-    "add-skill",
-    "create-skill",
-    "add-command",
-    "create-command",
-    "add-agent",
-    "create-agent",
-    "automation",
+    "plugin",
     "skill",
-    "agent-skill",
-    "marketplace",
-    "development-tools",
-    "claude-code",
+    "command",
+    "agent",
+    "create",
     "build",
-    "make",
-    "new",
-    "package"
+    "package",
+    "marketplace",
+    "publish",
+    "validate"
   ]
 }

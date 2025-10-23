@@ -1,20 +1,22 @@
 {
   "name": "context-solver",
-  "version": "1.0.0",
-  "description": "Optimal planning and context management for multi-file projects, website creation, and complex coding tasks. Provides file creation order optimization, context-efficient patterns, extended thinking delegation, and prevents redundant work.",
+  "version": "1.0.1",
+  "description": "Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average. Essential for maintaining session performance and analytical depth.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
   },
   "keywords": [
-    "context",
     "planning",
-    "multi-file",
-    "optimization",
-    "architecture",
-    "website",
+    "context",
+    "strategy",
+    "workflow",
     "thinking",
-    "delegation"
+    "decision",
+    "research",
+    "refactoring",
+    "optimization",
+    "session"
   ],
   "license": "MIT"
 }

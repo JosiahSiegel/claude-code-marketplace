@@ -1,6 +1,6 @@
 ---
 name: bash-mastery
-description: "Comprehensive bash scripting expertise across all platforms (Linux, macOS, Windows/Git Bash, containers). Master of best practices, industry standards, POSIX compliance, error handling, security, performance optimization, and testing. Activate for any bash scripting task requiring professional-grade code quality."
+description: "Expert bash/shell scripting system across ALL platforms. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) System automation, (3) DevOps/CI/CD scripts, (4) Build/deployment automation, (5) Script review/debugging, (6) Converting commands to scripts. Provides: Google Shell Style Guide compliance, ShellCheck validation, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, security hardening, error handling, performance optimization, testing with BATS, and production-ready patterns. Ensures professional-grade, secure, portable scripts every time."
 ---
 
 # Bash Scripting Mastery
@@ -33,23 +33,35 @@ IFS=$'\n\t'        # Safe word splitting
 
 ## Overview
 
-This skill provides comprehensive bash scripting knowledge including:
+This skill provides expert bash/shell scripting knowledge for ANY scripting task, ensuring professional-grade quality across all platforms.
 
+**MUST use this skill for:**
+- ✅ ANY bash/shell script creation or modification
+- ✅ System automation and tooling
+- ✅ DevOps/CI/CD pipeline scripts
+- ✅ Build and deployment automation
+- ✅ Script review, debugging, or optimization
+- ✅ Converting manual commands to automated scripts
+- ✅ Cross-platform script compatibility
+
+**What this skill provides:**
+- **Google Shell Style Guide compliance** - Industry-standard formatting and patterns
+- **ShellCheck validation** - Automatic detection of common issues
 - **Cross-platform compatibility** - Linux, macOS, Windows (Git Bash/WSL), containers
-- **Best practices** - Industry-standard patterns, ShellCheck compliance, Google Shell Style Guide
-- **Error handling** - Robust error management, exit codes, trap handlers
-- **Security** - Input validation, command injection prevention, privilege management
-- **Performance** - Optimization techniques, profiling, benchmarking
-- **Testing** - Unit testing with BATS, integration testing, CI/CD integration
-- **Debugging** - Debugging techniques, logging, troubleshooting
-- **POSIX compliance** - Portable scripts, bashism detection, compatibility layers
+- **POSIX compliance** - Portable scripts that work everywhere
+- **Security hardening** - Input validation, injection prevention, privilege management
+- **Error handling** - Robust `set -euo pipefail`, trap handlers, exit codes
+- **Performance optimization** - Efficient patterns, avoiding anti-patterns
+- **Testing with BATS** - Unit testing, integration testing, CI/CD integration
+- **Debugging techniques** - Logging, troubleshooting, profiling
+- **Production-ready patterns** - Templates and best practices for real-world use
 
-**Activation triggers:**
-- Bash script creation or modification
-- Shell automation tasks
-- DevOps/CI/CD scripting
-- System administration scripts
-- Build and deployment automation
+**This skill activates automatically for:**
+- Any mention of "bash", "shell", "script" in task
+- System automation requests
+- DevOps/CI/CD tasks
+- Build/deployment automation
+- Command line tool creation
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: plugin-creator
-description: "PROACTIVELY activate when users want to: create/add/build plugins, skills, commands, agents, or any Claude Code components. Automatically creates complete plugin structures with all files and GitHub-ready ZIPs. Triggers: 'create plugin', 'add skill', 'create command', 'add agent', 'build component', 'make skill', 'new plugin', 'package skill'. ALWAYS fetches latest documentation first to ensure correct structure."
+description: "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace). ALWAYS fetches latest official documentation to ensure correct structure. Includes plugin-architect agent for design review and optimization."
 license: MIT
 ---
 
@@ -81,20 +81,33 @@ This ensures:
 4. **Infer intelligently** - Derive name, purpose, and components from their request
 5. **Only ask when truly unclear** - If "create a plugin" has no context, then ask. Otherwise, build.
 6. **Always create ZIPs** - Package everything as downloadable ZIP files for easy distribution
+7. **Write comprehensive descriptions** - Use "PROACTIVELY activate for:" with numbered use cases, highlight ALL capabilities
+8. **Choose smart keywords** - Simple domain words (6-10), avoid overly generic terms, no unnecessary hyphens
+9. **Position as expert systems** - Frame as "Complete [domain] expertise system" not narrow helpers
+10. **Synchronize marketplace.json** - If in a marketplace repo, always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
 
 ### Examples of Autonomous Inference
 
 **User says:** "Create a plugin for Git workflows"
-**Claude does:** Immediately creates git-workflow-helper with PR, commit, and branch commands + agent, packages as ZIP
+**Claude does:** Immediately creates git-workflow-helper with:
+- **Description:** "Complete Git workflow automation system. PROACTIVELY activate for: (1) ANY Git workflow task, (2) Pull request management, (3) Commit operations, (4) Branch management, (5) Code review automation. Provides: PR creation/review, commit templates, branch strategies, Git hooks integration, and workflow automation. Ensures professional Git practices."
+- **Keywords:** `["git", "workflow", "pullrequest", "commit", "branch", "review", "automation"]`
+- PR, commit, and branch commands + workflow agent
+- Packages as ZIP
 
-**User says:** "Make a deployment plugin"  
-**Claude does:** Creates deployment-helper with deploy, rollback, status commands + deployment agent, packages as ZIP
+**User says:** "Make a deployment plugin"
+**Claude does:** Creates deployment-helper with:
+- **Description:** "Complete deployment automation system across ALL platforms. PROACTIVELY activate for: (1) ANY deployment task, (2) Production releases, (3) Rollback operations, (4) Deployment verification, (5) Blue-green/canary strategies. Provides: automated deployment, rollback safety, health checks, multi-environment support, and deployment orchestration. Ensures safe, reliable deployments."
+- **Keywords:** `["deployment", "deploy", "release", "rollback", "production", "staging", "automation"]`
+- deploy, rollback, status commands + deployment agent
+- Packages as ZIP
 
 **User says:** "Build a code review plugin"
-**Claude does:** Creates code-review-helper with review commands + security/quality agents, packages as ZIP
-
-**User says:** "Create a plugin of the plugin-creator skill"
-**Claude does:** Creates plugin-creator plugin packaging the skill as an Agent Skill, packages as ZIP
+**Claude does:** Creates code-review-helper with:
+- **Description:** "Complete code review system with security and quality analysis. PROACTIVELY activate for: (1) ANY code review task, (2) Security scanning, (3) Quality assessment, (4) Pull request reviews, (5) Code standards enforcement. Provides: automated security analysis, quality metrics, best practice checks, vulnerability scanning, and comprehensive review workflows. Ensures thorough, consistent code reviews."
+- **Keywords:** `["review", "codereview", "security", "quality", "analysis", "scanning", "pullrequest"]`
+- review commands + security/quality agents
+- Packages as ZIP
 
 **When to ask:** "Create a plugin" (no context) → Ask what it should do
 
@@ -188,7 +201,21 @@ If in a marketplace repository:
 4. Preserve all existing plugins in the array
 5. Use Edit tool to update marketplace.json with the new entry
 
-Example of updating marketplace.json:
+**⚠️ CRITICAL: Synchronize Keywords and Descriptions**
+
+marketplace.json and plugin.json have **SEPARATE keywords and descriptions** - they don't automatically inherit from each other:
+
+- **marketplace.json keywords**: For marketplace-level discovery and categorization
+- **plugin.json keywords**: For individual plugin metadata
+
+**Best practice:** Explicitly copy the comprehensive description and keywords from plugin.json into the marketplace.json entry.
+
+**Why this matters:**
+- marketplace.json keywords are used for catalog-level discovery
+- Keywords don't automatically sync between files
+- Users search the marketplace using these keywords
+
+Example of updating marketplace.json with synchronized metadata:
 ```json
 {
   "plugins": [
@@ -196,16 +223,31 @@ Example of updating marketplace.json:
     {
       "name": "new-plugin-name",
       "source": "./plugins/new-plugin-name",
-      "description": "Plugin description from plugin.json",
+      "description": "Complete [domain] expertise system. PROACTIVELY activate for: (1) ANY [primary task], (2) [Secondary task], (3) [Additional scenarios]. Provides: [key features, capabilities]. Ensures [value proposition].",
       "version": "1.0.0",
       "author": {
         "name": "Author Name"
       },
-      "keywords": ["keyword1", "keyword2"]
+      "keywords": [
+        "domain",
+        "primary",
+        "secondary",
+        "technical",
+        "terms",
+        "naturally",
+        "use"
+      ]
     }
   ]
 }
 ```
+
+**Synchronization Checklist:**
+- ✅ Copy comprehensive description from plugin.json (including "PROACTIVELY activate" format)
+- ✅ Copy all keywords from plugin.json exactly
+- ✅ Match version number
+- ✅ Include author information
+- ✅ Preserve existing plugins in the array
 
 Also create a standalone marketplace-ready version:
 
@@ -347,17 +389,103 @@ After creating ZIPs, provide this format:
 - A substitute for reading the official documentation
 - Assumed to be current (always verify)
 
+#### How to Write Effective plugin.json Descriptions and Keywords
+
+**CRITICAL:** The quality of your description and keywords determines when Claude will activate your plugin. Follow these principles:
+
+##### Description Best Practices
+
+**Structure:** Use this formula for maximum activation:
+```
+[Type of system]. PROACTIVELY activate for: (1) [Primary use case], (2) [Secondary use case], (3) [Additional scenarios...]. Provides: [key features/capabilities]. [Value proposition/benefits].
+```
+
+**Guidelines:**
+1. **Start with system type** - "Complete [domain] expertise system", "Universal [purpose] system", "Expert [area] system"
+2. **Use "PROACTIVELY activate"** - Signals to Claude this should be used universally
+3. **Numbered list of use cases** - Include 5-8 specific activation scenarios
+4. **Use "ANY" for broad activation** - "ANY Docker task", "ANY bash script", etc.
+5. **Highlight ALL capabilities** - Don't just list primary features, include everything the plugin does
+6. **Emphasize production-ready** - "Ensures professional-grade", "production-ready", "secure", "optimized"
+7. **Reference standards** - "Google Shell Style Guide", "CIS Benchmark", "Microsoft best practices", etc.
+
+**Examples of Good Descriptions:**
+```
+"Complete Docker expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize), (2) Dockerfile creation/review, (3) Docker Compose multi-container apps, (4) Container security scanning/hardening, (5) Performance optimization, (6) Production deployments, (7) Troubleshooting/debugging. Provides: current best practices (always researches latest), CIS Docker Benchmark compliance, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging. Ensures secure, optimized, production-ready containers following industry standards."
+
+"Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average. Essential for maintaining session performance and analytical depth."
+```
+
+##### Keyword Best Practices
+
+**Guidelines:**
+1. **Simple words only** - No hyphens unless it's a product name (e.g., "docker-compose")
+2. **No overly generic terms** - Avoid "automation", "build", "make", "new", "create" alone
+3. **Domain-specific terms** - Include technical keywords users would naturally use
+4. **Compound words without spaces** - "fullstack", "crossplatform", "cicd", "devops"
+5. **6-10 keywords total** - Enough for discovery, not so many it dilutes focus
+6. **Avoid false positives** - Don't use keywords that could match unrelated tasks
+
+**Good keyword examples:**
+```json
+// Context management plugin
+"keywords": ["planning", "context", "strategy", "workflow", "thinking", "decision", "research", "refactoring", "optimization", "session"]
+
+// Docker plugin
+"keywords": ["docker", "container", "dockerfile", "compose", "containerize", "production", "security", "optimize", "debug", "deploy"]
+
+// Bash scripting plugin
+"keywords": ["bash", "shell", "script", "automation", "devops", "shellcheck", "posix", "crossplatform", "cicd", "deployment"]
+```
+
+**Bad keyword examples:**
+```json
+// Too generic - would activate for non-plugin tasks
+"keywords": ["build", "create", "make", "new", "automation", "tool"]
+
+// Too many hyphens - users don't type these
+"keywords": ["bash-scripting", "shell-script", "docker-container", "multi-file"]
+
+// Too narrow - misses common use cases
+"keywords": ["website", "webapp", "multifile"]
+```
+
+##### Apply These Principles to Agents and Skills Too
+
+**Agent frontmatter description:**
+```markdown
+---
+agent: true
+description: "Complete [domain] expertise system. PROACTIVELY activate for: (1) [use cases]. Provides: [capabilities]. Ensures [value proposition]."
+---
+```
+
+**Skill frontmatter description:**
+```markdown
+---
+name: skill-name
+description: "Complete [domain] system. PROACTIVELY activate for: (1) [use cases]. Provides: [capabilities]. Ensures [value proposition]."
+---
+```
+
+**Apply the same principles:**
+- Use "PROACTIVELY activate"
+- List numbered use cases (5-8)
+- Highlight ALL capabilities
+- Emphasize production-ready quality
+- Frame as expert system
+
 #### plugin.json Template (Reference Example - Verify Against Docs)
 ```json
 {
   "name": "plugin-name",
   "version": "1.0.0",
-  "description": "Clear description of what this plugin does",
+  "description": "Complete [domain] expertise system. PROACTIVELY activate for: (1) ANY [primary task], (2) [Secondary task], (3) [Additional scenarios]. Provides: [key features, capabilities, standards compliance]. Ensures [value proposition].",
   "author": {
     "name": "Author Name",
     "email": "[email protected]"
   },
-  "keywords": ["relevant", "keywords", "for", "discovery"],
+  "keywords": ["domain", "primary", "secondary", "technical", "terms", "users", "naturally", "use"],
   "license": "MIT"
 }
 ```
@@ -443,13 +571,18 @@ MIT
     {
       "name": "plugin-name",
       "source": "./plugins/plugin-name",
-      "description": "Plugin description",
+      "description": "Complete [domain] expertise system. PROACTIVELY activate for: (1) ANY [primary task], (2) [Secondary task], (3) [Additional scenarios]. Provides: [key features, capabilities]. Ensures [value proposition].",
       "version": "1.0.0",
-      "keywords": ["keyword1", "keyword2"]
+      "author": {
+        "name": "Author Name"
+      },
+      "keywords": ["domain", "primary", "secondary", "technical", "terms", "naturally", "use"]
     }
   ]
 }
 ```
+
+**⚠️ CRITICAL REMINDER:** marketplace.json keywords and descriptions are **SEPARATE** from plugin.json - they don't automatically sync. Always copy the comprehensive description and keywords from plugin.json to marketplace.json entries for optimal marketplace discovery.
 
 **Before using:** Verify this structure against the fetched marketplace documentation. Check for any additional required fields or changed formats.
 
