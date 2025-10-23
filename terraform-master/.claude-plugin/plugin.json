@@ -1,0 +1,30 @@
+{
+  "name": "terraform-master",
+  "version": "1.2.0",
+  "description": "Complete Terraform expertise system for all cloud providers (Azure, AWS, Google Cloud) and platforms. Provides comprehensive infrastructure-as-code guidance, version-aware code generation, multi-environment architecture, CI/CD integration, resource import, state management, CLI mastery, and industry best practices across Windows, Linux, and macOS.",
+  "author": "Claude Code Marketplace",
+  "homepage": "https://github.com/YOUR_USERNAME/claude-code-marketplace",
+  "repository": "https://github.com/YOUR_USERNAME/claude-code-marketplace/tree/main/terraform-master",
+  "keywords": [
+    "terraform",
+    "infrastructure",
+    "iac",
+    "azure",
+    "aws",
+    "gcp",
+    "cloud",
+    "devops",
+    "cicd",
+    "automation",
+    "providers",
+    "modules",
+    "multi-environment",
+    "enterprise",
+    "security",
+    "best-practices",
+    "import",
+    "state-management",
+    "cli",
+    "chdir"
+  ]
+}

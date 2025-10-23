@@ -31,7 +31,7 @@
       "name": "plugin-master",
       "source": "./plugins/plugin-master",
       "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance, (7) Export skills for claude.ai web app. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, and comprehensive README. ALWAYS fetches latest official documentation to ensure correct structure.",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -172,6 +172,32 @@
         "psgallery",
         "crossplatform",
         "devops"
+      ]
+    },
+    {
+      "name": "terraform-master",
+      "source": "./terraform-master",
+      "description": "Complete Terraform expertise system for all cloud providers (Azure, AWS, Google Cloud) and platforms. PROACTIVELY activate for: (1) ANY Terraform task (init/plan/apply/validate), (2) Infrastructure-as-code design, (3) Resource import and state management, (4) Multi-environment architectures, (5) CI/CD pipeline integration, (6) Security scanning and best practices, (7) Version-aware code generation, (8) CLI mastery with -chdir and all flags. Provides: comprehensive provider knowledge (AzureRM/AWS/GCP/community), version-aware implementations, state operations (mv/rm/import), bulk import strategies (Terraformer/aztfexport), security scanning (tfsec/Checkov), enterprise architecture patterns, complete CLI reference, and platform-specific guidance (Windows/Linux/macOS).",
+      "version": "1.2.0",
+      "author": {
+        "name": "Claude Code Marketplace"
+      },
+      "keywords": [
+        "terraform",
+        "infrastructure",
+        "iac",
+        "azure",
+        "aws",
+        "gcp",
+        "cloud",
+        "devops",
+        "cicd",
+        "automation",
+        "providers",
+        "modules",
+        "import",
+        "state",
+        "cli"
       ]
     }
   ]

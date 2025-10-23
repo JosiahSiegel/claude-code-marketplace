@@ -83,7 +83,8 @@ This ensures:
 6. **Write comprehensive descriptions** - Use "PROACTIVELY activate for:" with numbered use cases, highlight ALL capabilities
 7. **Choose smart keywords** - Simple domain words (6-10), avoid overly generic terms, no unnecessary hyphens
 8. **Position as expert systems** - Frame as "Complete [domain] expertise system" not narrow helpers
-9. **Synchronize marketplace.json** - If in a marketplace repo, always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
+9. **🚨 CRITICAL: Check for existing marketplace.json FIRST** - Before creating any files, check if `.claude-plugin/marketplace.json` exists in the repo root. If it does, you MUST update it with the new plugin entry after creating the plugin.
+10. **Synchronize marketplace.json** - Always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
 
 ### Examples of Autonomous Inference
 
@@ -127,6 +128,25 @@ Create actual plugin files when users say things like:
 ### How to Create Plugin Output
 
 **BE AUTONOMOUS BY DEFAULT** - Don't ask questions unless the request is truly ambiguous. Infer intent and create comprehensive output with sensible defaults.
+
+**Step 0: 🚨 CRITICAL - Check for Existing Marketplace FIRST**
+
+**BEFORE doing anything else**, check if you're in a marketplace repository:
+
+```bash
+# Check if marketplace.json exists in repo root
+if [[ -f .claude-plugin/marketplace.json ]]; then
+    echo "✅ IN MARKETPLACE REPO - Must update marketplace.json after creating plugin"
+else
+    echo "ℹ️  Not in marketplace repo - Will create standalone marketplace structure"
+fi
+```
+
+**If marketplace.json exists:**
+- ✅ You MUST update it after creating the plugin
+- ✅ Add the new plugin entry to the plugins array
+- ✅ Synchronize description and keywords from plugin.json
+- ✅ Preserve all existing plugins
 
 **Step 1: Fetch Latest Documentation & Infer Requirements**
 
@@ -262,6 +282,20 @@ Guide the user on how to use the plugin:
 - Installation instructions for Claude Code
 - Usage examples
 - Documentation links
+
+**Step 6: 🚨 FINAL VERIFICATION - Marketplace Registration Check**
+
+Before finalizing, verify you completed marketplace registration:
+
+**Checklist:**
+- [ ] Did you check for `.claude-plugin/marketplace.json` in Step 0?
+- [ ] If marketplace.json existed, did you update it?
+- [ ] Did you add the plugin entry to the plugins array?
+- [ ] Did you copy the comprehensive description from plugin.json to marketplace.json?
+- [ ] Did you copy all keywords from plugin.json to marketplace.json?
+- [ ] Did you preserve all existing plugins in the array?
+
+**If you answered NO to any of these and marketplace.json exists, STOP and fix it immediately!**
 
 ### Output Format
 
@@ -712,11 +746,11 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 ### Critical Guidelines for Output Creation
 
 **DO:**
+- ✅ **🚨 STEP 0 FIRST: Check if .claude-plugin/marketplace.json exists in repo root** (BEFORE creating any files!)
+- ✅ **🚨 UPDATE existing marketplace.json when creating plugins in a marketplace repo** (ABSOLUTELY CRITICAL - NEVER SKIP!)
+- ✅ **🚨 SYNCHRONIZE description and keywords from plugin.json to marketplace.json** (they don't auto-sync - must be done manually!)
 - ✅ **ALWAYS fetch latest plugin docs first** (plugins-reference and plugin-marketplaces)
 - ✅ **Follow the structure from the fetched docs, not just templates** (docs = source of truth)
-- ✅ **Check if .claude-plugin/marketplace.json exists in repo root**
-- ✅ **UPDATE existing marketplace.json when creating plugins in a marketplace repo** (CRITICAL!)
-- ✅ **SYNCHRONIZE description and keywords from plugin.json to marketplace.json** (they don't auto-sync!)
 - ✅ Actually create files in the working directory
 - ✅ Verify component registration method against fetched docs
 - ✅ Create complete, working examples
@@ -729,10 +763,11 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 - ✅ Test that structure is correct before packaging
 
 **DON'T:**
-- ❌ **Skip fetching the latest documentation** (most critical step!)
+- ❌ **🚨 Skip checking for marketplace.json in Step 0** (MOST CRITICAL - check BEFORE creating files!)
+- ❌ **🚨 Forget to update existing marketplace.json when in a marketplace repo** (ABSOLUTELY CRITICAL - this causes the most problems!)
+- ❌ **🚨 Forget to synchronize description/keywords between plugin.json and marketplace.json** (CRITICAL - they are separate files!)
+- ❌ **Skip fetching the latest documentation** (required for correct structure!)
 - ❌ **Blindly copy templates without verifying against fetched docs**
-- ❌ **Forget to update existing marketplace.json when in a marketplace repo** (CRITICAL!)
-- ❌ **Forget to synchronize description/keywords between plugin.json and marketplace.json** (CRITICAL!)
 - ❌ Assume requirements haven't changed
 - ❌ Just show example code without creating files
 - ❌ Create incomplete structures

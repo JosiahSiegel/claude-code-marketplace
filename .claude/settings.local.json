@@ -1,8 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Skill(plugin-creator:plugin-creator)",
-      "mcp__context7__get-library-docs"
+      "SlashCommand(/plugin-master:create-plugin)"
     ],
     "deny": [],
     "ask": []
