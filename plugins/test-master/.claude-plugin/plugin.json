@@ -3,8 +3,8 @@
   "version": "1.0.2",
   "description": "Complete Vitest + Playwright + MSW testing system. PROACTIVELY activate for: (1) ANY testing task (unit/integration/E2E), (2) Test creation and scaffolding, (3) Test debugging and failure analysis, (4) Coverage analysis and optimization, (5) MSW mock management, (6) Test configuration (Vitest/Playwright), (7) CI/CD test setup, (8) Multi-project test architecture. Provides: intelligent test running, auto-scaffolding with boilerplate, MSW handler generation, coverage gap analysis, Playwright trace debugging, snapshot management, parallel execution optimization, and comprehensive test infrastructure setup. Ensures production-ready testing with Vitest 3.x, Playwright 1.56+, MSW 2.x, happy-dom across all modern JavaScript projects.",
   "author": {
-    "name": "Claude Code Marketplace",
-    "email": "[email protected]"
+    "name": "Josiah Siegel",
+    "email": "JosiahSiegel@users.noreply.github.com"
   },
   "keywords": [
     "testing",

@@ -1,6 +1,6 @@
 {
   "name": "plugin-master",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace). ALWAYS fetches latest official documentation to ensure correct structure. Includes plugin-architect agent for design review and optimization.",
   "author": {
     "name": "Josiah Siegel",

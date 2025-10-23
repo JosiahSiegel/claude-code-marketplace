@@ -83,8 +83,9 @@ This ensures:
 6. **Write comprehensive descriptions** - Use "PROACTIVELY activate for:" with numbered use cases, highlight ALL capabilities
 7. **Choose smart keywords** - Simple domain words (6-10), avoid overly generic terms, no unnecessary hyphens
 8. **Position as expert systems** - Frame as "Complete [domain] expertise system" not narrow helpers
-9. **🚨 CRITICAL: Check for existing marketplace.json FIRST** - Before creating any files, check if `.claude-plugin/marketplace.json` exists in the repo root. If it does, you MUST update it with the new plugin entry after creating the plugin.
-10. **Synchronize marketplace.json** - Always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
+9. **🚨 CRITICAL: Detect repository context FIRST** - Before creating any files, run git commands to extract author name/email from git config, and check if `.claude-plugin/marketplace.json` exists in the repo root.
+10. **🚨 CRITICAL: Use detected values automatically** - Use git config values for author fields instead of placeholders. If in marketplace repo, use the marketplace owner name for consistency.
+11. **Synchronize marketplace.json** - Always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
 
 ### Examples of Autonomous Inference
 
@@ -129,22 +130,50 @@ Create actual plugin files when users say things like:
 
 **BE AUTONOMOUS BY DEFAULT** - Don't ask questions unless the request is truly ambiguous. Infer intent and create comprehensive output with sensible defaults.
 
-**Step 0: 🚨 CRITICAL - Check for Existing Marketplace FIRST**
+**Step 0: 🚨 CRITICAL - Detect Repository Context FIRST**
 
-**BEFORE doing anything else**, check if you're in a marketplace repository:
+**BEFORE doing anything else**, detect the repository context to use correct values:
 
 ```bash
-# Check if marketplace.json exists in repo root
+# 1. Check if in a marketplace repo
 if [[ -f .claude-plugin/marketplace.json ]]; then
     echo "✅ IN MARKETPLACE REPO - Must update marketplace.json after creating plugin"
+    IN_MARKETPLACE=true
 else
     echo "ℹ️  Not in marketplace repo - Will create standalone marketplace structure"
+    IN_MARKETPLACE=false
+fi
+
+# 2. Extract git repository information (if available)
+if git rev-parse --git-dir > /dev/null 2>&1; then
+    AUTHOR_NAME=$(git config user.name || echo "Unknown Author")
+    AUTHOR_EMAIL=$(git config user.email || echo "")
+    REPO_URL=$(git config --get remote.origin.url || echo "")
+    echo "✅ Git repo detected - Author: $AUTHOR_NAME"
+else
+    AUTHOR_NAME="Unknown Author"
+    AUTHOR_EMAIL=""
+    REPO_URL=""
+    echo "ℹ️  Not in a git repo - will use placeholder values"
+fi
+
+# 3. Extract owner/repo from marketplace.json (if exists)
+if [[ -f .claude-plugin/marketplace.json ]]; then
+    MARKETPLACE_OWNER=$(cat .claude-plugin/marketplace.json | jq -r '.owner.name' || echo "$AUTHOR_NAME")
+    echo "✅ Marketplace owner: $MARKETPLACE_OWNER"
 fi
 ```
+
+**Use these detected values for:**
+- ✅ `author.name` in plugin.json → Use `$AUTHOR_NAME` from git config
+- ✅ `author.email` in plugin.json → Use `$AUTHOR_EMAIL` from git config
+- ✅ `author.name` in marketplace.json entry → Use `$MARKETPLACE_OWNER` or `$AUTHOR_NAME`
+- ✅ Repository references → Use `$REPO_URL` if available
 
 **If marketplace.json exists:**
 - ✅ You MUST update it after creating the plugin
 - ✅ Add the new plugin entry to the plugins array
+- ✅ Use the same author name from existing marketplace.json owner
 - ✅ Synchronize description and keywords from plugin.json
 - ✅ Preserve all existing plugins
 
@@ -283,19 +312,34 @@ Guide the user on how to use the plugin:
 - Usage examples
 - Documentation links
 
-**Step 6: 🚨 FINAL VERIFICATION - Marketplace Registration Check**
+**Step 6: 🚨 FINAL VERIFICATION - JSON Schema & Marketplace Check**
 
-Before finalizing, verify you completed marketplace registration:
+Before finalizing, verify JSON schema correctness and marketplace registration:
 
-**Checklist:**
-- [ ] Did you check for `.claude-plugin/marketplace.json` in Step 0?
+**Repository Context Validation (Run Step 0 checks first!):**
+- [ ] Did you run git commands to detect `$AUTHOR_NAME` and `$AUTHOR_EMAIL`?
+- [ ] Did you check for `.claude-plugin/marketplace.json` existence?
+- [ ] Did you extract `$MARKETPLACE_OWNER` from marketplace.json if it exists?
+- [ ] Are you using detected values instead of placeholders?
+
+**JSON Schema Validation (CRITICAL - Most common failure point!):**
+- [ ] `author` is an object `{ "name": "..." }` (NOT a string!)
+- [ ] `author.name` uses `$AUTHOR_NAME` from git config (NOT "Author Name" placeholder!)
+- [ ] `author.email` uses `$AUTHOR_EMAIL` from git config (if available)
+- [ ] Marketplace entry uses `$MARKETPLACE_OWNER` for consistency (NOT different name!)
+- [ ] `version` is a string like `"1.0.0"` (NOT a number!)
+- [ ] `keywords` is an array `["word1", "word2"]` (NOT a comma-separated string!)
+- [ ] All JSON is valid (test with `cat plugin.json | jq .`)
+- [ ] No extra fields like `homepage` or `repository` (these cause issues - remove them)
+
+**Marketplace Registration Checklist:**
 - [ ] If marketplace.json existed, did you update it?
 - [ ] Did you add the plugin entry to the plugins array?
 - [ ] Did you copy the comprehensive description from plugin.json to marketplace.json?
 - [ ] Did you copy all keywords from plugin.json to marketplace.json?
 - [ ] Did you preserve all existing plugins in the array?
 
-**If you answered NO to any of these and marketplace.json exists, STOP and fix it immediately!**
+**If you answered NO to any of these, STOP and fix it immediately before proceeding!**
 
 ### Output Format
 
@@ -499,19 +543,55 @@ description: "Complete [domain] system. PROACTIVELY activate for: (1) [use cases
 - Frame as expert system
 
 #### plugin.json Template (Reference Example - Verify Against Docs)
+
+**🚨 CRITICAL JSON SCHEMA REQUIREMENTS:**
+
+These are the most common validation errors - always verify these:
+
+1. **`author` MUST be an object** - Never use a string!
+   - ✅ CORRECT: `"author": { "name": "Author Name" }`
+   - ❌ WRONG: `"author": "Author Name"`
+
+2. **`version` MUST be a string** - Use semantic versioning
+   - ✅ CORRECT: `"version": "1.0.0"`
+   - ❌ WRONG: `"version": 1.0`
+
+3. **`keywords` MUST be an array of strings**
+   - ✅ CORRECT: `"keywords": ["terraform", "aws"]`
+   - ❌ WRONG: `"keywords": "terraform, aws"`
+
+4. **All URLs must be strings** (if included)
+   - ✅ CORRECT: `"homepage": "https://github.com/..."`
+
 ```json
 {
   "name": "plugin-name",
   "version": "1.0.0",
   "description": "Complete [domain] expertise system. PROACTIVELY activate for: (1) ANY [primary task], (2) [Secondary task], (3) [Additional scenarios]. Provides: [key features, capabilities, standards compliance]. Ensures [value proposition].",
   "author": {
-    "name": "Author Name",
-    "email": "[email protected]"
+    "name": "AUTHOR_NAME_FROM_GIT_CONFIG",
+    "email": "AUTHOR_EMAIL_FROM_GIT_CONFIG"
   },
   "keywords": ["domain", "primary", "secondary", "technical", "terms", "users", "naturally", "use"],
   "license": "MIT"
 }
 ```
+
+**🚨 CRITICAL: Use detected values from Step 0!**
+- Use `$AUTHOR_NAME` from git config for `author.name`
+- Use `$AUTHOR_EMAIL` from git config for `author.email`
+- Use `$MARKETPLACE_OWNER` for marketplace.json entries (consistency with existing plugins)
+- DO NOT use placeholders like "Author Name" or "YOUR_USERNAME"
+
+**VALIDATION CHECKLIST - Run BEFORE completing plugin creation:**
+- [ ] `author` is an object with `name` field (not a string!)
+- [ ] `author.name` uses value from git config (not a placeholder!)
+- [ ] `author.email` uses value from git config (if available)
+- [ ] `version` is a string in semantic format (e.g., "1.0.0")
+- [ ] `keywords` is an array of strings (not a comma-separated string!)
+- [ ] All required fields present: name, version, description
+- [ ] Valid JSON syntax (no trailing commas, proper quotes)
+- [ ] Test with: `cat plugin.json | jq .` to verify valid JSON
 
 **Note:** Components (commands, agents, skills) are discovered automatically from their respective directories - no registration needed in plugin.json.
 
@@ -746,7 +826,12 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 ### Critical Guidelines for Output Creation
 
 **DO:**
-- ✅ **🚨 STEP 0 FIRST: Check if .claude-plugin/marketplace.json exists in repo root** (BEFORE creating any files!)
+- ✅ **🚨 STEP 0 FIRST: Detect repository context** - Run git commands to extract author/email and check for marketplace.json (BEFORE creating any files!)
+- ✅ **🚨 USE DETECTED VALUES: Use git config values for author fields** - Never use placeholders like "Author Name" or "YOUR_USERNAME"!
+- ✅ **🚨 USE DETECTED VALUES: Match marketplace owner** - If in marketplace repo, use the same author name from marketplace.json owner
+- ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `author` is an object, NOT a string** (most common validation error!)
+- ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `version` is a string "1.0.0", NOT a number** (required format!)
+- ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `keywords` is an array, NOT a comma-separated string** (required format!)
 - ✅ **🚨 UPDATE existing marketplace.json when creating plugins in a marketplace repo** (ABSOLUTELY CRITICAL - NEVER SKIP!)
 - ✅ **🚨 SYNCHRONIZE description and keywords from plugin.json to marketplace.json** (they don't auto-sync - must be done manually!)
 - ✅ **ALWAYS fetch latest plugin docs first** (plugins-reference and plugin-marketplaces)
@@ -763,7 +848,12 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 - ✅ Test that structure is correct before packaging
 
 **DON'T:**
-- ❌ **🚨 Skip checking for marketplace.json in Step 0** (MOST CRITICAL - check BEFORE creating files!)
+- ❌ **🚨 Skip detecting repository context in Step 0** (MOST CRITICAL - detect git values BEFORE creating files!)
+- ❌ **🚨 Use placeholder values like "Author Name" or "YOUR_USERNAME"** (MUST use detected git config values!)
+- ❌ **🚨 Use different author names in plugin.json vs marketplace.json** (MUST match marketplace owner for consistency!)
+- ❌ **🚨 Use `"author": "Name"` as a string** (MUST be an object: `{ "name": "Name" }`)
+- ❌ **🚨 Use `"version": 1.0` as a number** (MUST be a string: `"1.0.0"`)
+- ❌ **🚨 Use `"keywords": "word1, word2"` as a string** (MUST be an array: `["word1", "word2"]`)
 - ❌ **🚨 Forget to update existing marketplace.json when in a marketplace repo** (ABSOLUTELY CRITICAL - this causes the most problems!)
 - ❌ **🚨 Forget to synchronize description/keywords between plugin.json and marketplace.json** (CRITICAL - they are separate files!)
 - ❌ **Skip fetching the latest documentation** (required for correct structure!)

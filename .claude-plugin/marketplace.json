@@ -31,7 +31,7 @@
       "name": "plugin-master",
       "source": "./plugins/plugin-master",
       "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance, (7) Export skills for claude.ai web app. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, and comprehensive README. ALWAYS fetches latest official documentation to ensure correct structure.",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -138,7 +138,7 @@
       "description": "Complete Vitest + Playwright + MSW testing system. PROACTIVELY activate for: (1) ANY testing task (unit/integration/E2E), (2) Test creation and scaffolding, (3) Test debugging and failure analysis, (4) Coverage analysis and optimization, (5) MSW mock management, (6) Test configuration (Vitest/Playwright), (7) CI/CD test setup, (8) Multi-project test architecture. Provides: intelligent test running, auto-scaffolding with boilerplate, MSW handler generation, coverage gap analysis, Playwright trace debugging, snapshot management, parallel execution optimization, and comprehensive test infrastructure setup. Ensures production-ready testing with Vitest 3.x, Playwright 1.56+, MSW 2.x, happy-dom across all modern JavaScript projects.",
       "version": "1.0.2",
       "author": {
-        "name": "Claude Code Marketplace"
+        "name": "Josiah Siegel"
       },
       "keywords": [
         "testing",
@@ -180,7 +180,7 @@
       "description": "Complete Terraform expertise system for all cloud providers (Azure, AWS, Google Cloud) and platforms. PROACTIVELY activate for: (1) ANY Terraform task (init/plan/apply/validate), (2) Infrastructure-as-code design, (3) Resource import and state management, (4) Multi-environment architectures, (5) CI/CD pipeline integration, (6) Security scanning and best practices, (7) Version-aware code generation, (8) CLI mastery with -chdir and all flags. Provides: comprehensive provider knowledge (AzureRM/AWS/GCP/community), version-aware implementations, state operations (mv/rm/import), bulk import strategies (Terraformer/aztfexport), security scanning (tfsec/Checkov), enterprise architecture patterns, complete CLI reference, and platform-specific guidance (Windows/Linux/macOS).",
       "version": "1.2.0",
       "author": {
-        "name": "Claude Code Marketplace"
+        "name": "Josiah Siegel"
       },
       "keywords": [
         "terraform",
