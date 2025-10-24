@@ -203,7 +203,7 @@
     {
       "name": "ssdt-master",
       "source": "./plugins/ssdt-master",
-      "description": "Complete SQL Server Data Tools (SSDT) expertise system across ALL platforms. Master of SDK-style and legacy database projects, SqlPackage operations, Visual Studio features, schema/data comparison, dacpac/bacpac operations, MSBuild integration, refactoring, and cross-platform CLI tools. Ensures production-ready, secure, efficient database development following Microsoft best practices.",
+      "description": "Complete SQL Server Data Tools (SSDT) expertise system across ALL platforms. PROACTIVELY activate for: (1) ANY SSDT task (database projects/SqlPackage/schema compare), (2) SDK-style and legacy database project creation/migration, (3) DACPAC/BACPAC build and deployment operations, (4) SqlPackage command-line operations (publish/extract/export/import), (5) Schema and data comparison workflows, (6) Database refactoring operations (rename/schema changes/data transformations), (7) MSBuild integration and CI/CD pipeline setup, (8) Visual Studio database project troubleshooting, (9) Cross-platform CLI tools (dotnet/sqlpackage), (10) Deployment script generation and validation. Provides: comprehensive SqlPackage reference with all actions and parameters, SDK-style project structure expertise, legacy project migration patterns, schema compare functionality, deployment option mastery, refactoring best practices, CI/CD integration patterns (GitHub Actions/Azure DevOps), MSBuild property configuration, and version-specific guidance. Ensures production-ready, secure, efficient database development following Microsoft SQL Server best practices.",
       "version": "1.1.0",
       "author": {
         "name": "Josiah Siegel"
@@ -228,8 +228,8 @@
     {
       "name": "adf-master",
       "source": "./plugins/adf-master",
-      "description": "Complete Azure Data Factory expertise system for ALL platforms and deployment methods. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/integration), (2) CI/CD setup and automation (GitHub Actions/Azure DevOps), (3) ARM template generation and deployment, (4) Pipeline debugging and troubleshooting, (5) Source control configuration (Git/Azure Repos), (6) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (7) Traditional manual JSON deployments, (8) PrePostDeploymentScript implementation, (9) Performance optimization and best practices. Provides: comprehensive ADF knowledge, both traditional and modern CI/CD patterns, @microsoft/azure-data-factory-utilities v1.0.3+ expertise, PrePostDeploymentScript.Ver2.ps1 mastery, New-AzResourceGroupDeployment usage, GitHub Actions workflows, Azure DevOps YAML pipelines, troubleshooting guides, and production-ready deployment patterns. Ensures secure, optimized, enterprise-grade ADF solutions following Microsoft best practices.",
-      "version": "1.1.0",
+      "description": "Complete Azure Data Factory expertise system with STRICT validation enforcement for ALL platforms. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/linked services) WITH automatic validation, (2) Activity nesting validation (ForEach/If/Switch/Until limitations), (3) Linked service configuration validation (Blob Storage accountKind, SQL Database auth), (4) CI/CD setup and automation (GitHub Actions/Azure DevOps), (5) ARM template generation and deployment, (6) Pipeline debugging and troubleshooting, (7) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (8) Performance optimization and best practices. Provides: comprehensive ADF knowledge with validation enforcement, activity nesting rules (REJECTS prohibited combinations like ForEach in If), linked service requirements (Azure Blob Storage, SQL Database, ADLS), resource limit checks, Execute Pipeline workarounds, common pitfall prevention, CI/CD patterns, troubleshooting guides, and production-ready VALIDATED solutions. Ensures ONLY valid, compliant, optimized ADF pipelines are created following Microsoft best practices AND platform limitations.",
+      "version": "2.0.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -237,13 +237,13 @@
         "adf",
         "datafactory",
         "azure",
-        "etl",
+        "validation",
         "pipeline",
+        "foreach",
+        "nested",
+        "linkedservice",
         "cicd",
-        "arm",
-        "deployment",
-        "npm",
-        "devops"
+        "deployment"
       ]
     },
     {

@@ -8,6 +8,14 @@ The **adf-master** plugin provides comprehensive Azure Data Factory expertise, c
 
 ## Key Features
 
+### 🛡️ **NEW: Comprehensive Validation & Edge-Case Handling**
+- **STRICT activity nesting validation** - Prevents prohibited combinations (ForEach in If, nested ForEach, etc.)
+- **Linked service validation** - Ensures required properties are set (e.g., accountKind for managed identity)
+- **Resource limit enforcement** - Validates activity counts, ForEach batching, Lookup limits
+- **Automatic violation detection** - Immediately identifies and rejects invalid configurations
+- **Execute Pipeline workarounds** - Provides valid alternatives for complex nesting scenarios
+- **Popular connector mastery** - Deep knowledge of Azure Blob Storage, SQL Database requirements and pitfalls
+
 ### 🚀 CI/CD Automation
 - **Modern Automated CI/CD** using `@microsoft/azure-data-factory-utilities` v1.0.3+
 - **Traditional Manual CI/CD** with Git integration and publish button
@@ -16,12 +24,13 @@ The **adf-master** plugin provides comprehensive Azure Data Factory expertise, c
 - **ARM template deployment** with PowerShell and Azure CLI
 - **PrePostDeploymentScript.Ver2** for intelligent trigger management
 
-### 🔧 Pipeline Development
-- Pipeline design following Microsoft best practices
+### 🔧 Pipeline Development with Validation
+- **Validated pipeline design** following Microsoft best practices AND ADF limitations
 - Data transformation patterns (SCD, incremental load, metadata-driven)
 - Performance optimization strategies
 - Error handling and retry logic
 - Monitoring and logging patterns
+- **ENFORCED Execute Pipeline pattern** for prohibited nesting scenarios
 
 ### 🐛 Troubleshooting & Debugging
 - Systematic debugging approaches
@@ -87,28 +96,42 @@ Claude: I'll guide you through setting up modern automated CI/CD for Azure Data 
 ```
 
 ### `/adf-master:adf-pipeline-create`
-Create Azure Data Factory pipelines following Microsoft best practices.
+Create Azure Data Factory pipelines following Microsoft best practices **with STRICT validation enforcement**.
 
 **What it does:**
+- **VALIDATES activity nesting** against ADF limitations BEFORE creation
+- **REJECTS prohibited patterns** (ForEach in If, nested ForEach, etc.)
+- **SUGGESTS Execute Pipeline workarounds** for complex nesting needs
 - Designs pipeline architecture based on requirements
 - Implements proper parameterization
 - Adds error handling and retry logic
 - Optimizes for performance
 - Includes monitoring and logging
-- Provides production-ready pipeline JSON
+- **Provides ONLY valid, production-ready pipeline JSON**
+
+**New Validation Features:**
+- ✅ Activity nesting validation (ForEach, If, Switch, Until)
+- ✅ Resource limit checks (activity count < 120, ForEach batchCount ≤ 50)
+- ✅ Linked service property validation (accountKind, authentication requirements)
+- ✅ Automatic detection of Set Variable in parallel ForEach
+- ✅ Comprehensive validation checklist before finalization
 
 **When to use:**
 - Creating new pipelines from scratch
 - Implementing common patterns (incremental load, SCD, metadata-driven)
-- Need guidance on pipeline design decisions
+- Need validation that pipeline structure is valid
 - Want production-ready code with best practices
+- Complex nesting requirements (automatically uses Execute Pipeline pattern)
 
 **Example usage:**
 ```
-User: "Create a pipeline to incrementally load sales data from SQL to Data Lake"
+User: "Create a pipeline with ForEach loop inside an If condition"
 
-Claude: I'll create an incremental load pipeline with watermark tracking...
-[Provides complete pipeline JSON with lookup activities, copy activity, and watermark update]
+Claude: ❌ INVALID: If activities CANNOT contain ForEach activities.
+
+✅ SOLUTION: Execute Pipeline pattern
+[Provides parent pipeline with If calling Execute Pipeline, and child pipeline with ForEach]
+This complies with ADF limitations while maintaining your logic.
 ```
 
 ### `/adf-master:adf-pipeline-debug`
@@ -218,29 +241,42 @@ Claude: Let's optimize your data flow performance and cost...
 
 ## Agents
 
-### `adf-expert`
-Complete Azure Data Factory expertise across all operations.
+### `adf-expert` **[ENHANCED with Validation]**
+Complete Azure Data Factory expertise across all operations **with STRICT validation enforcement**.
 
 **Expertise:**
-- Pipeline design and architecture
+- **VALIDATION-FIRST** pipeline design and architecture
+- **Activity nesting rules enforcement** (ForEach, If, Switch, Until)
+- **Linked service configuration validation** (Blob Storage, SQL Database, etc.)
 - Data transformation patterns
 - Integration patterns (source-to-sink, real-time vs batch)
 - Performance optimization
 - Security and compliance
 - All ADF components (linked services, datasets, activities, triggers, IRs)
 
+**New Validation Capabilities:**
+- ⚠️ **Immediately rejects** prohibited activity nesting combinations
+- ⚠️ **Verifies** linked service properties match authentication requirements
+- ⚠️ **Enforces** resource limits (activities, ForEach batching, Lookup size)
+- ✅ **Suggests** Execute Pipeline workarounds for complex nesting
+- ✅ **Validates** against common pitfalls (missing accountKind, expired SAS tokens, etc.)
+
 **When activated:**
 - Automatically when you work on ADF pipelines
-- When you need design guidance
+- When you need design guidance with validation
 - For complex transformation logic
 - When implementing best practices
+- **When creating ANY pipeline with control flow activities**
 
 **Example:**
 ```
-User: "How do I implement a Type 2 Slowly Changing Dimension in ADF?"
+User: "Create nested ForEach loops to process files"
 
-adf-expert: I'll guide you through implementing SCD Type 2 using Data Flow...
-[Provides complete data flow transformation logic with conditional splits and historical tracking]
+adf-expert: ❌ INVALID NESTING DETECTED
+ForEach activities support only ONE level of nesting. Cannot nest ForEach within ForEach.
+
+✅ SOLUTION: Execute Pipeline Pattern
+[Provides validated solution with parent ForEach calling Execute Pipeline to child pipeline with inner ForEach]
 ```
 
 ### `adf-cicd-expert`
@@ -285,6 +321,34 @@ Comprehensive knowledge base with:
 **How it helps:**
 The skill provides detailed reference information that agents and commands can access on-demand, ensuring all guidance is based on the latest official documentation and proven patterns.
 
+### `adf-validation-rules` Skill **[NEW]**
+**Comprehensive validation rules and limitations enforcement:**
+
+**Activity Nesting Rules:**
+- ✅ Permitted combinations (ForEach→If, Until→Switch, etc.)
+- ❌ Prohibited combinations (ForEach→ForEach, If→ForEach, Switch→If, etc.)
+- 🔧 Execute Pipeline workarounds for all prohibited scenarios
+- 🚫 Special restrictions (Validation activity, Set Variable in parallel ForEach)
+
+**Linked Service Requirements:**
+- **Azure Blob Storage**: Authentication methods, accountKind requirements, common pitfalls
+- **Azure SQL Database**: Connection string parameters, authentication setup, serverless tier issues
+- **All popular connectors**: Configuration requirements, edge cases, validation rules
+
+**Resource Limits:**
+- Activity limits (120 per pipeline)
+- ForEach limits (50 concurrent iterations max)
+- Lookup limits (5000 rows, 4 MB size)
+- Data Flow limits (column names, row size, transformation limits)
+
+**Validation Checklist:**
+- Complete pre-creation validation checklist
+- Linked service property verification
+- Common error patterns and prevention
+
+**How it helps:**
+This skill is automatically consulted by agents and commands to ENFORCE Azure Data Factory limitations, preventing invalid configurations from being created. Ensures all pipelines comply with platform restrictions.
+
 ## Use Cases
 
 ### Setting Up CI/CD for the First Time
@@ -324,18 +388,27 @@ The skill provides detailed reference information that agents and commands can a
 
 ## Best Practices
 
-This plugin enforces Microsoft best practices:
+This plugin enforces Microsoft best practices **AND Azure Data Factory platform limitations**:
 
-1. **Parameterization** - Everything configurable should be parameterized
-2. **Error Handling** - Comprehensive retry and logging
-3. **Incremental Loads** - Avoid full refreshes
-4. **Security** - Managed Identity and Key Vault for secrets
-5. **Monitoring** - Log Analytics and alerts
-6. **Testing** - Debug mode before production
-7. **Git Configuration** - Only on development environment
-8. **Modular Design** - Reusable child pipelines
-9. **Modern CI/CD** - npm-based automated deployments
-10. **Documentation** - Clear purpose and dependencies
+### 🚨 CRITICAL Validation Rules (ALWAYS ENFORCED)
+1. **Activity Nesting Validation** - REJECT prohibited combinations (ForEach in If, nested ForEach, etc.)
+2. **Linked Service Validation** - VERIFY required properties (accountKind for managed identity, etc.)
+3. **Resource Limits** - ENFORCE activity count < 120, ForEach batchCount ≤ 50, Lookup < 5000 rows
+4. **Variable Scope** - PREVENT Set Variable in parallel ForEach
+
+### Standard Best Practices
+5. **Parameterization** - Everything configurable should be parameterized
+6. **Error Handling** - Comprehensive retry and logging
+7. **Incremental Loads** - Avoid full refreshes
+8. **Security** - Managed Identity and Key Vault for secrets
+9. **Monitoring** - Log Analytics and alerts
+10. **Testing** - Debug mode before production
+11. **Git Configuration** - Only on development environment
+12. **Modular Design** - Reusable child pipelines with **Execute Pipeline pattern**
+13. **Modern CI/CD** - npm-based automated deployments
+14. **Documentation** - Clear purpose and dependencies
+
+**NEW:** All validation rules are automatically enforced - the plugin will REJECT invalid configurations before they're created!
 
 ## Documentation Sources
 
@@ -385,6 +458,18 @@ For plugin-specific issues:
   - Your environment (Node.js version, platform, etc.)
 
 ## Version History
+
+### 2.0.0 (January 2025) **[MAJOR UPDATE]**
+- **NEW: Comprehensive validation and edge-case handling**
+- **NEW: adf-validation-rules skill** with all ADF limitations
+- **ENHANCED: Activity nesting validation** - Enforces ForEach, If, Switch, Until rules
+- **ENHANCED: Linked service validation** - Azure Blob Storage, SQL Database requirements
+- **ENHANCED: Resource limit enforcement** - Activity counts, ForEach batching, Lookup limits
+- **ENHANCED: Execute Pipeline workarounds** - Automatic suggestions for prohibited nesting
+- **ENHANCED: Common pitfall prevention** - accountKind, SAS expiry, connection pooling, etc.
+- Updated all agents and commands with strict validation enforcement
+- Comprehensive validation checklist for pipeline creation
+- Detailed error messages with clear explanations and solutions
 
 ### 1.0.0 (January 2025)
 - Initial release

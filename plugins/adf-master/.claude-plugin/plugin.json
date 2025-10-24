@@ -1,7 +1,7 @@
 {
   "name": "adf-master",
-  "version": "1.1.0",
-  "description": "Complete Azure Data Factory expertise system for ALL platforms and deployment methods. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/integration), (2) CI/CD setup and automation (GitHub Actions/Azure DevOps), (3) ARM template generation and deployment, (4) Pipeline debugging and troubleshooting, (5) Source control configuration (Git/Azure Repos), (6) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (7) Traditional manual JSON deployments, (8) PrePostDeploymentScript implementation, (9) Performance optimization and best practices. Provides: comprehensive ADF knowledge, both traditional and modern CI/CD patterns, @microsoft/azure-data-factory-utilities v1.0.3+ expertise, PrePostDeploymentScript.Ver2.ps1 mastery, New-AzResourceGroupDeployment usage, GitHub Actions workflows, Azure DevOps YAML pipelines, troubleshooting guides, and production-ready deployment patterns. Ensures secure, optimized, enterprise-grade ADF solutions following Microsoft best practices.",
+  "version": "2.0.0",
+  "description": "Complete Azure Data Factory expertise system with STRICT validation enforcement for ALL platforms. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/linked services) WITH automatic validation, (2) Activity nesting validation (ForEach/If/Switch/Until limitations), (3) Linked service configuration validation (Blob Storage accountKind, SQL Database auth), (4) CI/CD setup and automation (GitHub Actions/Azure DevOps), (5) ARM template generation and deployment, (6) Pipeline debugging and troubleshooting, (7) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (8) Performance optimization and best practices. Provides: comprehensive ADF knowledge with validation enforcement, activity nesting rules (REJECTS prohibited combinations like ForEach in If), linked service requirements (Azure Blob Storage, SQL Database, ADLS), resource limit checks, Execute Pipeline workarounds, common pitfall prevention, CI/CD patterns, troubleshooting guides, and production-ready VALIDATED solutions. Ensures ONLY valid, compliant, optimized ADF pipelines are created following Microsoft best practices AND platform limitations.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
@@ -10,13 +10,13 @@
     "adf",
     "datafactory",
     "azure",
-    "etl",
+    "validation",
     "pipeline",
+    "foreach",
+    "nested",
+    "linkedservice",
     "cicd",
-    "arm",
-    "deployment",
-    "npm",
-    "devops"
+    "deployment"
   ],
   "license": "MIT"
 }
