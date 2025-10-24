@@ -198,18 +198,32 @@ Then, from the user's request, automatically determine:
 
 **Default approach: Create comprehensive plugin with all relevant components**
 
-**Step 2: Create Directory Structure in Working Directory**
-Use bash_tool to create the full structure in /home/claude first:
+**Step 2: Create Directory Structure in Correct Location**
+
+**🚨 CRITICAL: Detect marketplace repo and create plugin in correct location!**
+
+Based on the marketplace detection from Step 0, create the plugin in the appropriate location:
 
 ```bash
-cd /home/claude
-mkdir -p PLUGIN_NAME/.claude-plugin
-mkdir -p PLUGIN_NAME/commands
-mkdir -p PLUGIN_NAME/agents
-mkdir -p PLUGIN_NAME/skills
-mkdir -p PLUGIN_NAME/hooks
-mkdir -p PLUGIN_NAME/scripts
+# If in marketplace repo (marketplace.json exists), create in plugins/ subdirectory
+if [[ -f .claude-plugin/marketplace.json ]]; then
+    echo "✅ Marketplace repo detected - creating plugin in plugins/ directory"
+    PLUGIN_DIR="plugins/PLUGIN_NAME"
+else
+    echo "ℹ️  Not in marketplace repo - creating plugin in current directory"
+    PLUGIN_DIR="PLUGIN_NAME"
+fi
+
+# Create the plugin directory structure
+mkdir -p $PLUGIN_DIR/.claude-plugin
+mkdir -p $PLUGIN_DIR/commands
+mkdir -p $PLUGIN_DIR/agents
+mkdir -p $PLUGIN_DIR/skills
+mkdir -p $PLUGIN_DIR/hooks
+mkdir -p $PLUGIN_DIR/scripts
 ```
+
+**IMPORTANT:** Always use `$PLUGIN_DIR` as the base path for all subsequent file operations to ensure files are created in the correct location.
 
 **Step 3: Create All Necessary Files**
 
@@ -321,6 +335,8 @@ Before finalizing, verify JSON schema correctness and marketplace registration:
 - [ ] Did you check for `.claude-plugin/marketplace.json` existence?
 - [ ] Did you extract `$MARKETPLACE_OWNER` from marketplace.json if it exists?
 - [ ] Are you using detected values instead of placeholders?
+- [ ] Did you create the plugin in `plugins/PLUGIN_NAME/` if marketplace.json exists?
+- [ ] Did you create the plugin in root only if marketplace.json does NOT exist?
 
 **JSON Schema Validation (CRITICAL - Most common failure point!):**
 - [ ] `author` is an object `{ "name": "..." }` (NOT a string!)
@@ -335,6 +351,7 @@ Before finalizing, verify JSON schema correctness and marketplace registration:
 **Marketplace Registration Checklist:**
 - [ ] If marketplace.json existed, did you update it?
 - [ ] Did you add the plugin entry to the plugins array?
+- [ ] Did you use the correct source path `./plugins/PLUGIN_NAME` (NOT `./PLUGIN_NAME`)?
 - [ ] Did you copy the comprehensive description from plugin.json to marketplace.json?
 - [ ] Did you copy all keywords from plugin.json to marketplace.json?
 - [ ] Did you preserve all existing plugins in the array?
@@ -827,12 +844,14 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 
 **DO:**
 - ✅ **🚨 STEP 0 FIRST: Detect repository context** - Run git commands to extract author/email and check for marketplace.json (BEFORE creating any files!)
+- ✅ **🚨 CREATE IN CORRECT DIRECTORY: If marketplace.json exists, create plugin in plugins/ subdirectory** (NOT in root!)
 - ✅ **🚨 USE DETECTED VALUES: Use git config values for author fields** - Never use placeholders like "Author Name" or "YOUR_USERNAME"!
 - ✅ **🚨 USE DETECTED VALUES: Match marketplace owner** - If in marketplace repo, use the same author name from marketplace.json owner
 - ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `author` is an object, NOT a string** (most common validation error!)
 - ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `version` is a string "1.0.0", NOT a number** (required format!)
 - ✅ **🚨 VALIDATE JSON SCHEMA: Ensure `keywords` is an array, NOT a comma-separated string** (required format!)
 - ✅ **🚨 UPDATE existing marketplace.json when creating plugins in a marketplace repo** (ABSOLUTELY CRITICAL - NEVER SKIP!)
+- ✅ **🚨 UPDATE marketplace.json with correct source path: ./plugins/PLUGIN_NAME** (NOT ./PLUGIN_NAME!)
 - ✅ **🚨 SYNCHRONIZE description and keywords from plugin.json to marketplace.json** (they don't auto-sync - must be done manually!)
 - ✅ **ALWAYS fetch latest plugin docs first** (plugins-reference and plugin-marketplaces)
 - ✅ **Follow the structure from the fetched docs, not just templates** (docs = source of truth)
@@ -849,8 +868,10 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 
 **DON'T:**
 - ❌ **🚨 Skip detecting repository context in Step 0** (MOST CRITICAL - detect git values BEFORE creating files!)
+- ❌ **🚨 Create plugins in root directory when marketplace.json exists** (MUST create in plugins/ subdirectory!)
 - ❌ **🚨 Use placeholder values like "Author Name" or "YOUR_USERNAME"** (MUST use detected git config values!)
 - ❌ **🚨 Use different author names in plugin.json vs marketplace.json** (MUST match marketplace owner for consistency!)
+- ❌ **🚨 Use wrong source path in marketplace.json** (MUST be `./plugins/PLUGIN_NAME` NOT `./PLUGIN_NAME`!)
 - ❌ **🚨 Use `"author": "Name"` as a string** (MUST be an object: `{ "name": "Name" }`)
 - ❌ **🚨 Use `"version": 1.0` as a number** (MUST be a string: `"1.0.0"`)
 - ❌ **🚨 Use `"keywords": "word1, word2"` as a string** (MUST be an array: `["word1", "word2"]`)

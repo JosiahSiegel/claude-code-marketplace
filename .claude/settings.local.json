@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "SlashCommand(/plugin-master:create-plugin)"
+      "SlashCommand(/plugin-master:create-plugin)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
