@@ -1,6 +1,6 @@
 {
   "name": "terraform-master",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Complete Terraform expertise system for all cloud providers (Azure, AWS, Google Cloud) and platforms. Provides comprehensive infrastructure-as-code guidance, version-aware code generation, multi-environment architecture, CI/CD integration, resource import, state management, CLI mastery, and industry best practices across Windows, Linux, and macOS.",
   "author": {
     "name": "Josiah Siegel",

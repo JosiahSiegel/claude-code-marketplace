@@ -1,6 +1,6 @@
 {
   "name": "ssdt-master",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Complete SQL Server Data Tools (SSDT) expertise system across ALL platforms. Master of SDK-style and legacy database projects, SqlPackage operations, Visual Studio features, schema/data comparison, dacpac/bacpac operations, MSBuild integration, refactoring, and cross-platform CLI tools. Ensures production-ready, secure, efficient database development following Microsoft best practices.",
   "author": {
     "name": "Josiah Siegel",

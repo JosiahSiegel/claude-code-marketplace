@@ -1,6 +1,6 @@
 {
   "name": "adf-master",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Complete Azure Data Factory expertise system for ALL platforms and deployment methods. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/integration), (2) CI/CD setup and automation (GitHub Actions/Azure DevOps), (3) ARM template generation and deployment, (4) Pipeline debugging and troubleshooting, (5) Source control configuration (Git/Azure Repos), (6) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (7) Traditional manual JSON deployments, (8) PrePostDeploymentScript implementation, (9) Performance optimization and best practices. Provides: comprehensive ADF knowledge, both traditional and modern CI/CD patterns, @microsoft/azure-data-factory-utilities v1.0.3+ expertise, PrePostDeploymentScript.Ver2.ps1 mastery, New-AzResourceGroupDeployment usage, GitHub Actions workflows, Azure DevOps YAML pipelines, troubleshooting guides, and production-ready deployment patterns. Ensures secure, optimized, enterprise-grade ADF solutions following Microsoft best practices.",
   "author": {
     "name": "Josiah Siegel",
