@@ -4,7 +4,8 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "mcp__context7__get-library-docs",
-      "Skill(plugin-master)"
+      "Skill(plugin-master)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

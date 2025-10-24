@@ -1,0 +1,27 @@
+{
+  "name": "salesforce-master",
+  "version": "1.0.0",
+  "description": "Complete Salesforce expertise system across ALL platforms and integration scenarios. PROACTIVELY activate for: (1) ANY Salesforce task (API/data/Apex/Lightning/Flow), (2) SOQL/SOSL query design and optimization, (3) REST/SOAP API integration and authentication, (4) Apex development (classes/triggers/batch/scheduled), (5) Lightning Web Components and Aura development, (6) Data model design and schema management (objects/fields/relationships), (7) Integration patterns (source-to-Salesforce, Salesforce-to-target), (8) Deployment and metadata management (change sets/SFDX/CLI), (9) Security model implementation (profiles/permissions/sharing), (10) Flow/Process Builder automation. Provides: comprehensive SFDC object schema knowledge (standard/custom objects, all fields, relationships), complete API reference (REST/SOAP/Bulk/Streaming), Apex language mastery, Lightning platform expertise, SOQL/SOSL optimization, authentication methods (OAuth/JWT/Session), limits and best practices, governor limits handling, integration patterns (ETL/real-time/batch), metadata API operations, SFDX CLI commands, version-specific guidance, and platform event architecture. Ensures production-ready, scalable, secure Salesforce solutions following Salesforce best practices and Well-Architected Framework.",
+  "author": {
+    "name": "Josiah Siegel",
+    "email": "josiah0601@gmail.com"
+  },
+  "keywords": [
+    "salesforce",
+    "sfdc",
+    "apex",
+    "soql",
+    "lightning",
+    "api",
+    "crm",
+    "integration",
+    "metadata",
+    "sfdx",
+    "flow",
+    "data",
+    "schema",
+    "authentication",
+    "deployment"
+  ],
+  "license": "MIT"
+}
