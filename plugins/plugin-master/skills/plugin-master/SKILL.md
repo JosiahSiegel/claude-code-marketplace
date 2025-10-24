@@ -6,6 +6,39 @@ license: MIT
 
 # Plugin Creator - Complete Beginner's Guide
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+### Documentation Guidelines
+
+**Plugin Creation Exception: This plugin's purpose IS to create documentation files.**
+
+When creating plugins (the core purpose of this plugin):
+- ✅ **DO create** all necessary plugin files: README.md, agents/*.md, skills/*.md, commands/*.md
+- ✅ **DO create** complete, comprehensive documentation as part of plugin structure
+- ✅ **DO create** marketplace.json and plugin.json manifest files
+
+For other scenarios:
+- ❌ **DON'T create** additional supplementary documentation beyond the plugin structure
+- ❌ **DON'T create** extra guides or tutorials unless explicitly requested
+- ✅ **DO update** existing documentation files when modifications are needed
+
+---
+
 This skill provides comprehensive, step-by-step guidance for creating Claude Code plugins, from your very first plugin to publishing it for the world to use. **No prior plugin experience required!**
 
 ## 🎯 Quick Navigation
