@@ -31,7 +31,7 @@ Azure Master is a comprehensive plugin that provides expert-level guidance acros
 
 ```bash
 /plugin marketplace add JosiahSiegel/claude-code-marketplace
-/plugin install azure-master@JosiahSiegel
+/plugin install azure-master@claude-code-marketplace
 ```
 
 ### Local Installation (Mac/Linux)

@@ -23,7 +23,7 @@ The `salesforce-master` plugin transforms Claude into a comprehensive Salesforce
 /plugin marketplace add JosiahSiegel/claude-code-marketplace
 
 # Install salesforce-master
-/plugin install salesforce-master@JosiahSiegel
+/plugin install salesforce-master@claude-code-marketplace
 ```
 
 ### Local Installation (Mac/Linux)

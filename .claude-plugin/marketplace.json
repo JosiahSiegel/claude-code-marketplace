@@ -322,6 +322,27 @@
         "governance",
         "security"
       ]
+    },
+    {
+      "name": "azure-to-docker-master",
+      "source": "./plugins/azure-to-docker-master",
+      "description": "Complete Azure-to-Docker containerization system. PROACTIVELY activate for: (1) ANY Azure infrastructure containerization task, (2) Extracting Azure configurations programmatically, (3) Converting Azure resources to Docker Compose, (4) Migrating Azure web apps to containers, (5) Exporting Azure SQL/PostgreSQL/MySQL databases, (6) Creating local Docker development environments, (7) Generating production-ready Dockerfiles from Azure configs, (8) Multi-service Docker orchestration for Azure stacks. Provides: comprehensive Azure CLI extraction scripts (900+ lines), automated infrastructure discovery, docker-compose generation, database export/import automation, Dockerfile generation for all runtimes (Node/Python/.NET/PHP/Java), Azure service mapping to Docker equivalents, connection string transformation, security best practices, Docker security review integration, and complete migration workflows. Ensures production-ready, secure, optimized local development environments from Azure infrastructure.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "azure",
+        "docker",
+        "containerization",
+        "migration",
+        "compose",
+        "infrastructure",
+        "extraction",
+        "local",
+        "development",
+        "automation"
+      ]
     }
   ]
 }

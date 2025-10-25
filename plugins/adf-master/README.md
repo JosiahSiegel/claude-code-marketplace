@@ -55,7 +55,7 @@ The **adf-master** plugin provides comprehensive Azure Data Factory expertise, c
 /plugin marketplace add JosiahSiegel/claude-code-marketplace
 
 # Install the plugin
-/plugin install adf-master@JosiahSiegel
+/plugin install adf-master@claude-code-marketplace
 ```
 
 ### Verify Installation
