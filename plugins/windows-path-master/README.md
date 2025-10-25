@@ -123,11 +123,11 @@ pwd
 # Output: /s/repos/claude-code-marketplace
 
 # You ask Claude:
-"Edit the file /s/repos/claude-code-marketplace/README.md"
+"Edit the file /s/repos/myproject/README.md"
 
 # Plugin automatically converts:
-# From: /s/repos/claude-code-marketplace/README.md
-# To:   S:\repos\claude-code-marketplace\README.md
+# From: /s/repos/myproject/README.md
+# To:   S:\repos\myproject\README.md
 
 # Result: ✅ File edited successfully!
 ```
@@ -251,11 +251,11 @@ Input:  /s/repos/claude-code-marketplace/file.tsx
 Steps:
 1. Extract drive letter: "s" → "S"
 2. Add colon: "S:"
-3. Get remaining path: repos/claude-code-marketplace/file.tsx
-4. Replace / with \: repos\claude-code-marketplace\file.tsx
-5. Combine: S:\repos\claude-code-marketplace\file.tsx
+3. Get remaining path: repos/myproject/file.tsx
+4. Replace / with \: repos\myproject\file.tsx
+5. Combine: S:\repos\myproject\file.tsx
 
-Output: S:\repos\claude-code-marketplace\file.tsx
+Output: S:\repos\myproject\file.tsx
 ```
 
 ## Common Scenarios

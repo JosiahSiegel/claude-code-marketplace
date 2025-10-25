@@ -52,12 +52,12 @@ Using forward slashes copied from Git Bash output:
 
 **Incorrect usage:**
 ```
-Edit(file_path="/s/repos/claude-code-marketplace/file.tsx")
+Edit(file_path="/s/repos/myproject/file.tsx")
 ```
 
 **Correct usage:**
 ```
-Edit(file_path="S:\repos\claude-code-marketplace\file.tsx")
+Edit(file_path="S:\repos\myproject\file.tsx")
 ```
 
 **Solution steps:**
@@ -212,16 +212,16 @@ When a user provides a file path, follow this decision tree:
 
 **For MINGW paths (`/x/...`):**
 ```
-Input: /s/repos/claude-code-marketplace/plugins/adf-master/commands/adf-validate.md
+Input: /s/repos/myproject/src/components/Button.tsx
 
 Process:
 1. Extract drive letter: "s"
 2. Uppercase: "S"
 3. Add colon: "S:"
-4. Replace remaining slashes: \repos\claude-code-marketplace\plugins\adf-master\commands\adf-validate.md
-5. Combine: S:\repos\claude-code-marketplace\plugins\adf-master\commands\adf-validate.md
+4. Replace remaining slashes: \repos\myproject\src\components\Button.tsx
+5. Combine: S:\repos\myproject\src\components\Button.tsx
 
-Output: S:\repos\claude-code-marketplace\plugins\adf-master\commands\adf-validate.md
+Output: S:\repos\myproject\src\components\Button.tsx
 ```
 
 **For Windows paths with forward slashes (`X:/...`):**

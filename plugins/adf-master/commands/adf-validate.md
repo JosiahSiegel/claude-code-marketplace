@@ -87,8 +87,8 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/validate-adf-pipelines.ps1 -Strict
 **Full example with all options:**
 ```powershell
 ${CLAUDE_PLUGIN_ROOT}/scripts/validate-adf-pipelines.ps1 `
-    -PipelinePath "S:\repos\formstax-adf\pipeline" `
-    -DatasetPath "S:\repos\formstax-adf\dataset" `
+    -PipelinePath "C:\myproject\adf\pipeline" `
+    -DatasetPath "C:\myproject\adf\dataset" `
     -Strict
 ```
 

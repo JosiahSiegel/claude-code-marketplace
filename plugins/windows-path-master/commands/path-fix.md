@@ -77,15 +77,15 @@ or for a specific file:
 
 **For MINGW paths (`/x/...`):**
 ```
-Input:  /s/repos/claude-code-marketplace/file.tsx
+Input:  /s/repos/myproject/file.tsx
 
 Step 1: Extract drive letter from first segment → "s"
 Step 2: Uppercase the drive letter → "S"
 Step 3: Add colon → "S:"
-Step 4: Replace remaining forward slashes with backslashes → \repos\claude-code-marketplace\file.tsx
-Step 5: Combine → S:\repos\claude-code-marketplace\file.tsx
+Step 4: Replace remaining forward slashes with backslashes → \repos\myproject\file.tsx
+Step 5: Combine → S:\repos\myproject\file.tsx
 
-Output: S:\repos\claude-code-marketplace\file.tsx
+Output: S:\repos\myproject\file.tsx
 ```
 
 **For Windows paths with forward slashes (`X:/...`):**
@@ -134,10 +134,10 @@ Output: C:\Users\name\project\file.tsx
 ✅ Path Conversion Complete
 
 **Original Path (Git Bash/MINGW format):**
-/s/repos/claude-code-marketplace/plugins/windows-path-master/README.md
+/s/repos/myproject/src/components/Button.tsx
 
 **Converted Path (Windows format for Claude Code):**
-S:\repos\claude-code-marketplace\plugins\windows-path-master\README.md
+S:\repos\myproject\src\components\Button.tsx
 
 **What Changed:**
 - Converted /s/ → S:
@@ -203,15 +203,15 @@ Now retrying the edit operation with the correct Windows path...
 
 ### Scenario 2: Proactive Path Conversion
 
-**User:** "Please edit /c/Users/jsiegel/Documents/notes.txt"
+**User:** "Please edit /c/Users/john/Documents/notes.txt"
 
 **Response (proactive conversion):**
 ```
 I notice you're using Git Bash path format. I'll convert this to Windows format
 for Claude Code's Edit tool:
 
-Git Bash format:  /c/Users/jsiegel/Documents/notes.txt
-Windows format:   C:\Users\jsiegel\Documents\notes.txt
+Git Bash format:  /c/Users/john/Documents/notes.txt
+Windows format:   C:\Users\john\Documents\notes.txt
 
 Editing the file now...
 ```

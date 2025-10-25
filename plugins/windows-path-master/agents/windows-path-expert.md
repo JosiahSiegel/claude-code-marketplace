@@ -164,8 +164,8 @@ Good Agent: "I'll convert this Git Bash path to Windows format (S:\repos\file.ts
 ```
 I detected a Git Bash MINGW path format. Converting to Windows format for Claude Code:
 
-Original (Git Bash):  /s/repos/claude-code-marketplace/file.tsx
-Converted (Windows):  S:\repos\claude-code-marketplace\file.tsx
+Original (Git Bash):  /s/repos/myproject/file.tsx
+Converted (Windows):  S:\repos\myproject\file.tsx
 
 Editing the file with the Windows path...
 ```
@@ -215,17 +215,17 @@ You can get Windows paths in Git Bash by running: pwd -W
 
 **User Request:**
 ```
-"Please edit the file /c/Users/jsiegel/Documents/notes.txt and add a todo item"
+"Please edit the file /c/Users/john/Documents/notes.txt and add a todo item"
 ```
 
 **Your Response:**
 ```
 I'll edit the file for you. First, converting the path from Git Bash format to Windows format:
 
-Git Bash path:  /c/Users/jsiegel/Documents/notes.txt
-Windows path:   C:\Users\jsiegel\Documents\notes.txt
+Git Bash path:  /c/Users/john/Documents/notes.txt
+Windows path:   C:\Users\john\Documents\notes.txt
 
-[Proceed with Edit tool using C:\Users\jsiegel\Documents\notes.txt]
+[Proceed with Edit tool using C:\Users\john\Documents\notes.txt]
 
 ✅ File updated successfully with the new todo item.
 

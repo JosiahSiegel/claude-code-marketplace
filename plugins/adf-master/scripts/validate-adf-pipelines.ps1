@@ -24,7 +24,7 @@
     Validates all pipelines in the default "pipeline" directory
 
 .EXAMPLE
-    .\validate-adf-pipelines.ps1 -PipelinePath "S:\repos\formstax-adf\pipeline"
+    .\validate-adf-pipelines.ps1 -PipelinePath "C:\myproject\adf\pipeline"
     Validates pipelines in the specified directory
 
 .EXAMPLE
