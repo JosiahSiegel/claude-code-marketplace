@@ -228,8 +228,8 @@
     {
       "name": "adf-master",
       "source": "./plugins/adf-master",
-      "description": "Complete Azure Data Factory expertise system with STRICT validation enforcement for ALL platforms. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/linked services) WITH automatic validation, (2) Activity nesting validation (ForEach/If/Switch/Until limitations), (3) Linked service configuration validation (Blob Storage accountKind, SQL Database auth), (4) CI/CD setup and automation (GitHub Actions/Azure DevOps), (5) ARM template generation and deployment, (6) Pipeline debugging and troubleshooting, (7) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (8) Performance optimization and best practices. Provides: comprehensive ADF knowledge with validation enforcement, activity nesting rules (REJECTS prohibited combinations like ForEach in If), linked service requirements (Azure Blob Storage, SQL Database, ADLS), resource limit checks, Execute Pipeline workarounds, common pitfall prevention, CI/CD patterns, troubleshooting guides, and production-ready VALIDATED solutions. Ensures ONLY valid, compliant, optimized ADF pipelines are created following Microsoft best practices AND platform limitations.",
-      "version": "2.0.0",
+      "description": "Complete Azure Data Factory expertise system with STRICT validation enforcement for ALL platforms. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/linked services) WITH automatic validation, (2) Activity nesting validation (ForEach/If/Switch/Until limitations), (3) Linked service configuration validation (Blob Storage accountKind, SQL Database auth), (4) CI/CD setup and automation (GitHub Actions/Azure DevOps), (5) ARM template generation and deployment, (6) Pipeline debugging and troubleshooting, (7) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (8) Performance optimization and best practices. Provides: comprehensive ADF knowledge with validation enforcement, activity nesting rules (REJECTS prohibited combinations like ForEach in If), linked service requirements (Azure Blob Storage, SQL Database, ADLS), resource limit checks, Execute Pipeline workarounds, common pitfall prevention, CI/CD patterns, troubleshooting guides, automated validation script, and production-ready VALIDATED solutions. Ensures ONLY valid, compliant, optimized ADF pipelines are created following Microsoft best practices AND platform limitations.",
+      "version": "2.1.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -270,6 +270,27 @@
         "schema",
         "authentication",
         "deployment"
+      ]
+    },
+    {
+      "name": "windows-path-master",
+      "source": "./plugins/windows-path-master",
+      "description": "Windows path resolution and Git Bash compatibility expert for Claude Code. PROACTIVELY activate for: (1) File path errors on Windows (backslash issues), (2) Git Bash MINGW path resolution, (3) Edit/Write tool failures with Windows paths, (4) Cross-platform path conversion, (5) Windows file system navigation in Claude Code, (6) Path format detection and conversion, (7) Windows-specific file operation troubleshooting. Provides: automatic path format detection, backslash conversion guidance, Git Bash compatibility fixes, Windows-specific file operation patterns, MINGW path troubleshooting, real-time path validation, and production-ready Windows file handling. Ensures correct file operations on Windows following Claude Code best practices.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "windows",
+        "path",
+        "gitbash",
+        "mingw",
+        "backslash",
+        "pathconversion",
+        "windowsfile",
+        "claudecode",
+        "filepath",
+        "crossplatform"
       ]
     }
   ]

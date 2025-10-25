@@ -421,6 +421,114 @@ ConnectRetryInterval=10;
 - [ ] Sink has appropriate schema and data type mappings
 - [ ] Staging linked service configured for optimal performance
 
+## 🔍 Automated Validation Script
+
+**CRITICAL: Always run automated validation before committing or deploying ADF pipelines!**
+
+The adf-master plugin includes a comprehensive PowerShell validation script that checks for ALL the rules and limitations documented above.
+
+### Using the Validation Script
+
+**Location:** `${CLAUDE_PLUGIN_ROOT}/scripts/validate-adf-pipelines.ps1`
+
+**Basic usage:**
+```powershell
+# From the root of your ADF repository
+pwsh -File validate-adf-pipelines.ps1
+```
+
+**With custom paths:**
+```powershell
+pwsh -File validate-adf-pipelines.ps1 `
+    -PipelinePath "path/to/pipeline" `
+    -DatasetPath "path/to/dataset"
+```
+
+**With strict mode (additional warnings):**
+```powershell
+pwsh -File validate-adf-pipelines.ps1 -Strict
+```
+
+### What the Script Validates
+
+The automated validation script checks for issues that Microsoft's official `@microsoft/azure-data-factory-utilities` package does **NOT** validate:
+
+1. **Activity Nesting Violations:**
+   - ForEach → ForEach, Until, Validation
+   - Until → Until, ForEach, Validation
+   - IfCondition → ForEach, If, IfCondition, Switch, Until, Validation
+   - Switch → ForEach, If, IfCondition, Switch, Until, Validation
+
+2. **Resource Limits:**
+   - Pipeline activity count (max 120, warn at 100)
+   - Pipeline parameter count (max 50)
+   - Pipeline variable count (max 50)
+   - ForEach batchCount limit (max 50, warn at 30 in strict mode)
+
+3. **Variable Scope Violations:**
+   - SetVariable in parallel ForEach (causes race conditions)
+   - Proper AppendVariable vs SetVariable usage
+
+4. **Dataset Configuration Issues:**
+   - Missing fileName or wildcardFileName for file-based datasets
+   - AzureBlobFSLocation missing required fileSystem property
+   - Missing required properties for DelimitedText, Json, Parquet types
+
+5. **Copy Activity Validations:**
+   - Source/sink type compatibility with dataset types
+   - Lookup activity firstRowOnly=false warnings (5000 row/4MB limits)
+   - Blob file dependencies (additionalColumns logging pattern)
+
+### Integration with CI/CD
+
+**GitHub Actions example:**
+```yaml
+- name: Validate ADF Pipelines
+  run: |
+    pwsh -File validate-adf-pipelines.ps1 -PipelinePath pipeline -DatasetPath dataset
+  shell: pwsh
+```
+
+**Azure DevOps example:**
+```yaml
+- task: PowerShell@2
+  displayName: 'Validate ADF Pipelines'
+  inputs:
+    filePath: 'validate-adf-pipelines.ps1'
+    arguments: '-PipelinePath pipeline -DatasetPath dataset'
+    pwsh: true
+```
+
+### Command Reference
+
+Use the `/adf-validate` command to run the validation script with proper guidance:
+
+```bash
+/adf-validate
+```
+
+This command will:
+1. Detect your ADF repository structure
+2. Run the validation script with appropriate paths
+3. Parse and explain any errors or warnings found
+4. Provide specific solutions for each violation
+5. Recommend next actions based on results
+6. Suggest CI/CD integration patterns
+
+### Exit Codes
+
+- **0**: Validation passed (no errors)
+- **1**: Validation failed (errors found - DO NOT DEPLOY)
+
+### Best Practices
+
+1. **Run validation before every commit** to catch issues early
+2. **Add validation to CI/CD pipeline** to prevent invalid deployments
+3. **Use strict mode during development** for additional warnings
+4. **Re-validate after bulk changes** or generated pipelines
+5. **Document validation exceptions** if you must bypass a warning
+6. **Share validation results with team** to prevent repeated mistakes
+
 ## 🚨 CRITICAL: Enforcement Protocol
 
 **When creating or modifying ADF pipelines:**
