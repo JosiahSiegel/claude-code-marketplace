@@ -292,6 +292,36 @@
         "filepath",
         "crossplatform"
       ]
+    },
+    {
+      "name": "azure-master",
+      "source": "./plugins/azure-master",
+      "description": "Complete Azure ecosystem expertise system across ALL platforms and services. PROACTIVELY activate for: (1) ANY Azure task (resources/deployment/migration/IaC), (2) Azure CLI operations and scripting, (3) ARM template creation and best practices, (4) Bicep infrastructure-as-code development, (5) Terraform Azure provider usage, (6) Azure resource management (compute/network/storage/databases/AI), (7) Cloud migration strategies and Cloud Adoption Framework, (8) Azure Well-Architected Framework implementation, (9) Multi-cloud and hybrid deployments, (10) Azure DevOps and CI/CD integration, (11) Security and compliance (Azure AD/RBAC/Key Vault/Defender), (12) Cost optimization and governance. Provides: comprehensive az CLI reference (always researches latest), ARM/Bicep template best practices, Terraform Azure provider expertise, top Azure services knowledge (VMs/AKS/App Service/Functions/Storage/SQL/Cosmos/VNet/Firewall/Application Gateway), Cloud Adoption Framework migration patterns, Well-Architected Framework pillars, authentication methods (service principals/managed identity), Azure Landing Zones, resource tagging strategies, monitoring/logging (Azure Monitor/Application Insights), disaster recovery patterns, and production-ready enterprise-grade solutions. Ensures secure, optimized, compliant Azure deployments following Microsoft best practices and industry standards.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "azure",
+        "cloud",
+        "microsoft",
+        "arm",
+        "bicep",
+        "terraform",
+        "azcli",
+        "deployment",
+        "migration",
+        "infrastructure",
+        "iac",
+        "compute",
+        "networking",
+        "storage",
+        "database",
+        "wellarchitected",
+        "caf",
+        "governance",
+        "security"
+      ]
     }
   ]
 }
