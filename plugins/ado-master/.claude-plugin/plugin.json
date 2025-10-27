@@ -1,7 +1,7 @@
 {
   "name": "ado-master",
-  "version": "1.1.0",
-  "description": "Complete Azure DevOps and Azure Pipelines expertise system. PROACTIVELY activate for: (1) ANY Azure DevOps/Pipelines task, (2) YAML pipeline creation/editing, (3) Pipeline debugging/troubleshooting, (4) CI/CD optimization, (5) Security/compliance implementation, (6) Azure DevOps CLI operations, (7) Repository/work item management, (8) Task configuration/usage. Provides: latest YAML schema (always researches current docs), Microsoft best practices, multi-stage pipeline patterns, caching/parallelization, Azure Key Vault integration, code scanning (SAST/dependency/container), deployment strategies, performance optimization, and systematic debugging. Ensures production-ready, secure, efficient pipelines following Microsoft standards.",
+  "version": "1.3.0",
+  "description": "Complete Azure DevOps and Azure Pipelines expertise system with Sprint 254-262 features (2025). PROACTIVELY activate for: (1) ANY Azure DevOps/Pipelines task, (2) YAML pipeline creation/editing with expression functions (iif, trim), (3) Template management and reusability, (4) Microsoft Security DevOps (MSDO) integration, (5) Stage dependencies visualization, (6) Agent v4 with ARM64 support, (7) New OS images (Ubuntu-24.04, Windows-2025, macOS-15), (8) GitHub Copilot integration (Sprint 262), (9) OAuth apps migration to Entra ID (Sprint 261), (10) Continuous Access Evaluation (CAE), (11) Pipeline debugging/troubleshooting, (12) CI/CD optimization, (13) Security/compliance implementation, (14) Azure DevOps CLI operations. Provides: Sprint 254-262 latest features, Agent v4 on .NET 8 with ARM64 platform support, Microsoft Defender for DevOps with MSDO extension (replaces deprecated CredScan), GitHub Advanced Security integration, workload identity federation (OIDC), template patterns for code reuse, iif() ternary operator and trim() function, stage-level variables and dependency visualization, Ubuntu-24.04/Windows-2025/macOS-15 hosted agents, GitHub Copilot work item integration, latest YAML schema (always researches current docs), Microsoft best practices, multi-stage pipeline patterns, caching/parallelization, Azure Key Vault integration, comprehensive security scanning (SAST/dependency/container/IaC/secrets), deployment strategies, performance optimization, and systematic debugging. Ensures production-ready, secure, efficient pipelines following Microsoft 2025 standards.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
@@ -16,7 +16,10 @@
     "cicd",
     "microsoft",
     "azure",
-    "devops"
+    "devops",
+    "security",
+    "templates",
+    "defender"
   ],
   "license": "MIT"
 }

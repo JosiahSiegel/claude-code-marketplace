@@ -1,22 +1,25 @@
 {
   "name": "azure-to-docker-master",
   "version": "1.0.0",
-  "description": "Complete Azure-to-Docker containerization system. PROACTIVELY activate for: (1) ANY Azure infrastructure containerization task, (2) Extracting Azure configurations programmatically, (3) Converting Azure resources to Docker Compose, (4) Migrating Azure web apps to containers, (5) Exporting Azure SQL/PostgreSQL/MySQL databases, (6) Creating local Docker development environments, (7) Generating production-ready Dockerfiles from Azure configs, (8) Multi-service Docker orchestration for Azure stacks. Provides: comprehensive Azure CLI extraction scripts (900+ lines), automated infrastructure discovery, docker-compose generation, database export/import automation, Dockerfile generation for all runtimes (Node/Python/.NET/PHP/Java), Azure service mapping to Docker equivalents, connection string transformation, security best practices, Docker security review integration, and complete migration workflows. Ensures production-ready, secure, optimized local development environments from Azure infrastructure.",
+  "description": "Complete Azure-to-Docker migration system for local development. PROACTIVELY activate for: (1) ANY Azure-to-Docker migration task, (2) Azure infrastructure extraction and Docker Compose generation, (3) Azure service emulator setup (Azurite, SQL Server 2025, Cosmos DB, Service Bus), (4) Local development environment creation from Azure configs, (5) Database export from Azure SQL/PostgreSQL/MySQL to Docker, (6) Dockerfile generation from Azure App Service configurations, (7) Multi-container orchestration with proper networking and dependencies, (8) Production-ready Docker Compose with health checks and security, (9) Azure service mapping (App Service/SQL/Storage/Redis/Cosmos), (10) Development-to-production parity with Azure emulators. Provides: Azure resource extraction and analysis, complete Docker Compose generation with 2025 best practices, Azure emulator configuration (Azurite for Storage, SQL Server 2025, Cosmos DB emulator, Service Bus emulator), database export automation, App Service to Dockerfile conversion, service dependency mapping, network isolation patterns, volume management strategies, environment variable templating, health check implementation, resource limit configuration, security hardening (non-root users, read-only filesystems, capability drops), development override patterns, and Azure-to-Docker best practices. Ensures production-ready local development environments that mirror Azure infrastructure.",
   "author": {
     "name": "Josiah Siegel",
-    "email": "josiah0601@gmail.com"
+    "email": "JosiahSiegel@users.noreply.github.com"
   },
   "keywords": [
     "azure",
     "docker",
-    "containerization",
     "migration",
     "compose",
+    "emulator",
+    "azurite",
+    "local-dev",
     "infrastructure",
     "extraction",
-    "local",
-    "development",
-    "automation"
+    "containerize",
+    "sql-server",
+    "cosmos",
+    "storage"
   ],
   "license": "MIT"
 }

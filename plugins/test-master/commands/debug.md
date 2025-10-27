@@ -167,6 +167,7 @@ await page.waitForFunction(() =>
 
 ### Use Playwright Trace Viewer
 
+**For Playwright E2E Tests:**
 ```bash
 # Run with tracing
 npx playwright test --trace on
@@ -180,6 +181,23 @@ npx playwright show-trace trace.zip
 # - Check network requests
 # - See console logs
 # - Review screenshots
+```
+
+**For Vitest 4.0+ with Browser Mode:**
+```bash
+# Run tests with trace generation
+vitest run --browser --browser.trace on
+
+# Traces available as test reporter annotations
+# View trace file from test output
+npx playwright show-trace path/to/trace.zip
+
+# Trace includes:
+# - Test execution timeline
+# - Browser interactions
+# - DOM state at each step
+# - Network activity
+# - Console logs
 ```
 
 ### Use VS Code Debugger
@@ -198,6 +216,12 @@ npx playwright show-trace trace.zip
   "internalConsoleOptions": "neverOpen"
 }
 ```
+
+**For Vitest 4.0+ Browser Mode:**
+- Install Vitest VS Code extension
+- Click "Debug Test" button above test in editor
+- Works seamlessly with Browser Mode tests
+- Breakpoints and step-through debugging supported
 
 **For Playwright:**
 

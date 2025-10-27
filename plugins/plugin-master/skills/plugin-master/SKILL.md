@@ -57,54 +57,24 @@ This skill provides comprehensive, step-by-step guidance for creating Claude Cod
 
 ### ⚠️ ALWAYS FETCH LATEST DOCUMENTATION FIRST
 
-**BEFORE creating any plugin**, Claude must ALWAYS fetch the latest plugin documentation. The official docs are the **SOURCE OF TRUTH** for structure and required fields:
+**BEFORE creating any plugin**, fetch the latest documentation from docs.claude.com:
 
 ```
-web_fetch: https://docs.claude.com/en/docs/claude-code/plugins-reference
-web_fetch: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
+WebFetch: https://docs.claude.com/en/docs/claude-code/plugins-reference
+WebFetch: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
 ```
 
-**CRITICAL:** Follow the structure and requirements from the fetched documentation, NOT just the templates in this skill. The templates below are reference examples that may become outdated - **the official docs you fetch are always correct**.
-
-This ensures:
-- All required fields (like `owner` in marketplace.json, component registration in plugin.json) are included
-- Latest structural requirements are followed
-- New features or requirements aren't missed
-- You're working with current, accurate information
+**Official docs are the source of truth.** Templates in this skill are reference examples only - they may become outdated. Always verify structure against fetched documentation.
 
 **Workflow:**
-1. Fetch documentation (always)
-2. Read and understand current requirements
-3. Use templates below as starting points only
-4. Verify your plugin.json structure matches what you learned from the docs
-5. Create the plugin following the official docs structure
+1. Fetch latest docs
+2. Verify current requirements (required fields, component registration)
+3. Use skill templates as starting points only
+4. Follow official structure from docs
 
-### ⚠️ CRITICAL: Verify Component Registration
+### Component Discovery (2025)
 
-**After fetching the official docs**, verify the current plugin structure requirements. The documentation will show the correct approach.
-
-**Current Implementation** (verify this matches what you read in the docs):
-- Components are discovered automatically by file convention (convention over configuration)
-- Commands, agents, and skills don't need to be registered in plugin.json
-- Simply placing files in the correct directories (`commands/`, `agents/`, `skills/`) is sufficient
-- The plugin.json file only needs metadata fields (name, version, description, author, keywords, license)
-
-**Correct plugin.json structure:**
-```json
-{
-  "name": "my-plugin",
-  "version": "1.0.0",
-  "description": "My plugin",
-  "author": {
-    "name": "Your Name",
-    "email": "[email protected]"
-  },
-  "keywords": ["keyword1", "keyword2"],
-  "license": "MIT"
-}
-```
-
-**Remember:** Always verify against the official documentation you fetched, but the current implementation uses file-based discovery (convention over configuration).
+**Convention over configuration:** Commands, agents, and Agent Skills are auto-discovered from their respective directories. Custom paths optional via plugin.json. See advanced-features-2025 skill for complete details.
 
 ### Autonomous Creation Principles
 
@@ -596,13 +566,13 @@ description: "Complete [domain] system. PROACTIVELY activate for: (1) [use cases
 
 **🚨 CRITICAL JSON SCHEMA REQUIREMENTS:**
 
-These are the most common validation errors - always verify these:
+Common validation errors to avoid:
 
-1. **`author` MUST be an object** - Never use a string!
+1. **`author` MUST be an object** - Never a string
    - ✅ CORRECT: `"author": { "name": "Author Name" }`
    - ❌ WRONG: `"author": "Author Name"`
 
-2. **`version` MUST be a string** - Use semantic versioning
+2. **`version` MUST be a string** - Semantic versioning format
    - ✅ CORRECT: `"version": "1.0.0"`
    - ❌ WRONG: `"version": 1.0`
 
@@ -610,9 +580,7 @@ These are the most common validation errors - always verify these:
    - ✅ CORRECT: `"keywords": ["terraform", "aws"]`
    - ❌ WRONG: `"keywords": "terraform, aws"`
 
-4. **All URLs must be strings** (if included)
-   - ✅ CORRECT: `"homepage": "https://github.com/..."`
-
+**2025 Recommended Fields:**
 ```json
 {
   "name": "plugin-name",
@@ -622,8 +590,10 @@ These are the most common validation errors - always verify these:
     "name": "AUTHOR_NAME_FROM_GIT_CONFIG",
     "email": "AUTHOR_EMAIL_FROM_GIT_CONFIG"
   },
-  "keywords": ["domain", "primary", "secondary", "technical", "terms", "users", "naturally", "use"],
-  "license": "MIT"
+  "homepage": "https://github.com/user/repo/tree/main/plugins/plugin-name",
+  "repository": "https://github.com/user/repo",
+  "license": "MIT",
+  "keywords": ["domain", "primary", "secondary", "technical", "terms", "users", "naturally", "use"]
 }
 ```
 
@@ -1041,155 +1011,17 @@ That's it! You're now a plugin creator. Everything else in this guide builds on 
 
 ### What's in a Plugin?
 
-A plugin is a folder with this structure:
+Only `.claude-plugin/plugin.json` is required. Optional components: commands/, agents/, skills/, hooks/, MCP servers.
 
-```
-my-plugin/
-├── .claude-plugin/
-│   └── plugin.json       # ← Required: Tells Claude about your plugin
-├── commands/             # ← Optional: Custom commands
-│   └── my-command.md
-├── agents/               # ← Optional: Specialized AI assistants
-│   └── my-agent.md
-├── skills/               # ← Optional: Knowledge to teach Claude
-│   └── my-skill.md
-└── README.md            # ← Recommended: How to use your plugin
-```
+### Plugin Components
 
-Only the `.claude-plugin/plugin.json` file is **required**. Everything else is optional!
+**Commands**: Custom slash commands in `commands/*.md`
+**Agents**: Specialized subagents in `agents/*.md` with frontmatter
+**Agent Skills**: Dynamic knowledge in `skills/*/SKILL.md` (auto-loaded by context)
+**Hooks**: Automated workflows triggered by events (see advanced-features-2025 skill)
+**MCP Servers**: External tool integration via Model Context Protocol
 
-### The Five Types of Plugin Components
-
-**IMPORTANT:** Always fetch and check the official documentation to understand how components should be structured and registered.
-
-#### 1. Commands (The Most Common)
-Commands are custom instructions that you invoke with `/command-name`.
-
-**Example:** A `/deploy` command that knows your deployment process.
-
-**When to use:** When you want to trigger a specific workflow or task.
-
-**File location:** `commands/deploy.md`
-
-```markdown
----
-description: Deploy to production with safety checks
----
-
-# Deploy Command
-
-## Purpose
-This command guides Claude through our production deployment process.
-
-## Instructions
-1. Check that all tests pass
-2. Review the changelog
-3. Create a backup
-4. Deploy to production
-5. Run smoke tests
-6. Notify the team
-```
-
-#### 2. Agents (Specialized Assistants)
-Agents are AI assistants with specific roles or expertise.
-
-**Example:** A "Security Reviewer" agent that checks code for vulnerabilities.
-
-**When to use:** When you want Claude to adopt a specific perspective or expertise.
-
-**File location:** `agents/security-reviewer.md`
-
-```markdown
----
-agent: true
----
-
-# Security Reviewer
-
-You are a security expert reviewing code for vulnerabilities. Focus on:
-
-- SQL injection risks
-- XSS vulnerabilities  
-- Authentication issues
-- Data exposure
-
-Always explain security issues in simple terms and suggest fixes.
-```
-
-#### 3. Skills (Teaching Claude)
-Skills provide Claude with knowledge about your domain, tools, or processes.
-
-**Example:** A skill explaining your company's API structure.
-
-**When to use:** When Claude needs to understand something specific to your context.
-
-**File location:** `skills/our-api.md`
-
-```markdown
----
-name: our-api
-description: Knowledge about our company's API structure
----
-
-# Our API Documentation
-
-## Overview
-Our API follows REST principles with JSON payloads.
-
-## Authentication
-We use JWT tokens in the Authorization header...
-
-## Common Endpoints
-- `GET /api/users` - List users
-- `POST /api/users` - Create user
-...
-```
-
-#### 4. Hooks (Advanced: Auto-Triggers)
-Hooks automatically run scripts or commands when certain events happen.
-
-**Example:** Auto-format code after Claude edits a file.
-
-**When to use:** When you want automatic behavior without manual commands.
-
-**File location:** `.claude-plugin/hooks.json`
-
-```json
-{
-  "PostToolUse": [
-    {
-      "matcher": "Write",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "./scripts/format.sh"
-        }
-      ]
-    }
-  ]
-}
-```
-
-#### 5. MCP Servers (Advanced: External Tools)
-MCP (Model Context Protocol) servers let Claude use external tools and APIs.
-
-**Example:** A server that lets Claude interact with your company's database.
-
-**When to use:** When you need Claude to access external systems or services.
-
-**Configuration in:** `.claude-plugin/plugin.json`
-
-```json
-{
-  "name": "my-plugin",
-  "mcpServers": {
-    "my-tool": {
-      "command": "npx",
-      "args": ["-y", "@my-company/mcp-server"]
-    }
-  }
-}
-```
+For detailed component guides, see advanced-features-2025 skill.
 
 ### Plugin vs Marketplace: What's the Difference?
 
@@ -1233,47 +1065,13 @@ This is the only required file. It tells Claude Code about your plugin:
 - `version`: Follow semantic versioning (1.0.0)
 - `description`: Help others find your plugin
 
-### Commands Directory
+### Directory Organization
 
-Each markdown file here becomes a `/command-name` in Claude Code.
-
-**Naming:** The filename becomes the command name.
-- `deploy.md` → `/deploy`
-- `review-pr.md` → `/review-pr`
-
-**Content:** Instructions for Claude on what to do when command is invoked.
-
-### Agents Directory
-
-Each markdown file here becomes an agent Claude can use.
-
-**Naming:** Use descriptive names for the file.
-- `security-expert.md` → "Security Expert" agent
-
-**Content:** Instructions that define the agent's role and expertise.
-
-**Required frontmatter:**
-```markdown
----
-agent: true
----
-```
-
-### Skills Directory
-
-Skills teach Claude about your context. Each file is loaded into Claude's context when needed.
-
-**Naming:** Use descriptive names.
-- `company-api.md`
-- `deployment-process.md`
-
-**Content:** Documentation, guides, or knowledge Claude should know.
-
-### Optional Directories
-
-- `hooks/` - Scripts that run automatically
-- `scripts/` - Helper scripts your plugin uses
-- `bin/` - Binary tools or executables
+- `commands/` → Each .md file becomes a slash command
+- `agents/` → Subagents with specialized expertise (require frontmatter)
+- `skills/` → Agent Skills for dynamic knowledge loading
+- `hooks/` → Automated workflows (see advanced-features-2025 skill)
+- `scripts/`, `bin/` → Helper utilities
 
 ## Publishing Your Plugin to a Marketplace
 
@@ -1456,253 +1254,24 @@ This shows detailed loading information and error messages.
 ## Real-World Plugin Examples
 
 <plugin_examples>
-Let's look at practical plugins you might create:
+**PR Review Helper**: Commands for code/test review + security/code-reviewer agents
+**Team Onboarding**: Skills for tech stack/standards + setup commands
+**API Integration**: Commands for common operations + domain expert agent + API skill
+**Documentation Generator**: Commands for docs/readme/changelog generation
 
-### Example 1: PR Review Helper
-
-**Purpose:** Help create thorough pull request reviews.
-
-**Structure:**
-```
-pr-review-helper/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── review-pr.md
-│   ├── check-tests.md
-│   └── suggest-improvements.md
-├── agents/
-│   ├── code-reviewer.md
-│   └── security-reviewer.md
-└── README.md
-```
-
-**Key command** (`commands/review-pr.md`):
-```markdown
----
-description: Perform a comprehensive PR review
----
-
-# PR Review
-
-## Purpose
-Review pull requests thoroughly for code quality, security, and best practices.
-
-## Process
-1. Read all changed files
-2. Check for security issues
-3. Verify tests exist
-4. Check code style
-5. Suggest improvements
-6. Write review summary
-
-## Security Checklist
-- SQL injection risks
-- XSS vulnerabilities
-- Exposed secrets
-- Auth/authorization issues
-```
-
-**To create this:** Just ask Claude:
-> "Create a PR review plugin with commands for reviewing code, checking tests, and suggesting improvements. Include agents for code and security review."
-
-### Example 2: Team Onboarding
-
-**Purpose:** Help new team members get up to speed.
-
-**Structure:**
-```
-team-onboarding/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── setup-environment.md
-│   ├── explain-architecture.md
-│   └── common-tasks.md
-├── skills/
-│   ├── our-tech-stack.md
-│   ├── code-standards.md
-│   └── deployment-process.md
-└── README.md
-```
-
-**Key skill** (`skills/our-tech-stack.md`):
-```markdown
----
-name: our-tech-stack
-description: Overview of our company's technology choices
----
-
-# Our Tech Stack
-
-## Frontend
-- React 18 with TypeScript
-- TailwindCSS for styling
-- Vite as build tool
-
-## Backend
-- Node.js with Express
-- PostgreSQL database
-- Redis for caching
-
-## Deployment
-- Docker containers
-- AWS ECS for hosting
-- GitHub Actions for CI/CD
-
-## Code Standards
-- ESLint + Prettier
-- Test coverage > 80%
-- All PRs need 2 approvals
-```
-
-**To create this:** Tell Claude:
-> "Create a team onboarding plugin that explains our tech stack, deployment process, and common tasks. Use skills for documentation."
-
-### Example 3: API Integration Helper
-
-**Purpose:** Make it easy to work with a specific API.
-
-**Structure:**
-```
-stripe-helper/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── create-customer.md
-│   ├── create-subscription.md
-│   └── handle-webhook.md
-├── skills/
-│   └── stripe-api.md
-├── agents/
-│   └── payment-expert.md
-└── README.md
-```
-
-**Skill** teaches Claude the API, **commands** handle common tasks, **agent** provides expertise.
-
-**To create this:** Ask Claude:
-> "Create a plugin for Stripe API integration with commands for creating customers, subscriptions, and handling webhooks. Include a payment expert agent."
-
-### Example 4: Documentation Generator
-
-**Purpose:** Automatically generate project documentation.
-
-**Structure:**
-```
-docs-generator/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── generate-api-docs.md
-│   ├── generate-readme.md
-│   └── update-changelog.md
-└── README.md
-```
-
-**These plugins show you don't need complex structures.** Even simple plugins with 1-3 commands can be incredibly useful!
+Even simple 1-3 command plugins provide immense value. Just describe what you want to Claude.
 </plugin_examples>
 
 ## Tips for Better Plugins
 
 <plugin_tips>
-### Writing Good Commands
+### Writing Quality Components
 
-**DO:**
-- ✅ Be specific about steps
-- ✅ Include examples
-- ✅ Handle error cases
-- ✅ Explain *why* not just *what*
+**Commands**: Be specific, include examples, handle errors, explain why not just what
+**Agents**: Define clear role, perspective, and constraints (what they DON'T do)
+**Agent Skills**: Focus on single domain, scannable headers, concrete examples, updated content
 
-**DON'T:**
-- ❌ Be vague ("do something")
-- ❌ Skip error handling
-- ❌ Assume context
-- ❌ Write a novel (keep focused)
-
-**Example of good vs bad:**
-
-❌ **Bad:**
-```markdown
-Check the code for issues
-```
-
-✅ **Good:**
-```markdown
-# Code Review Process
-
-1. Read all changed files
-2. Check for:
-   - SQL injection (look for string concatenation in queries)
-   - XSS (check for unescaped user input in HTML)
-   - Exposed secrets (search for API keys, passwords)
-3. Verify tests exist for new functions
-4. Suggest specific improvements with code examples
-5. Rate severity: Low/Medium/High
-```
-
-### Writing Good Agents
-
-Agents should have:
-1. **Clear role:** What expertise do they provide?
-2. **Perspective:** How do they approach problems?
-3. **Constraints:** What DON'T they do?
-
-**Example:**
-```markdown
----
-agent: true
----
-
-# Performance Optimizer
-
-You are a performance optimization expert. Your role is to identify and fix performance bottlenecks in code.
-
-## Your Approach
-- Always measure before optimizing
-- Focus on algorithmic improvements first
-- Consider memory usage alongside CPU time
-- Explain trade-offs clearly
-
-## You DON'T
-- Optimize prematurely
-- Sacrifice readability for minor gains
-- Recommend without profiling data
-```
-
-### Writing Good Skills
-
-Skills should:
-1. **Be focused:** One skill = one topic
-2. **Be scannable:** Use headers and lists
-3. **Include examples:** Show don't just tell
-4. **Stay updated:** Update as things change
-
-**Structure:**
-```markdown
----
-name: skill-name
-description: One-line summary
----
-
-# Skill Title
-
-## Overview
-Brief introduction
-
-## Key Concepts
-- Concept 1: Explanation
-- Concept 2: Explanation
-
-## Examples
-Concrete examples
-
-## Common Pitfalls
-What to avoid
-
-## Related Information
-Links or references
-```
+See advanced-features-2025 skill for Agent Skills best practices and patterns.
 
 ### Keep Plugins Focused
 
@@ -1898,90 +1467,7 @@ If you're still having trouble:
 
 ## Advanced Plugin Development
 
-Once you're comfortable with the basics, explore these advanced topics:
-
-### Progressive Disclosure in Skills
-
-Skills can load information gradually to save context:
-
-```markdown
----
-name: advanced-skill
-description: Loads details only when needed
----
-
-# Advanced Skill
-
-## Overview
-High-level description always loaded.
-
-## <details id="detail-1">
-### Detailed Topic 1
-This section only loads when Claude needs it.
-</details>
-
-## <details id="detail-2">
-### Detailed Topic 2
-Another section that loads on-demand.
-</details>
-```
-
-### Dynamic Hook Configuration
-
-Create hooks that adapt to the environment:
-
-```json
-{
-  "PostToolUse": [
-    {
-      "matcher": "Write|Edit",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/smart-formatter.sh",
-          "env": {
-            "PROJECT_TYPE": "auto-detect"
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-### Multi-Plugin Workflows
-
-Design plugins that work together:
-
-1. **Base plugin** - Core functionality
-2. **Extension plugins** - Add specific features
-3. **Users install what they need**
-
-Example: Git plugin + GitHub plugin + GitLab plugin
-
-### Environment Variables
-
-Use `${CLAUDE_PLUGIN_ROOT}` for plugin-relative paths:
-
-```json
-{
-  "mcpServers": {
-    "my-tool": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/bin/server",
-      "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/config.json"]
-    }
-  }
-}
-```
-
-### Plugin Testing Framework
-
-Create a testing workflow:
-
-1. **Local marketplace** for development
-2. **Test scripts** to validate structure
-3. **CI/CD** to check on every commit
-4. **Beta testing** with small group first
+For advanced topics including Agent Skills patterns, hooks, MCP integration, environment variables, multi-plugin workflows, and testing strategies, see the advanced-features-2025 skill.
 
 ## Best Practices Summary
 

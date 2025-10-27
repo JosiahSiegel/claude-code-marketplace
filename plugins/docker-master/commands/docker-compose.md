@@ -26,8 +26,8 @@ Create and manage multi-container Docker applications following current Docker C
 
 #### File Format & Structure
 ```yaml
-# Use latest compose file format
-version: '3.8'  # or latest supported version
+# Modern Compose format (2025: version field obsolete)
+# No version field needed for Compose v2.40+
 
 services:
   # Service definitions here
@@ -44,6 +44,8 @@ configs:
 secrets:
   # Secrets (for Swarm mode)
 ```
+
+**Important (2025 Update):** The `version` field is now obsolete in Docker Compose v2.40+. Modern compose files start directly with `services`.
 
 #### Service Configuration Best Practices
 
@@ -208,7 +210,7 @@ secrets:
 ## Complete Example: Production-Ready Compose File
 
 ```yaml
-version: '3.8'
+# Modern Compose v2.40+ format (no version field)
 
 services:
   nginx:
@@ -416,8 +418,6 @@ docker stats $(docker compose ps -q)
 
 Create `docker-compose.override.yml`:
 ```yaml
-version: '3.8'
-
 services:
   app:
     build:
@@ -436,8 +436,6 @@ services:
 
 Create `docker-compose.prod.yml`:
 ```yaml
-version: '3.8'
-
 services:
   app:
     build:

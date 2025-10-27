@@ -1,6 +1,6 @@
 # test-master
 
-Complete management plugin for **Vitest + Playwright + MSW** testing infrastructure. This production-ready plugin provides comprehensive test automation, debugging, and infrastructure management for modern JavaScript projects.
+Complete management plugin for **Vitest 3.x + Playwright 1.50+ + MSW 2.x** testing infrastructure (2025). This production-ready plugin provides comprehensive test automation, debugging, mutation testing, test annotation, and infrastructure management for modern JavaScript projects.
 
 ## 🚀 Features
 
@@ -62,12 +62,28 @@ Complete management plugin for **Vitest + Playwright + MSW** testing infrastruct
 unzip test-master.zip -d ~/.local/share/claude/plugins/
 ```
 
-## 🎯 Technology Stack
+## 🎯 Technology Stack (2025)
 
-- **Vitest 3.x** - Unit and integration testing with multi-project support
-- **Playwright 1.56+** - E2E browser testing across Chrome, Firefox, Safari, mobile
-- **MSW (Mock Service Worker) 2.x** - API mocking for both Vitest and Playwright
-- **happy-dom** - Fast DOM simulation for Vitest
+- **Vitest 3.x** (Latest: 3.2 - June 2025) - Unit, integration, and browser testing
+  - **Annotation API (3.2+)** - Add metadata and attachments to tests
+  - **Line Number Filtering (3.0+)** - Run tests by line number from IDE
+  - **Improved Watch Mode** - Smarter change detection, faster rebuilds
+  - **Enhanced Reporting** - Reduced flicker, clearer output
+  - **Workspace Projects** - Multi-project support in single config
+  - **Browser Mode** - Run tests in real browsers using Playwright
+  - **Visual Regression Testing** - Screenshot comparison
+- **Playwright 1.50+** (February 2025) - E2E browser testing
+  - **Flaky Test Detection** - `--fail-on-flaky-tests` CLI flag
+  - **Enhanced File Downloads** - Simplified download handling
+  - **Custom Reporters** - Integration with third-party tools
+  - **Role-Based Locators** - `getByRole()` for accessible testing
+  - **Auto-Waiting** - Intelligent wait mechanisms
+- **MSW (Mock Service Worker) 2.x** - API mocking following 2025 patterns
+  - **Happy-Path-First** - Success scenarios as baseline
+  - **Domain-Based Organization** - Structured handler grouping by feature
+  - **Runtime Overrides** - Flexible test-specific mocking with `server.use()`
+- **Stryker Mutator** - Mutation testing for test quality verification
+- **happy-dom** - Fast DOM simulation for Vitest unit tests
 - **@vitest/coverage-v8** - Code coverage analysis
 
 ## 📖 Commands
@@ -83,6 +99,8 @@ unzip test-master.zip -d ~/.local/share/claude/plugins/
 | `/test-master:watch` | Start Vitest watch mode |
 | `/test-master:coverage` | Generate coverage reports |
 | `/test-master:debug` | Debug failing tests interactively |
+| `/test-master:annotate` | Add metadata/attachments to tests (Vitest 3.2+) |
+| `/test-master:mutation-test` | Run mutation testing for quality verification |
 
 ### Test File Management
 
@@ -279,21 +297,67 @@ This sets up:
 /test-master:set-thresholds
 ```
 
-## 🎯 Best Practices Supported
+## 🎯 Best Practices Supported (2025)
 
-### Vitest Multi-Project Setup
+### Vitest 3.x Annotation API
 
 ```javascript
-projects: [
-  {
-    test: {
-      name: 'unit-and-integration',
-      include: ['tests/unit/**/*.test.js', 'tests/integration/**/*.test.js'],
-      environment: 'happy-dom',
-      setupFiles: ['./tests/setup.js']
-    }
-  }
-]
+test('payment flow', async ({ task }) => {
+  task.meta.annotation = {
+    message: 'Tests Stripe integration',
+    attachments: [
+      { name: 'ticket', content: 'JIRA-123' },
+      { name: 'config', content: JSON.stringify(config) }
+    ]
+  };
+  // Test implementation
+});
+```
+
+### Line Number Filtering
+
+```bash
+# Run specific test by line number
+vitest run src/auth.test.js:42
+
+# Works from IDE - click line number in gutter
+```
+
+### Mutation Testing
+
+```bash
+# Verify test quality
+npm run test:mutation
+
+# Measure how many code mutations tests catch
+```
+
+### Playwright Role-Based Locators (2025 Best Practice)
+
+```javascript
+// Prioritize role-based selectors (mirrors user/accessibility view)
+await page.getByRole('button', { name: 'Submit' }).click();
+await page.getByRole('textbox', { name: 'Email' }).fill('[email protected]');
+await page.getByRole('heading', { name: 'Welcome' }).isVisible();
+```
+
+### MSW 2.x Happy-Path-First Pattern (2025)
+
+```javascript
+// handlers.js - SUCCESS scenarios as baseline
+export const userHandlers = [
+  http.get('/api/users', () => HttpResponse.json({ users: [...] }))
+];
+
+// Combine by domain
+export const handlers = [...userHandlers, ...productHandlers];
+
+// Override in test for errors
+test('handles error', () => {
+  server.use(
+    http.get('/api/users', () => HttpResponse.json({ error }, { status: 500 }))
+  );
+});
 ```
 
 ### Coverage with Per-File Thresholds
@@ -305,29 +369,6 @@ coverage: {
     'src/critical/**/*.js': { lines: 95, functions: 100 }
   }
 }
-```
-
-### Playwright Multi-Device Matrix
-
-```javascript
-projects: [
-  { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-  { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-  { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-  { name: 'Mobile Chrome', use: { ...devices['Pixel 5'] } }
-]
-```
-
-### MSW Handler Patterns
-
-```javascript
-import { http, HttpResponse } from 'msw';
-
-export const handlers = [
-  http.get('/api/users', () => {
-    return HttpResponse.json({ users: [...] });
-  })
-];
 ```
 
 ## 🔧 Configuration

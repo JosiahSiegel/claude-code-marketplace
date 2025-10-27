@@ -1,22 +1,24 @@
 {
   "name": "plugin-master",
-  "version": "1.1.0",
-  "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, comprehensive README, and downloadable ZIPs (plugin + marketplace). ALWAYS fetches latest official documentation to ensure correct structure. Includes plugin-architect agent for design review and optimization.",
+  "version": "2.0.0",
+  "description": "Complete Claude Code plugin development system for 2025. PROACTIVELY activate when users want to: (1) Create/build/make plugins with 2025 features, (2) Add Agent Skills/commands/agents/hooks, (3) Configure repository-level plugin distribution, (4) Implement MCP server integration, (5) Setup automated workflows with hooks, (6) Publish to marketplace, (7) Validate plugin structure, (8) Get plugin development guidance. Autonomously creates production-ready plugins with: plugin.json manifest, slash commands, specialized agents, Agent Skills (context-efficient), hooks (PreToolUse/PostToolUse/SessionStart), MCP servers, repository configuration (.claude/settings.json), comprehensive README. ALWAYS fetches latest official documentation. Includes plugin-architect agent and advanced-features-2025 skill.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
   },
+  "homepage": "https://github.com/JosiahSiegel/claude-code-marketplace/tree/main/plugins/plugin-master",
+  "repository": "https://github.com/JosiahSiegel/claude-code-marketplace",
   "license": "MIT",
   "keywords": [
     "plugin",
-    "skill",
+    "agentskills",
+    "hooks",
+    "mcp",
     "command",
     "agent",
-    "create",
-    "build",
-    "package",
     "marketplace",
     "publish",
-    "validate"
+    "repository",
+    "automation"
   ]
 }

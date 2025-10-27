@@ -7,16 +7,17 @@ description: Generate MSW handler for API endpoint
 ## Purpose
 Generate a Mock Service Worker (MSW) request handler for intercepting and mocking API calls in tests.
 
-## Process
+## Process (MSW 2.x - 2025 Best Practices)
 
 1. **Gather API Information**
    - API endpoint URL (e.g., `/api/users`)
    - HTTP method (GET, POST, PUT, DELETE, PATCH)
    - Expected request parameters
    - Response data structure
+   - Domain/feature area (for organization)
    - Status codes to mock
 
-2. **Generate Handler**
+2. **Generate Happy Path Handler (Success Scenario First)**
 
    **For GET endpoint:**
    ```javascript
@@ -45,26 +46,48 @@ Generate a Mock Service Worker (MSW) request handler for intercepting and mockin
    })
    ```
 
-3. **Add to handlers.js**
+3. **Add to handlers.js with Domain-Based Organization**
 
-   Update `tests/mocks/handlers.js`:
+   Update `tests/mocks/handlers.js` using 2025 pattern:
 
    ```javascript
    import { http, HttpResponse } from 'msw';
 
-   export const handlers = [
-     // Existing handlers...
+   // Group handlers by domain for better organization
+   export const userHandlers = [
+     // Existing user handlers...
 
-     // New handler
+     // New handler - Happy path (success scenario)
      http.get('/api/users', () => {
        return HttpResponse.json({
          users: [
-           { id: 1, name: 'John Doe' },
-           { id: 2, name: 'Jane Smith' }
+           { id: 1, name: 'John Doe', email: '[email protected]' },
+           { id: 2, name: 'Jane Smith', email: '[email protected]' }
          ]
        });
      }),
    ];
+
+   export const productHandlers = [
+     // Product-related handlers...
+   ];
+
+   // Combine all domain handlers
+   export const handlers = [
+     ...userHandlers,
+     ...productHandlers,
+     // Add more domains...
+   ];
+   ```
+
+   **Note:** Define success scenarios as baseline. Override per test for errors:
+   ```javascript
+   // In your test file
+   server.use(
+     http.get('/api/users', () => {
+       return HttpResponse.json({ error: 'Failed' }, { status: 500 });
+     })
+   );
    ```
 
 ## Advanced Handler Patterns
@@ -132,13 +155,15 @@ http.post('/api/users', async ({ request }) => {
 })
 ```
 
-## Best Practices
+## Best Practices (MSW 2.x - 2025)
 
-1. **Keep handlers realistic** - Return data that matches production API
-2. **Use fixtures** - Import mock data from fixtures for consistency
-3. **Support multiple scenarios** - Create handlers for success and error cases
-4. **Validate requests** - Check request body/headers in handlers
-5. **Document handlers** - Add comments explaining what each handler mocks
+1. **Happy paths first** - Define success scenarios as baseline in handlers.js
+2. **Domain-based organization** - Group handlers by feature/domain area
+3. **Runtime overrides** - Use `server.use()` for test-specific error cases
+4. **Keep handlers realistic** - Return data that matches production API
+5. **Use fixtures** - Import mock data from fixtures for consistency
+6. **Validate requests** - Check request body/headers in handlers
+7. **Document handlers** - Add comments explaining domain and purpose
 
 ## After Creating
 

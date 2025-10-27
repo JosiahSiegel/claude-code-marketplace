@@ -1,99 +1,179 @@
----
-description: Execute Azure CLI commands with expert guidance and best practices
----
+# Azure CLI Expert Command
 
-# Azure CLI Command
+Execute Azure CLI commands with expert guidance and best practices.
 
-Get expert assistance with Azure CLI commands, syntax, authentication, and automation.
+## Agent Activation
+<skill>azure-expert</skill>
 
-## Purpose
+## Your Task
 
-This command provides comprehensive Azure CLI guidance, including:
-- Command syntax and parameters
-- Authentication methods
-- Resource management
-- Query optimization (JMESPath)
-- Scripting and automation
-- Error handling
-- Cross-platform compatibility
+You are helping the user execute Azure CLI commands following 2025 best practices and latest features.
 
-## Instructions
+### 1. RESEARCH LATEST FEATURES
 
-When this command is invoked:
+**ALWAYS start by researching current Azure CLI capabilities:**
 
-1. **Fetch Latest Documentation**:
-   - Always research the latest Azure CLI documentation first
-   - Use WebFetch to get current command syntax and best practices
-
-2. **Understand the Request**:
-   - Clarify which Azure service or operation is needed
-   - Identify the target environment (dev, staging, production)
-   - Determine if this is for interactive use or automation
-
-3. **Provide Complete Guidance**:
-   - Show the full command with all required parameters
-   - Include common optional parameters
-   - Explain each parameter's purpose
-   - Show expected output format
-
-4. **Include Best Practices**:
-   - Add error handling for scripts
-   - Show idempotent patterns when applicable
-   - Include security considerations (no hardcoded credentials)
-   - Provide cross-platform examples when needed
-
-5. **Offer Related Commands**:
-   - Show verification commands
-   - Suggest related operations
-   - Include query examples for filtering results
-
-## Examples
-
-### Example 1: Create Resource Group
 ```bash
-# Create resource group
-az group create \
-  --name MyResourceGroup \
-  --location eastus \
-  --tags Environment=Production CostCenter=IT
+# Check Azure CLI version
+az version
 
-# Verify creation
-az group show --name MyResourceGroup --output table
+# Search for latest documentation
+WebSearch: "Azure CLI [service-name] 2025 latest features"
+WebSearch: "Azure CLI breaking changes 2025"
 ```
 
-### Example 2: VM Management with Error Handling
+### 2. UNDERSTAND USER INTENT
+
+Ask clarifying questions if needed:
+- Which Azure service? (AKS, Container Apps, App Service, etc.)
+- What environment? (dev, staging, production)
+- Any specific requirements? (region, SKU, networking)
+- Security requirements? (private endpoints, managed identity)
+- Budget constraints?
+
+### 3. PROVIDE PRODUCTION-READY COMMANDS
+
+**Include all critical parameters:**
+
 ```bash
-# Check if VM exists
-if az vm show --resource-group MyRG --name MyVM &>/dev/null; then
-    echo "VM exists, starting..."
-    az vm start --resource-group MyRG --name MyVM --no-wait
-else
-    echo "VM does not exist, creating..."
-    az vm create \
-        --resource-group MyRG \
-        --name MyVM \
-        --image Ubuntu2204 \
-        --size Standard_D2s_v3 \
-        --generate-ssh-keys
-fi
+# Example: Create AKS Automatic cluster (2025 GA)
+az aks create \
+  --resource-group MyRG \
+  --name MyAKSAutomatic \
+  --sku automatic \
+  --enable-karpenter \
+  --network-plugin azure \
+  --network-plugin-mode overlay \
+  --network-dataplane cilium \
+  --kubernetes-version 1.34 \
+  --zones 1 2 3 \
+  --enable-managed-identity \
+  --enable-aad \
+  --enable-azure-rbac \
+  --node-os-upgrade-channel NodeImage \
+  --auto-upgrade-channel stable
 ```
 
-### Example 3: Query and Filter
+### 4. EXPLAIN PARAMETERS
+
+After each command, explain:
+- What each parameter does
+- Why it's recommended
+- Alternatives and trade-offs
+- Cost implications
+- Security considerations
+
+### 5. VALIDATE AND TEST
+
 ```bash
-# List running VMs in specific location
-az vm list \
-  --query "[?powerState=='VM running' && location=='eastus'].{Name:name, Size:hardwareProfile.vmSize, ResourceGroup:resourceGroup}" \
+# Provide validation commands
+az aks show \
+  --resource-group MyRG \
+  --name MyAKSAutomatic \
   --output table
 
-# Get VM IDs for scripting
-vmIds=$(az vm list --query "[].id" --output tsv)
+# Get credentials
+az aks get-credentials \
+  --resource-group MyRG \
+  --name MyAKSAutomatic
+
+# Test connectivity
+kubectl get nodes
 ```
 
-## Tips
+### 6. FOLLOW-UP RECOMMENDATIONS
 
-- Use `--output table` for human-readable output
-- Use `--output tsv` for scripting and parsing
-- Use `--query` with JMESPath for filtering results
-- Use `--no-wait` for async operations
-- Use `--debug` for troubleshooting
-- Always test commands in dev environment first
+Suggest next steps:
+- Monitoring setup
+- Security hardening
+- Cost optimization
+- Backup/disaster recovery
+- CI/CD integration
+
+## 2025 Azure CLI Features to Prioritize
+
+**AKS Automatic (GA - October 2025)**
+- `--sku automatic` - Fully-managed mode
+- `--enable-karpenter` - Dynamic node provisioning
+- Ubuntu 24.04 on Kubernetes 1.34+
+
+**Container Apps with GPU**
+- `--gpu-type nvidia-a100` - GPU type
+- `--gpu-count 1` - Number of GPUs
+- Scale-to-zero for cost optimization
+
+**Deployment Stacks**
+- `az stack sub create` - Create at subscription scope
+- `--deny-settings-mode DenyWriteAndDelete` - Protect resources
+- `--action-on-unmanage deleteAll` - Clean up orphaned resources
+
+**Azure OpenAI GPT-5 and Reasoning Models**
+- Deploy gpt-5, gpt-5-pro, o3, o4-mini
+- Configure capacity and quotas
+- Set up model router for cost optimization
+
+**Bicep Deployment**
+- Use `az deployment group create` with Bicep files
+- Leverage externalInput() function (v0.37+)
+- Implement what-if analysis before deployment
+
+## Common Patterns
+
+**Resource Group Creation**
+```bash
+az group create \
+  --name MyRG \
+  --location eastus \
+  --tags Environment=Production Project=MyApp
+```
+
+**List Available Regions**
+```bash
+az account list-locations \
+  --query "[?metadata.regionCategory=='Recommended'].{Name:name, DisplayName:displayName}" \
+  --output table
+```
+
+**Check Quota**
+```bash
+az vm list-usage \
+  --location eastus \
+  --output table
+
+az quota list \
+  --resource-name "Microsoft.Compute" \
+  --location eastus
+```
+
+**Cost Analysis**
+```bash
+az consumption usage list \
+  --start-date 2025-01-01 \
+  --end-date 2025-01-31
+
+az advisor recommendation list \
+  --category Cost \
+  --output table
+```
+
+## Error Handling
+
+If commands fail:
+1. Check Azure CLI version: `az version`
+2. Update if needed: `az upgrade`
+3. Verify permissions: `az role assignment list --assignee <user>`
+4. Check resource provider registration: `az provider list --query "[?registrationState=='Registered']" --output table`
+5. Review activity logs: `az monitor activity-log list --resource-group MyRG`
+
+## Best Practices
+
+✓ Use `--output table` for readable output
+✓ Use `--query` for JMESPath filtering
+✓ Store credentials securely (Key Vault, not plain text)
+✓ Use managed identities instead of service principals
+✓ Enable zone redundancy for production workloads
+✓ Tag all resources for cost tracking
+✓ Use `--no-wait` for long-running operations
+✓ Implement `--what-if` analysis before deployments
+
+Execute the Azure CLI command and provide comprehensive guidance!

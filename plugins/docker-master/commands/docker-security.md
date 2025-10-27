@@ -12,10 +12,10 @@ Identify and fix security vulnerabilities in Docker images and containers follow
 ### 1. Pre-Scan Research
 
 **Check latest security standards:**
-1. Review Docker security best practices (current year)
-2. Check CIS Docker Benchmark latest version
+1. Review Docker security best practices (current year - **CIS Docker Benchmark v1.7.0** as of 2025)
+2. Check current CVE databases and vulnerability trends
 3. Review OWASP Docker Security Cheat Sheet
-4. Understand platform-specific security features
+4. Understand platform-specific security features (SELinux, AppArmor, Windows Defender)
 
 ### 2. Vulnerability Scanning
 
@@ -36,26 +36,26 @@ docker scout compare --to IMAGE_NAME:latest IMAGE_NAME:new
 docker scout cves --format sarif IMAGE_NAME > report.sarif
 ```
 
-**Trivy (comprehensive):**
+**Trivy (comprehensive, recommended):**
 ```bash
-# Install trivy first
-# Scan image
+# Scan image for vulnerabilities
 trivy image IMAGE_NAME
 
-# Scan for specific severities
-trivy image --severity HIGH,CRITICAL IMAGE_NAME
+# Scan for specific severities (fail on critical)
+trivy image --severity HIGH,CRITICAL --exit-code 1 IMAGE_NAME
 
-# Output as table
-trivy image --format table IMAGE_NAME
+# Generate SBOM during scan
+trivy image --format spdx-json --output sbom.spdx.json IMAGE_NAME
 
-# Generate JSON report
-trivy image --format json --output results.json IMAGE_NAME
+# Scan for secrets (MANDATORY 2025)
+trivy image --scanners secret IMAGE_NAME
+trivy fs --scanners secret .
 
-# Scan Dockerfile
+# Scan Dockerfile for misconfigurations
 trivy config Dockerfile
 
-# Scan for secrets
-trivy fs --scanners secret .
+# Generate comprehensive report
+trivy image --format json --output security-report.json IMAGE_NAME
 ```
 
 **Grype (Anchore):**
@@ -81,10 +81,26 @@ snyk container monitor IMAGE_NAME
 
 #### Base Image Security
 
+**2025 RECOMMENDED BASE IMAGES (by security level):**
+
+1. **Maximum Security (Zero-CVE goal):**
+   - Wolfi/Chainguard Images: `cgr.dev/chainguard/{node|python|go|etc}:latest`
+   - Built-in SBOM, nightly security patches, minimal attack surface
+   - Ideal for: Production, compliance, security-critical apps
+
+2. **High Security (Minimal):**
+   - Distroless: `gcr.io/distroless/{static|base|...}` (~2MB)
+   - Alpine: `alpine:3.19` (~7MB)
+   - Ideal for: Standard production workloads
+
+3. **Standard Security:**
+   - Slim variants: `python:3.12-slim`, `node:20-slim` (~70MB)
+   - Ideal for: Development, compatibility requirements
+
 **DO:**
 - ✅ Use official images from trusted sources
 - ✅ Specify exact version tags (never `latest`)
-- ✅ Use minimal base images (alpine, distroless, slim)
+- ✅ **2025:** Prefer Wolfi/Chainguard for security-critical workloads
 - ✅ Scan base images regularly
 - ✅ Keep base images updated
 
@@ -298,18 +314,51 @@ services:
 
 Restart Docker daemon after configuration.
 
-### 5. Compliance & Benchmarking
+### 5. SBOM Generation (2025 MANDATORY)
 
-#### CIS Docker Benchmark
+**Why SBOM is Critical:**
+- Supply chain transparency and security
+- Vulnerability tracking and rapid response
+- Compliance (Executive Order 14028, NIST, etc.)
+- License compliance
+- Incident response readiness
+
+**Generate SBOM:**
+```bash
+# Using Docker Scout (built-in)
+docker scout sbom IMAGE_NAME --format spdx > sbom.spdx.json
+docker scout sbom IMAGE_NAME --format cyclonedx > sbom.cyclonedx.json
+
+# Using Syft (industry standard, recommended)
+syft IMAGE_NAME -o spdx-json > sbom.spdx.json
+syft IMAGE_NAME -o cyclonedx-json > sbom.cyclonedx.json
+
+# Build with SBOM attestation (WARNING: not cryptographically signed)
+docker buildx build --sbom=true --provenance=true -t IMAGE_NAME .
+
+# Scan SBOM for vulnerabilities (faster than scanning image)
+grype sbom:sbom.spdx.json --fail-on high
+trivy sbom sbom.spdx.json
+```
+
+**SBOM in CI/CD:**
+- Generate SBOM for every production build
+- Store SBOM alongside image in registry
+- Fail builds if SBOM generation fails
+- Continuously scan SBOM for new vulnerabilities
+
+### 6. Compliance & Benchmarking
+
+#### CIS Docker Benchmark v1.7.0 (2025)
 
 Run automated checks:
 ```bash
-# Docker Bench for Security
+# Docker Bench for Security (checks ~140 controls)
 git clone https://github.com/docker/docker-bench-security.git
 cd docker-bench-security
 sudo sh docker-bench-security.sh
 
-# Or run as container
+# Or run as container (preferred)
 docker run --rm --net host --pid host --userns host --cap-add audit_control \
     -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
     -v /var/lib:/var/lib:ro \

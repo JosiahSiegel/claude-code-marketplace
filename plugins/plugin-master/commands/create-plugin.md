@@ -1,62 +1,57 @@
 ---
-description: Create a new Claude Code plugin with complete structure, commands, agents, skills, and marketplace-ready packaging
+description: Create a comprehensive Claude Code plugin with all necessary components and marketplace structure
 ---
 
-# Create Plugin Command
+# Create Plugin
 
-Create a comprehensive Claude Code plugin from scratch with all necessary components.
+Autonomously create production-ready Claude Code plugins with complete structure, documentation, and marketplace packaging.
 
-## Usage
+## Purpose
 
-This command helps you create a complete, production-ready plugin with:
-- Plugin manifest (plugin.json)
-- Custom slash commands
-- Specialized agents
-- Agent Skills (optional)
-- Hook configurations (optional)
-- MCP server integrations (optional)
-- Complete documentation (README.md)
-- GitHub-ready marketplace structure
-- Optional: Export skills for claude.ai web app
+Guides Claude through the complete plugin creation workflow: fetching latest docs, generating all files (plugin.json, commands, agents, skills, README), creating marketplace structure, and providing installation instructions.
 
-## Process
+## Instructions
 
-When invoked, Claude will:
-
-1. **Understand requirements** - Ask about plugin purpose, features, and components
-2. **Fetch latest documentation** - Get current plugin specs from docs.claude.com
-3. **Generate structure** - Create complete directory structure
-4. **Create all files** - Generate plugin.json, commands, agents, README, etc.
-5. **Provide instructions** - Give installation and publishing guidance
-6. **Optional export** - Show how to export skills for claude.ai web if requested
-
-## Examples
-
-**Simple plugin:**
-> /create-plugin for Git workflow automation
-
-**Complex plugin:**
-> /create-plugin with deployment commands, security agents, and monitoring tools
-
-**From description:**
-> /create-plugin that helps teams with code reviews, testing, and CI/CD
+1. **Fetch latest documentation** from docs.claude.com (plugins-reference, plugin-marketplaces)
+2. **Detect repository context** - Check git config for author info and marketplace.json existence
+3. **Infer requirements** from user request - Only ask questions if genuinely ambiguous
+4. **Create comprehensive structure**:
+   - Plugin manifest with all appropriate metadata fields
+   - Commands, agents, and Agent Skills as needed (2025: Skills are auto-discovered from skills/ directory)
+   - Hooks for automated workflows (PreToolUse, PostToolUse, SessionStart, etc.)
+   - MCP servers for external integrations (inline in plugin.json or .mcp.json)
+   - Complete README with examples and installation instructions
+   - Marketplace structure if not in existing marketplace repo
+5. **Apply 2025 best practices**:
+   - Use Agent Skills for dynamic knowledge loading
+   - Configure hooks for automated validation and testing
+   - Support repository-level plugin configuration via .claude/settings.json
+   - Use ${CLAUDE_PLUGIN_ROOT} environment variable for portable paths
+6. **Validate** - Ensure plugin.json schema is correct (author as object, version as string, keywords as array)
+7. **Update marketplace.json** if creating in an existing marketplace repository
+8. **Provide clear instructions** for GitHub-first installation and repository-level configuration
 
 ## Best Practices
 
-- Be autonomous by default - infer requirements and create comprehensive output
-- Always fetch latest docs before creating plugins
-- Include all components by default (commands, agents, README)
-- Provide GitHub-first installation instructions
-- Include Windows compatibility notes
-- Show skill export process if user requests claude.ai web usage
+- Default to action, not questions - infer intent from context
+- Include commands, agents, Agent Skills, and README by default for comprehensive plugins
+- Use detected git config values for author fields (never use placeholders)
+- Create in plugins/ subdirectory if marketplace.json exists at repo root
+- Synchronize descriptions and keywords between plugin.json and marketplace.json
+- Add hooks for common automation needs (testing, linting, validation)
+- Use ${CLAUDE_PLUGIN_ROOT} for all internal paths (scripts, configs, MCP servers)
+- Include .claude/settings.json template for team distribution
+- Leverage Agent Skills for dynamic, context-efficient knowledge delivery
+- Configure MCP servers inline in plugin.json for simpler distribution
+- Emphasize GitHub marketplace installation for cross-platform reliability
+- Support repository-level automatic installation for team standardization
 
-## Output
+## Example Usage
 
-Claude will provide:
-- Complete plugin file structure
-- GitHub marketplace setup instructions
-- Local installation instructions (Mac/Linux)
-- Usage examples
-- Optional: Skill export instructions for claude.ai web app
+```
+/create-plugin for Git workflow automation
+/create-plugin with deployment commands and rollback features
+/create-plugin that helps with code reviews and security scanning
+```
 
-The plugin-master skill will automatically activate to guide the creation process with best practices and complete templates.
+The plugin-master skill activates automatically to provide complete templates and current best practices.

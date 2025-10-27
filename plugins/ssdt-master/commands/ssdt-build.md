@@ -1,18 +1,24 @@
 ---
-description: Build SQL Server database projects (SDK-style or legacy) following current best practices and industry standards
+description: Build SQL Server database projects (SDK-style or legacy) with .NET 8 and Microsoft.Build.Sql 2.0.0 GA
 ---
 
 You are an expert in building SQL Server database projects using SSDT tools.
 
 ## Your Task
 
-Build the specified SQL Server database project (.sqlproj or .sqlprojx) following Microsoft best practices for both SDK-style (Microsoft.Build.Sql) and legacy formats.
+Build SQL Server database project (.sqlproj) following Microsoft 2025 best practices for SDK-style (Microsoft.Build.Sql 2.0.0 GA) and legacy formats.
+
+**Prerequisites:**
+- SDK-style: .NET 8.0 SDK, Microsoft.Build.Sql 2.0.0
+- Legacy: MSBuild (Windows only)
 
 ## Project Type Detection
 
-First, analyze the project file to determine the type:
-- **SDK-style**: Contains `<Sdk Name="Microsoft.Build.Sql"` or uses .sqlprojx extension (VS 17.12 preview 2 only)
-- **Legacy**: Contains `<Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets"`
+First, analyze the project file:
+- **SDK-style (GA)**: `<Project Sdk="Microsoft.Build.Sql">` or `<Project Sdk="Microsoft.Build.Sql/2.0.0">`
+- **Legacy**: Contains `<Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\...SSDT..."`
+
+**Note:** .sqlprojx extension was preview-only (VS 17.12 preview 2), now use .sqlproj for SDK-style.
 
 ## Build Methods
 
@@ -223,99 +229,26 @@ dotnet build MyDatabase.sqlproj
 dotnet build MyDatabase.sqlproj
 ```
 
-### Method 6: Docker Containers (Windows)
+### Method 6: Docker Containers (Cross-Platform)
 
-**Recommended for**: Consistent builds, CI/CD, isolated environments
-
-**Windows Container - Full MSBuild:**
+**Recommended for**: SDK-style projects, CI/CD
 
 ```dockerfile
-# Dockerfile.windows
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022
-
-# Install Visual Studio Build Tools
-RUN Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_buildtools.exe -OutFile vs_buildtools.exe; \
-    Start-Process -Wait -FilePath .\vs_buildtools.exe -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', \
-      '--installPath', 'C:\BuildTools', \
-      '--add', 'Microsoft.VisualStudio.Workload.DataBuildTools', \
-      '--add', 'Microsoft.Net.Component.4.8.SDK'; \
-    Remove-Item .\vs_buildtools.exe
-
-WORKDIR /build
-COPY . .
-
-# Build with MSBuild
-RUN msbuild MyDatabase.sqlproj /p:Configuration=Release
-```
-
-**Build:**
-```bash
-docker build -f Dockerfile.windows -t my-database-build .
-docker run --rm -v ${PWD}/output:/build/bin my-database-build
-```
-
-**Windows Container - SDK-Style:**
-
-```dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2022
-
-WORKDIR /build
-COPY . .
-
-RUN dotnet build MyDatabase.sqlproj -c Release
-```
-
-### Method 7: Docker Containers (Linux)
-
-**Recommended for**: SDK-style projects, Linux CI/CD, cross-platform
-
-**Linux Container - SDK-Style:**
-
-```dockerfile
-# Dockerfile
+# Dockerfile - SDK-style (Linux/Windows compatible)
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 WORKDIR /build
 COPY . .
-
-# Restore and build
-RUN dotnet restore MyDatabase.sqlproj
-RUN dotnet build MyDatabase.sqlproj -c Release --no-restore
-
-# Copy output to volume
-CMD ["cp", "-r", "bin/Release/", "/output/"]
+RUN dotnet build MyDatabase.sqlproj -c Release
 ```
 
-**Build:**
+**One-liner build:**
 ```bash
-# Build image
-docker build -t my-database-build .
-
-# Run build
-docker run --rm -v $(pwd)/output:/output my-database-build
-
-# Or one-liner for quick builds
 docker run --rm -v $(pwd):/build -w /build mcr.microsoft.com/dotnet/sdk:8.0 \
   dotnet build MyDatabase.sqlproj -c Release
 ```
 
-**Multi-Stage Build:**
-
-```dockerfile
-# Multi-stage Dockerfile for optimal size
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY . .
-RUN dotnet restore MyDatabase.sqlproj
-RUN dotnet build MyDatabase.sqlproj -c Release --no-restore -o /app/build
-
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS final
-WORKDIR /app
-COPY --from=build /app/build .
-# DACPAC is now in /app/*.dacpac
-```
-
-### Method 8: CI/CD Build Scripts
+### Method 7: CI/CD Build Scripts
 
 **GitHub Actions:**
 ```yaml

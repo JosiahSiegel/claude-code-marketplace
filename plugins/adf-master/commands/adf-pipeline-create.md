@@ -84,7 +84,7 @@ Follow these Microsoft best practices:
 - **VALIDATE** activity nesting before writing ANY JSON
 - **CHECK** ForEach, If, Switch, Until combinations
 - **VERIFY** no prohibited nesting patterns
-- **CONFIRM** total activities < 120 per pipeline
+- **CONFIRM** total activities < 80 per pipeline
 - **ENSURE** ForEach batchCount ≤ 50
 - **REJECT** Set Variable in parallel ForEach
 - **VALIDATE** linked service properties match authentication type

@@ -27,6 +27,14 @@ Execute unit tests using Vitest, focusing on individual functions and modules in
 
    # With coverage
    vitest run tests/unit --coverage
+
+   # Run in Browser Mode (Vitest 4.0+) - uses Playwright
+   vitest run tests/unit --browser
+
+   # Run in Browser Mode with specific browser
+   vitest run tests/unit --browser.name=chromium
+   vitest run tests/unit --browser.name=firefox
+   vitest run tests/unit --browser.name=webkit
    ```
 
 3. **Parse Output**
@@ -46,14 +54,27 @@ Ensure vitest.config.js includes:
 export default {
   test: {
     include: ['tests/unit/**/*.test.js'],
-    environment: 'happy-dom', // or 'jsdom'
+    environment: 'happy-dom', // or 'jsdom' or use browser mode
     coverage: {
       provider: 'v8',
       include: ['src/**/*.js']
+    },
+    // Vitest 4.0+ Browser Mode (optional)
+    browser: {
+      enabled: false, // Set to true to use browser mode by default
+      name: 'chromium', // or 'firefox' or 'webkit'
+      provider: 'playwright', // uses Playwright to run tests in real browser
+      headless: true
     }
   }
 }
 ```
+
+**Browser Mode (Vitest 4.0+):**
+- Runs tests in a real browser using Playwright
+- Not a replacement for E2E tools - just changes test environment
+- Useful for testing browser-specific APIs and visual components
+- Stable as of Vitest 4.0 (October 2025)
 
 ## Common Patterns
 

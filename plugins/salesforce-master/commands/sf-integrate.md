@@ -31,7 +31,7 @@ Determine the integration architecture based on requirements:
 1. **Authentication**: Set up Connected App with OAuth 2.0
 2. **Endpoint Design**:
    ```
-   POST https://{instance}.salesforce.com/services/data/v60.0/sobjects/{Object}
+   POST https://{instance}.salesforce.com/services/data/v62.0/sobjects/{Object}
    Authorization: Bearer {access_token}
    Content-Type: application/json
 
@@ -46,7 +46,7 @@ Determine the integration architecture based on requirements:
 **Option B: Bulk API Integration** (Batch, >2K records):
 1. **Create Bulk Job**:
    ```json
-   POST /services/data/v60.0/jobs/ingest
+   POST /services/data/v62.0/jobs/ingest
    {
      "object": "Account",
      "operation": "upsert",
@@ -99,7 +99,7 @@ Determine the integration architecture based on requirements:
    const client = new cometd.CometD();
 
    client.configure({
-       url: 'https://{instance}.salesforce.com/cometd/60.0',
+       url: 'https://{instance}.salesforce.com/cometd/62.0',
        requestHeaders: { Authorization: `Bearer ${accessToken}` }
    });
 
@@ -108,6 +108,74 @@ Determine the integration architecture based on requirements:
        sendToExternalSystem(message.data.payload);
    });
    ```
+
+**Option E: Agentforce Integration** (2025 - AI Agents):
+```apex
+// Publish events for AI agent consumption
+public class AgentEventPublisher {
+    public static void publishAgentAction(String action, Map<String, Object> context) {
+        AgentActionEvent__e event = new AgentActionEvent__e(
+            Action__c = action,
+            Context__c = JSON.serialize(context),
+            Timestamp__c = System.now()
+        );
+        EventBus.publish(event);
+    }
+}
+```
+
+```javascript
+// AI Agent subscribes and processes events
+client.subscribe('/event/AgentActionEvent__e', async (message) => {
+    const { action, context } = message.data.payload;
+    // Process with AI (OpenAI, Anthropic Claude, etc.)
+    const result = await executeAIAction(action, JSON.parse(context));
+    // Send results back to Salesforce
+    updateSalesforce(result);
+});
+```
+
+**Option F: Data Cloud Integration** (2025 - Real-time Unified Data):
+```apex
+// Query Data Cloud for unified customer profile
+public class DataCloudIntegration {
+    public static Map<String, Object> getUnifiedProfile(String customerId) {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('callout:DataCloud/v1/profile/' + customerId);
+        req.setMethod('GET');
+
+        Http http = new Http();
+        HttpResponse res = http.send(req);
+
+        if (res.getStatusCode() == 200) {
+            return (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
+        }
+        return null;
+    }
+
+    // Activate segment members to external system
+    public static void syncSegmentToExternalSystem(String segmentName) {
+        // Get segment members from Data Cloud
+        List<Contact> members = [
+            SELECT Id, Email, External_Id__c
+            FROM Contact
+            WHERE Id IN (
+                SELECT ContactId__c FROM DataCloudSegmentMember__c
+                WHERE SegmentName__c = :segmentName
+            )
+        ];
+
+        // Send to external marketing platform
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('callout:MarketingPlatform/api/segments');
+        req.setMethod('POST');
+        req.setBody(JSON.serialize(members));
+
+        Http http = new Http();
+        http.send(req);
+    }
+}
+```
 
 **Option B: Change Data Capture** (Automatic change notifications):
 1. **Enable CDC**: Setup → Change Data Capture → Select objects
@@ -193,7 +261,7 @@ External System ←→ Middleware/Queue ←→ Salesforce
 - Centralized authentication management
 - Use in Apex callouts: `Callout:NamedCredential/endpoint`
 
-### Step 6: Common Integration Scenarios
+### Step 6: Common Integration Scenarios (2025)
 
 **Scenario 1: ERP → Salesforce (Accounts, Products)**
 - Nightly batch via Bulk API
@@ -201,17 +269,17 @@ External System ←→ Middleware/Queue ←→ Salesforce
 - Map ERP fields to Account/Product2 objects
 - Handle price book entries for products
 
-**Scenario 2: Salesforce → Data Warehouse (Analytics)**
+**Scenario 2: Salesforce → Data Warehouse (Analytics) via Data Cloud**
 - Change Data Capture for real-time replication
-- Or scheduled batch export via REST API
-- Materialize in star schema (fact/dimension tables)
-- Enable historical tracking
+- Data Cloud Zero Copy integration (Snowflake, Databricks)
+- No data movement - query in place
+- Enable historical tracking with Type 2 SCD
 
-**Scenario 3: Salesforce → Marketing Automation (Marketo, Pardot)**
-- Real-time lead/contact sync via REST API
+**Scenario 3: Salesforce → Marketing Automation (Marketo, Pardot) via Data Cloud**
+- Real-time segment activation from Data Cloud
 - Platform Events for engagement tracking
-- Bidirectional sync for campaign members
-- Use standard connectors if available
+- Bidirectional sync for campaign responses
+- Use calculated insights for targeting
 
 **Scenario 4: E-commerce → Salesforce (Orders, Customers)**
 - Real-time order creation via REST API
@@ -219,11 +287,17 @@ External System ←→ Middleware/Queue ←→ Salesforce
 - Inventory sync from Salesforce → E-commerce
 - Order fulfillment status updates (bidirectional)
 
-**Scenario 5: Support System → Salesforce (Cases)**
+**Scenario 5: Support System → Salesforce (Cases) with Agentforce**
 - Inbound: Create cases via REST API or Email-to-Case
-- Outbound: Update external system via Apex callout on case update
-- Attach files via ContentVersion API
-- Sync case comments bidirectionally
+- Agentforce AI agent handles L1 support
+- Escalation to human agents for complex cases
+- Sync case comments and AI conversation history bidirectionally
+
+**Scenario 6: Multi-Cloud Integration with Hyperforce** (2025)
+- AWS PrivateLink / Azure Private Link for secure connectivity
+- Salesforce Hyperforce → Your VPC without public internet
+- Lower latency, higher security
+- Unified monitoring with CloudWatch/Azure Monitor
 
 ### Step 7: Error Handling and Monitoring
 

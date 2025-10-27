@@ -39,18 +39,18 @@ Headers:
   Content-Type: application/json
 ```
 
-**Common Endpoints**:
-- Query: `GET /services/data/v60.0/query?q={SOQL}`
-- Create: `POST /services/data/v60.0/sobjects/{ObjectName}`
-- Update: `PATCH /services/data/v60.0/sobjects/{ObjectName}/{Id}`
-- Delete: `DELETE /services/data/v60.0/sobjects/{ObjectName}/{Id}`
-- Describe: `GET /services/data/v60.0/sobjects/{ObjectName}/describe`
+**Common Endpoints** (API v62.0):
+- Query: `GET /services/data/v62.0/query?q={SOQL}`
+- Create: `POST /services/data/v62.0/sobjects/{ObjectName}`
+- Update: `PATCH /services/data/v62.0/sobjects/{ObjectName}/{Id}`
+- Delete: `DELETE /services/data/v62.0/sobjects/{ObjectName}/{Id}`
+- Describe: `GET /services/data/v62.0/sobjects/{ObjectName}/describe`
 
 **Bulk API 2.0 Pattern**:
-1. Create job: `POST /services/data/v60.0/jobs/ingest`
-2. Upload CSV data: `PUT /services/data/v60.0/jobs/ingest/{jobId}/batches`
-3. Close job: `PATCH /services/data/v60.0/jobs/ingest/{jobId}` (state: UploadComplete)
-4. Monitor: `GET /services/data/v60.0/jobs/ingest/{jobId}`
+1. Create job: `POST /services/data/v62.0/jobs/ingest`
+2. Upload CSV data: `PUT /services/data/v62.0/jobs/ingest/{jobId}/batches`
+3. Close job: `PATCH /services/data/v62.0/jobs/ingest/{jobId}` (state: UploadComplete)
+4. Monitor: `GET /services/data/v62.0/jobs/ingest/{jobId}`
 
 ### Step 4: Error Handling and Limits
 - **API Limits**: Check daily API call limits in Setup → Company Information

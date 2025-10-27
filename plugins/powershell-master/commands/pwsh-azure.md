@@ -19,20 +19,27 @@ Manage and automate Azure resources using the Az PowerShell module with cross-pl
 ### 1. Setup & Authentication
 
 ```powershell
-# Install Az module
+# Install Az module 14.5.0 (latest as of October 2025)
+# RECOMMENDED: Use PSResourceGet (2x faster)
+Install-PSResource -Name Az -Scope CurrentUser -TrustRepository
+
+# Legacy: PowerShellGet
 Install-Module -Name Az -Scope CurrentUser -Force
 
 # Or install specific sub-modules
-Install-Module -Name Az.Accounts, Az.Compute, Az.Storage -Scope CurrentUser
+Install-PSResource -Name Az.Accounts, Az.Compute, Az.Storage -Scope CurrentUser
 
 # Import module
 Import-Module Az
 
-# Connect to Azure
+# Connect to Azure (MFA required starting September 2025)
 Connect-AzAccount
 
 # Connect with specific tenant
 Connect-AzAccount -Tenant "tenant-id"
+
+# Connect with claims challenge for MFA (Az 14.x+)
+Connect-AzAccount -ClaimsChallenge "challenge-string"
 
 # Connect with service principal (automation)
 $credential = Get-Credential
@@ -43,6 +50,9 @@ Set-AzContext -Subscription "subscription-name-or-id"
 
 # List available subscriptions
 Get-AzSubscription
+
+# Get access token as SecureString (default in Az 14.x+)
+$token = Get-AzAccessToken
 ```
 
 ### 2. Resource Groups
@@ -102,13 +112,14 @@ New-AzVM -ResourceGroupName "MyRG" `
 # List storage accounts
 Get-AzStorageAccount
 
-# Create storage account
+# Create storage account with Zone and ZonePlacement Policy (new in Az 14.5)
 $storageParams = @{
     ResourceGroupName = "MyRG"
     Name = "mystorageaccount123"
     Location = "EastUS"
     SkuName = "Standard_LRS"
     Kind = "StorageV2"
+    EnableZoneRedundancy = $true  # New feature
 }
 New-AzStorageAccount @storageParams
 
@@ -125,6 +136,9 @@ $ctx = New-AzStorageContext -StorageAccountName "mystorageaccount" -StorageAccou
 Get-AzStorageContainer -Context $ctx
 New-AzStorageContainer -Name "mycontainer" -Context $ctx -Permission Blob
 Set-AzStorageBlobContent -File "localfile.txt" -Container "mycontainer" -Blob "remotefile.txt" -Context $ctx
+
+# Create symbolic link in NFS File Share (new in Az 14.5)
+New-AzStorageFileSymbolicLink -Context $ctx -ShareName "nfsshare" -Path "symlink" -Target "/target/path"
 ```
 
 ### 5. Networking

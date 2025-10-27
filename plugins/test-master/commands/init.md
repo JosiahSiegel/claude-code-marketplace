@@ -18,17 +18,17 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
 2. **Install Dependencies**
 
    ```bash
-   # Install Vitest and related packages
-   npm install -D vitest @vitest/ui @vitest/coverage-v8 happy-dom
+   # Install Vitest 3.x and related packages (latest stable as of 2025)
+   npm install -D vitest@^3.2.0 @vitest/ui@^3.2.0 @vitest/coverage-v8@^3.2.0 happy-dom
 
-   # Install Playwright
-   npm install -D @playwright/test
+   # Install Playwright 1.50+ (latest as of 2025)
+   npm install -D @playwright/test@^1.50.0
 
    # Install Playwright browsers
    npx playwright install
 
-   # Install MSW (Mock Service Worker)
-   npm install -D msw
+   # Install MSW 2.x (Mock Service Worker)
+   npm install -D msw@^2.0.0
 
    # Install testing utilities (if React/Vue)
    npm install -D @testing-library/react @testing-library/user-event # For React
@@ -49,7 +49,7 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
 
 4. **Generate Configuration Files**
 
-   **vitest.config.js:**
+   **vitest.config.js (Vitest 3.x - 2025):**
    ```javascript
    import { defineConfig } from 'vitest/config';
 
@@ -82,6 +82,14 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
            statements: 70
          }
        },
+
+       // Optional: Browser Mode configuration (Vitest 4.0)
+       // browser: {
+       //   enabled: true,
+       //   name: 'chromium',
+       //   provider: { name: 'playwright' }, // Vitest 4.0 syntax
+       //   trace: 'on-first-retry'
+       // },
 
        // Multi-project setup
        projects: [
@@ -231,22 +239,60 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
    afterAll(() => server.close());
    ```
 
-6. **Create MSW Configuration**
+6. **Create MSW Configuration (2025 Best Practices - Happy Path First)**
 
    **tests/mocks/handlers.js:**
    ```javascript
    import { http, HttpResponse } from 'msw';
 
-   export const handlers = [
-     // Example handler
-     http.get('/api/example', () => {
+   // 2025 Pattern: Define SUCCESS scenarios as baseline (happy paths first)
+   // Domain-based organization for scalability
+   // Override per test for error scenarios
+
+   // User domain handlers (happy paths)
+   export const userHandlers = [
+     http.get('/api/users', () => {
        return HttpResponse.json({
-         message: 'This is a mocked response'
+         users: [
+           { id: 1, name: 'John Doe', email: '[email protected]' },
+           { id: 2, name: 'Jane Smith', email: '[email protected]' }
+         ]
        });
      }),
 
-     // Add your API handlers here
+     http.get('/api/users/:id', ({ params }) => {
+       return HttpResponse.json({
+         id: params.id,
+         name: 'John Doe',
+         email: '[email protected]'
+       });
+     }),
    ];
+
+   // Product domain handlers (happy paths)
+   export const productHandlers = [
+     http.get('/api/products', () => {
+       return HttpResponse.json({
+         products: [
+           { id: 1, name: 'Product A', price: 29.99 },
+           { id: 2, name: 'Product B', price: 49.99 }
+         ]
+       });
+     }),
+   ];
+
+   // Combine all domain handlers
+   export const handlers = [
+     ...userHandlers,
+     ...productHandlers
+     // Add more domain handlers as your API grows
+   ];
+
+   // ERROR scenarios: Override in individual tests using server.use()
+   // Example in test:
+   // server.use(
+   //   http.get('/api/users', () => HttpResponse.json({ error: 'Failed' }, { status: 500 }))
+   // );
    ```
 
    **tests/mocks/server.js:**
@@ -272,7 +318,8 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
        "test:e2e": "playwright test",
        "test:e2e:headed": "playwright test --headed",
        "test:e2e:debug": "playwright test --debug",
-       "test:e2e:ui": "playwright test --ui"
+       "test:e2e:ui": "playwright test --ui",
+       "test:mutation": "stryker run"
      }
    }
    ```
@@ -300,18 +347,29 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
    import { http, HttpResponse } from 'msw';
    import { server } from '../mocks/server.js';
 
-   describe('API Integration', () => {
-     it('should fetch data from API', async () => {
+   describe('API Integration (MSW 2.x)', () => {
+     it('should fetch users from happy path handler', async () => {
+       // Uses baseline handler from handlers.js
+       const response = await fetch('/api/users');
+       const data = await response.json();
+
+       expect(data.users).toHaveLength(2);
+       expect(data.users[0]).toHaveProperty('name');
+     });
+
+     it('should handle API error with runtime override', async () => {
+       // Override happy path for this specific test
        server.use(
-         http.get('/api/test', () => {
-           return HttpResponse.json({ data: 'test' });
+         http.get('/api/users', () => {
+           return HttpResponse.json(
+             { error: 'Server error' },
+             { status: 500 }
+           );
          })
        );
 
-       const response = await fetch('/api/test');
-       const data = await response.json();
-
-       expect(data).toEqual({ data: 'test' });
+       const response = await fetch('/api/users');
+       expect(response.status).toBe(500);
      });
    });
    ```

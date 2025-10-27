@@ -1,510 +1,557 @@
 # Azure-to-Docker Master Plugin
 
-Complete toolkit for extracting Azure infrastructure and creating local Docker development environments.
+> Complete Azure-to-Docker migration system for creating production-ready local development environments with 2025 best practices.
 
 ## Overview
 
-This plugin provides comprehensive automation for migrating Azure infrastructure to local Docker Compose stacks. Perfect for developers who want to:
+The **azure-to-docker-master** plugin provides autonomous expertise for migrating Azure infrastructure to local Docker-based development environments. It extracts Azure resource configurations, generates optimized Docker Compose stacks with Azure service emulators, creates production-ready Dockerfiles, and exports databases—all following 2025 industry standards.
 
-- **Eliminate Azure costs** for local development
-- **Work offline** without Azure connectivity
-- **Faster iteration** with local containers
-- **Consistent environments** across the team
-- **Production parity** with Docker equivalents
+## Why Use This Plugin?
 
-## Features
+- **Autonomous Azure Migration**: Automatically extract Azure infrastructure and convert to Docker
+- **2025 Azure Emulators**: Latest emulators (Azurite, SQL Server 2025, Cosmos DB, Service Bus)
+- **Production-Ready Compose**: Generate secure, optimized docker-compose.yml with health checks
+- **Complete Database Export**: Export and import Azure SQL/PostgreSQL/MySQL to Docker
+- **Modern Best Practices**: No version field (Compose v2.40+), security hardening, resource limits
+- **Development-Production Parity**: Mirror Azure infrastructure locally for efficient development
 
-### 🔍 Programmatic Azure Extraction
-- Automatically scan and extract entire Azure resource groups
-- Extract configurations from all major Azure services
-- Generate organized directory structures with all configs
-- Export databases with ready-to-use scripts
-- Transform connection strings for Docker compatibility
+## Key Features
 
-### 🐳 Docker Generation
-- Auto-generate production-ready Dockerfiles for all runtimes
-- Create complete docker-compose.yml with all services
-- Map Azure services to Docker container equivalents
-- Configure networking, volumes, and dependencies
-- Include health checks and resource limits
+### Azure Service Mapping
 
-### 📚 Comprehensive Documentation
-- 8,500+ lines of guides and references
-- 450+ Azure CLI command examples
-- Complete migration workflows
-- Troubleshooting guides
-- Security best practices
+Maps all Azure services to their Docker equivalents:
 
-### 🛠️ Powerful Scripts
-- **azure-infrastructure-extractor.sh** (900+ lines) - Full extraction automation for Linux/macOS/Git Bash
-- **azure-infrastructure-extractor.ps1** (600+ lines) - Windows PowerShell version
-- **dockerfile-generator.sh** (500+ lines) - Multi-runtime Dockerfile generator
+| Azure Service | Docker Image | Purpose |
+|---------------|-------------|---------|
+| App Service | Custom build | Application containers |
+| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-RC0` | SQL Server with AI features |
+| PostgreSQL | `postgres:16-alpine` | PostgreSQL database |
+| MySQL | `mysql:8.4` | MySQL database |
+| Redis Cache | `redis:7.4-alpine` | Redis cache |
+| Storage Account | `mcr.microsoft.com/azure-storage/azurite` | Blob/Queue/Table storage |
+| Cosmos DB | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator` | NoSQL database |
+| Service Bus | `rabbitmq:3.13-alpine` | Message queue |
+| App Insights | `jaegertracing/all-in-one` | Observability |
+
+### 2025 Features
+
+**Azure Emulators:**
+- Azurite: Complete Azure Storage emulator (Blob, Queue, Table)
+- SQL Server 2025: AI features (Vector Search, Semantic Queries)
+- Cosmos DB Emulator: NoSQL local development
+- Service Bus Emulator: Message queue testing
+
+**Docker Compose v2.40+:**
+- No `version` field (obsolete in 2025)
+- Health check conditions for dependencies
+- Multi-environment configuration (dev/prod)
+- YAML anchors for reusable config
+
+**Security Hardening:**
+- Non-root users in all containers
+- Read-only filesystems with tmpfs
+- Capability drops (ALL) and selective adds
+- `no-new-privileges` security option
+- Secrets management (Docker secrets)
+
+**Production Patterns:**
+- Resource limits (CPU, memory)
+- Comprehensive health checks
+- Network isolation (frontend/backend)
+- Logging configuration
+- Restart policies
 
 ## Installation
 
-### Via Marketplace (Recommended)
+### From Claude Code Marketplace
 
 ```bash
-/plugin marketplace add JosiahSiegel/claude-code-marketplace
-/plugin install azure-to-docker-master@claude-code-marketplace
+# Add to your project
+claude-code plugin add azure-to-docker-master
 ```
 
-### Verify Installation
+### From GitHub
 
 ```bash
-/help | grep "azure"
-# Should show azure-to-docker commands
-
-/agents | grep -i azure
-# Should show Azure extraction agents
-```
-
-## Quick Start
-
-### Extract Azure Infrastructure
-
-```bash
-# Linux/macOS/Git Bash
-/extract-infrastructure
-
-# Claude will guide you through:
-# 1. Azure CLI authentication check
-# 2. Resource group selection
-# 3. Running extraction script
-# 4. Reviewing generated configs
-```
-
-### Generate Dockerfiles
-
-```bash
-/generate-dockerfile
-
-# Claude will:
-# 1. Detect runtimes from Azure configs
-# 2. Generate optimized Dockerfiles
-# 3. Create .dockerignore files
-# 4. Add docker-compose entries
-```
-
-### Export Databases
-
-```bash
-/export-database
-
-# Claude helps with:
-# 1. Choosing export method (BACPAC, pg_dump, mysqldump)
-# 2. Running export commands
-# 3. Setting up local containers
-# 4. Importing data
+git clone https://github.com/JosiahSiegel/claude-code-marketplace.git
+cd claude-code-marketplace/plugins/azure-to-docker-master
 ```
 
 ## Commands
 
 ### `/extract-infrastructure`
-Extract complete Azure resource group to Docker-ready configs.
+
+Extract Azure infrastructure and generate Docker Compose stack.
 
 **What it does:**
-- Scans all resources in the resource group
-- Extracts configurations (App Services, Databases, Storage, etc.)
-- Generates .env files with transformed connection strings
-- Creates database export scripts
-- Produces docker-compose.yml
+1. Authenticates with Azure CLI
+2. Extracts resource configurations (App Services, databases, caches, storage)
+3. Analyzes service dependencies
+4. Maps Azure services to Docker equivalents
+5. Generates production-ready docker-compose.yml
+6. Creates .env.template with all required variables
+7. Generates Makefile for common operations
+8. Produces comprehensive README
 
-**Output:**
+**Usage:**
+```bash
+/azure-to-docker-master:extract-infrastructure
 ```
-azure-export/RESOURCE_GROUP_*/
-├── resource-group-info.json
-├── app-services/
-│   ├── webapp1-config.json
-│   ├── webapp1-appsettings.json
-│   └── webapp1.env
-├── databases/
-│   ├── sqldb1-details.json
-│   └── export-sqldb1.sh
-├── dockerfiles/
-│   ├── webapp1-Dockerfile
-│   └── webapp1-compose.yml
-└── docker-compose-generated.yml
+
+**Example output:**
+```
+azure-project/
+├── docker-compose.yml          # Main compose file
+├── docker-compose.override.yml # Development overrides
+├── .env.template               # Environment variables
+├── Makefile                    # Common operations
+├── README.md                   # Setup documentation
+├── init/                       # Database init scripts
+│   ├── 01-create-db.sql
+│   └── 02-seed-data.sql
+└── secrets/                    # Secrets (gitignored)
+    ├── sa_password.txt
+    └── postgres_password.txt
 ```
 
 ### `/generate-dockerfile`
-Create production-ready Dockerfiles from Azure App Service configurations.
 
-**Supported Runtimes:**
-- Node.js (16, 18, 20, 22 LTS)
-- Python (3.9, 3.10, 3.11, 3.12)
-- .NET (6.0, 7.0, 8.0)
-- PHP (8.0, 8.1, 8.2, 8.3)
-- Java (11, 17, 21)
-- Ruby (3.0, 3.1, 3.2, 3.3)
+Generate production-ready Dockerfiles from Azure App Service configurations.
 
-**Features:**
-- Multi-stage builds
-- Security best practices
-- Non-root users
-- Health checks
-- Layer optimization
+**What it does:**
+1. Analyzes App Service runtime stack
+2. Selects appropriate base image
+3. Generates multi-stage Dockerfile
+4. Applies security hardening
+5. Implements health checks
+6. Optimizes layer caching
+7. Creates .dockerignore
 
-### `/export-database`
-Export Azure databases for local Docker containers.
+**Supports:**
+- .NET (Core, Framework)
+- Node.js
+- Python
+- Java (Spring Boot)
+- PHP
+- Static sites (Next.js, Angular)
 
-**Supported Databases:**
-- Azure SQL Database → SQL Server container
-- Azure Database for PostgreSQL → PostgreSQL container
-- Azure Database for MySQL → MySQL container
-
-**Export Methods:**
-- BACPAC (Azure SQL)
-- pg_dump (PostgreSQL)
-- mysqldump (MySQL)
-- Portal export
-- SqlPackage CLI
-
-## Agents
-
-### Azure Extraction Expert
-Specialist in extracting Azure configurations and converting to Docker formats.
-
-**When activated:**
-- Azure infrastructure questions
-- Resource extraction tasks
-- Configuration transformation needs
-- Connection string conversions
-
-**Capabilities:**
-- Complete Azure CLI mastery
-- All Azure service knowledge
-- Docker mapping expertise
-- Security-first approach
-
-### Docker Compose Generator
-Expert in creating production-ready docker-compose.yml files.
-
-**When activated:**
-- Multi-service orchestration
-- Service dependency management
-- Network and volume configuration
-- Docker Compose optimization
-
-**Capabilities:**
-- Best practice enforcement
-- Security configuration
-- Health check setup
-- Resource management
-
-## Documentation
-
-Located in `docs/` directory:
-
-### Quick References
-- **AZURE-TO-DOCKER-QUICKSTART.md** (9KB) - Start here! 10-minute quick start
-- **AZURE-EXTRACTION-SUMMARY.md** (16KB) - Cheat sheet for common tasks
-- **README-AZURE-DOCKER-TOOLKIT.md** (14KB) - Toolkit overview
-
-### Complete Guides
-- **AZURE-TO-DOCKER-COMPLETE-GUIDE.md** (23KB) - Full migration guide (60 pages)
-- **azure-to-docker-compose-guide.md** (45KB) - Detailed docker-compose guide
-- **AZURE-CLI-COMMANDS-REFERENCE.md** (27KB) - 450+ CLI commands
-
-### Examples
-- **EXAMPLE-COMPLETE-WORKFLOW.md** (22KB) - Real e-commerce migration in 30 minutes
-
-### Navigation
-- **AZURE-TO-DOCKER-INDEX.md** (16KB) - Complete navigation guide
-
-## Usage Examples
-
-### Example 1: Simple Web App + Database
-
+**Usage:**
 ```bash
-# 1. Extract from Azure
-/extract-infrastructure
-# Specify resource group: my-web-app-rg
-
-# 2. Navigate to output
-cd azure-export/my-web-app-rg_*/
-
-# 3. Review and start
-docker compose up -d
-
-# 4. Access your app
-http://localhost:8080
+/azure-to-docker-master:generate-dockerfile
 ```
 
-### Example 2: Microservices Architecture
+### `/export-database`
+
+Export Azure databases and import into local Docker containers.
+
+**What it does:**
+1. Configures Azure firewall rules
+2. Exports database (BACPAC, SQL script, pg_dump, mysqldump)
+3. Transfers to local environment
+4. Imports into Docker container
+5. Verifies data integrity
+6. Cleans up firewall rules
+
+**Supports:**
+- Azure SQL Database
+- Azure Database for PostgreSQL
+- Azure Database for MySQL
+
+**Usage:**
+```bash
+/azure-to-docker-master:export-database
+```
+
+## Skills
+
+### `azure-emulators-2025`
+
+Comprehensive knowledge of Azure service emulators:
+- Azurite (Storage)
+- SQL Server 2025
+- Cosmos DB Emulator
+- Service Bus Emulator
+- PostgreSQL
+- MySQL
+- Redis
+
+Includes configuration examples, connection strings, limitations, and migration checklists.
+
+### `compose-patterns-2025`
+
+Production Docker Compose patterns:
+- Multi-environment strategy
+- Security hardening
+- Health checks
+- Dependency management
+- Network isolation
+- Resource limits
+- YAML anchors
+- Validation and testing
+
+## Agent
+
+### `azure-docker-expert`
+
+Specialized agent for generating Docker Compose files from Azure configurations. Provides:
+- Azure service mapping expertise
+- 2025 emulator configuration
+- Production-ready patterns
+- Security best practices
+- Network architecture
+- Volume management
+- Health check strategies
+
+## Quick Start
+
+### 1. Extract Azure Infrastructure
 
 ```bash
-# Extract full microservices stack
-/extract-infrastructure
-# Specify resource group: microservices-prod
+# Authenticate with Azure
+az login
 
-# Generated docker-compose.yml includes:
-# - 5 API services
-# - SQL Server
-# - PostgreSQL
-# - Redis
-# - Azure Storage (Azurite)
-# - Monitoring (Jaeger + Grafana)
+# Extract infrastructure
+/azure-to-docker-master:extract-infrastructure
 
-# Start all services
+# Follow prompts to select resource group
+```
+
+### 2. Review Generated Files
+
+```bash
+# Validate Compose syntax
+docker compose config
+
+# Check services
+docker compose config --services
+
+# Review environment template
+cat .env.template
+```
+
+### 3. Configure Environment
+
+```bash
+# Copy template and set passwords
+cp .env.template .env
+nano .env  # Set all passwords
+```
+
+### 4. Start Services
+
+```bash
+# Using Makefile
+make up
+
+# Or directly
 docker compose up -d
 
-# Check health
+# Check status
+make health
+# Or
 docker compose ps
 ```
 
-### Example 3: Database-Only Migration
+### 5. Export Databases (Optional)
 
 ```bash
-# Export specific database
-/export-database
-# Select: Azure SQL Database
-# Method: BACPAC
+/azure-to-docker-master:export-database
 
-# Import to local container
-docker run -d --name sqlserver \
-  -e "ACCEPT_EULA=Y" \
-  -e "SA_PASSWORD=YourPassword" \
-  -p 1433:1433 \
-  mcr.microsoft.com/mssql/server:2022-latest
-
-# Import BACPAC (command provided by agent)
+# Follow prompts for database selection
 ```
 
-## Azure Service Mappings
-
-| Azure Service | Docker Equivalent | Port |
-|--------------|-------------------|------|
-| Azure SQL Database | SQL Server 2022 | 1433 |
-| App Service | Custom container | 8080 |
-| Azure Redis | Redis 7 | 6379 |
-| Azure Storage | Azurite | 10000-02 |
-| PostgreSQL | PostgreSQL 15 | 5432 |
-| MySQL | MySQL 8.0 | 3306 |
-| Cosmos DB | Cosmos Emulator | 8081 |
-| Service Bus | Service Bus Emulator | 5672 |
-| App Insights | Jaeger + OTEL | 16686 |
-
-## Platform Compatibility
-
-- ✅ **Linux**: Full support (all features)
-- ✅ **macOS**: Full support (all features)
-- ✅ **Windows**: Full support
-  - PowerShell script for extraction
-  - Bash script works in Git Bash
-  - Docker Desktop required
-
-## Prerequisites
-
-### Required
-- **Azure CLI** (`az`) - Latest version
-- **Docker** - Version 20.10+
-- **Docker Compose** - v2.0+
-- **Git** - For Git Bash on Windows
-
-### Optional (for specific features)
-- **jq** - JSON parsing in scripts
-- **SqlPackage** - Advanced SQL operations
-- **pg_dump/pg_restore** - PostgreSQL operations
-- **mysqldump** - MySQL operations
-
-### Installation
+### 6. Generate Dockerfiles for Apps
 
 ```bash
-# Azure CLI
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+/azure-to-docker-master:generate-dockerfile
 
-# Docker (Linux)
-curl -fsSL https://get.docker.com | sh
-
-# jq
-sudo apt-get install jq     # Debian/Ubuntu
-brew install jq             # macOS
+# For each App Service in Azure
 ```
 
-## Security Best Practices
+## Example Scenarios
 
-### Secrets Management
-- ✅ Use .env files for local secrets
-- ✅ Add .env to .gitignore
-- ✅ Never commit passwords
-- ✅ Use Docker secrets in compose files
-- ✅ Encrypt sensitive exports
+### Scenario 1: Simple Web App + Database
 
-### Network Security
-- ✅ Use internal networks in docker-compose
-- ✅ Only expose necessary ports
-- ✅ Configure TLS where possible
-- ✅ Use non-root users in containers
-- ✅ Apply security options (no-new-privileges)
+**Azure Resources:**
+- 1 App Service (Node.js)
+- 1 Azure SQL Database
 
-### Database Security
-- ✅ Strong passwords for local databases
-- ✅ Restrict database user permissions
-- ✅ Encrypt backups containing sensitive data
-- ✅ Clean up exports from Azure Storage
-- ✅ Use Azure Key Vault for production secrets
+**Generated Stack:**
+```yaml
+services:
+  webapp:
+    build: ./webapp
+    ports: ["8080:8080"]
+    depends_on:
+      sqlserver:
+        condition: service_healthy
 
-## Integration with Other Plugins
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-RC0
+    healthcheck: ...
+```
 
-### docker-master
-After generating Dockerfiles:
+### Scenario 2: Three-Tier Application
+
+**Azure Resources:**
+- Frontend App Service (React)
+- Backend App Service (.NET)
+- Azure SQL Database
+- Redis Cache
+- Storage Account
+
+**Generated Stack:**
+```yaml
+services:
+  frontend:
+    build: ./frontend
+    networks: [frontend]
+
+  backend:
+    build: ./backend
+    networks: [frontend, backend]
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-RC0
+    networks: [backend]
+
+  redis:
+    image: redis:7.4-alpine
+    networks: [backend]
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    networks: [backend]
+```
+
+### Scenario 3: Microservices Architecture
+
+**Azure Resources:**
+- 5 App Services (microservices)
+- Azure SQL + Cosmos DB
+- Redis Cache
+- Service Bus
+- Application Insights
+
+**Generated Stack:**
+- Nginx gateway
+- 5 microservice containers
+- SQL Server 2025 + Cosmos DB Emulator
+- Redis
+- RabbitMQ (Service Bus alternative)
+- Jaeger + Grafana (monitoring)
+- Complete network isolation
+- Health checks for all services
+
+## Configuration Examples
+
+### Environment Variables
+
 ```bash
-# Review with docker-master
-/docker-security
+# .env file
+# SQL Server
+MSSQL_SA_PASSWORD=YourStrong!Passw0rd
 
-# Claude will:
-# - Check CIS Docker Benchmark compliance
-# - Identify security issues
-# - Suggest optimizations
-# - Validate best practices
+# PostgreSQL
+POSTGRES_PASSWORD=postgres123
+
+# Redis
+REDIS_PASSWORD=redis123
+
+# Azurite (standard development connection string)
+AZURITE_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+
+# Application
+ASPNETCORE_ENVIRONMENT=Development
+NODE_ENV=development
 ```
 
-### azure-master
-For Azure-specific questions:
-```bash
-# Ask azure-master for details
-# Agent automatically activates for Azure questions
+### Connection Strings
+
+**SQL Server:**
+```
+Server=sqlserver;Database=MyApp;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;
 ```
 
-### bash-master
-For script improvements:
-```bash
-# Review extraction scripts
-# Agent helps with ShellCheck compliance
+**PostgreSQL:**
 ```
+postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/myapp
+```
+
+**Redis:**
+```
+redis://:${REDIS_PASSWORD}@redis:6379
+```
+
+**Azurite (Blob Storage):**
+```
+DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+```
+
+**Cosmos DB:**
+```
+AccountEndpoint=https://cosmosdb:8081;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;
+```
+
+## Best Practices
+
+### Security
+
+1. **Never commit .env files** - Use .env.template
+2. **Use Docker secrets** for production
+3. **Run as non-root users** in all containers
+4. **Apply capability drops** (drop ALL, add selectively)
+5. **Use read-only filesystems** with tmpfs for writes
+6. **Network isolation** (frontend/backend separation)
+
+### Performance
+
+1. **Set resource limits** (CPU, memory)
+2. **Use health checks** for all services
+3. **Implement dependency ordering** with conditions
+4. **Cache Docker layers** appropriately
+5. **Use alpine images** where possible
+
+### Development Experience
+
+1. **Use docker-compose.override.yml** for dev settings
+2. **Mount source code** with hot reload
+3. **Expose debugger ports** (localhost only)
+4. **Use Makefile** for common operations
+5. **Document connection strings** in README
+
+### Maintainability
+
+1. **Version pin all images** (not `latest`)
+2. **Comment complex configurations**
+3. **Use YAML anchors** for repeated config
+4. **Organize networks logically**
+5. **Keep compose files modular**
 
 ## Troubleshooting
 
-### Extraction Script Fails
+### Services Fail to Start
 
-**Check Azure CLI auth:**
 ```bash
+# Check logs
+docker compose logs <service-name>
+
+# Verify resource allocation
+docker stats
+
+# Check port conflicts
+netstat -an | grep <port>
+```
+
+### Database Connection Issues
+
+```bash
+# Verify health check
+docker compose ps
+
+# Test connection
+docker compose exec <service> <db-client> -h localhost
+
+# Check network
+docker network inspect <network-name>
+```
+
+### Import Failures
+
+```bash
+# Check disk space
+df -h
+
+# Verify file permissions
+ls -la <import-file>
+
+# Test connectivity to Azure
 az account show
 ```
 
-**Verify resource group:**
-```bash
-az group show --name RESOURCE_GROUP
-```
+## Limitations
 
-**Permissions:**
-```bash
-az role assignment list --scope /subscriptions/SUB_ID/resourceGroups/RG_NAME
-```
+**Azure Emulators vs. Production:**
+- Performance characteristics differ
+- Some Azure-specific features unavailable
+- Single-instance only (no clustering)
+- Self-signed certificates require trust
+- Azure AD authentication not replicated
 
-### Docker Compose Errors
+**Database Emulators:**
+- SQL Server 2025: Developer edition only
+- Cosmos DB: Limited partition support
+- Service Bus: Official emulator in preview
 
-**Services won't start:**
-```bash
-# Check logs
-docker compose logs SERVICE_NAME
+**Known Issues:**
+- Azure SQL Edge retired (use SQL Server 2025)
+- Cosmos DB requires SSL/TLS trust
+- Large database exports may timeout
 
-# Verify health
-docker compose ps
-```
+## Requirements
 
-**Port conflicts:**
-```bash
-# Change ports in .env
-DB_PORT=1434  # Instead of 1433
-```
+**Host System:**
+- Docker Desktop 4.38+ with Compose v2.40+
+- Minimum 8GB RAM (16GB recommended for full stack)
+- Minimum 50GB disk space
+- Azure CLI installed and configured
 
-### Database Import Fails
+**Azure Permissions:**
+- Read access to resource groups
+- Database access credentials
+- Network rule management (for database export)
 
-**SQL Server memory:**
-```yaml
-sqlserver:
-  deploy:
-    resources:
-      limits:
-        memory: 4G  # Increase if needed
-```
+## Migration Checklist
 
-**Connection timeouts:**
-```bash
-# Wait for healthy status
-docker compose ps
-# Wait until health shows "healthy"
-```
-
-## Performance Tips
-
-### Faster Extraction
-- Run during off-peak hours for large resource groups
-- Use parallel database exports (custom scripts)
-- Compress exports before download
-
-### Faster Containers
-- Use BuildKit for Docker builds
-- Configure layer caching
-- Use .dockerignore properly
-- Optimize base images (alpine variants)
-
-### Resource Management
-```yaml
-# Set appropriate limits
-services:
-  webapp:
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-```
-
-## Cost Savings
-
-**Typical Savings:**
-- 10 developers × $500/month Azure dev environments = **$5,000/month**
-- Local Docker: **$0/month**
-- **Annual savings: $60,000**
-
-**Additional Benefits:**
-- Faster iteration (no Azure latency)
-- Work offline
-- No Azure quota limits
-- Test destructive operations safely
+- [ ] Extract Azure infrastructure
+- [ ] Review generated docker-compose.yml
+- [ ] Configure .env file with passwords
+- [ ] Test service startup: `docker compose up`
+- [ ] Verify health checks pass
+- [ ] Export databases from Azure
+- [ ] Import databases to Docker
+- [ ] Generate Dockerfiles for apps
+- [ ] Build and test application containers
+- [ ] Update application connection strings
+- [ ] Test full application locally
+- [ ] Document any Azure-specific feature gaps
+- [ ] Set up regular data refresh process
 
 ## Contributing
 
-Found a bug or have a suggestion?
-
-1. File an issue in the marketplace repo
-2. Suggest improvements to extraction scripts
-3. Share your Azure service mappings
-4. Contribute Docker Compose patterns
-
-## License
-
-MIT License - See LICENSE file for details
+Contributions are welcome! Please ensure:
+- All examples use 2025 best practices
+- No `version` field in Compose files
+- Security hardening applied
+- Comprehensive health checks included
+- Documentation updated
 
 ## Support
 
-- 📖 **Documentation**: See `docs/` directory
-- 🤖 **Ask Claude**: Use the commands and agents
-- 💬 **Community**: Claude Code community Discord
-- 🐛 **Issues**: GitHub issues in marketplace repo
+For issues, questions, or feature requests:
+- GitHub Issues: [claude-code-marketplace](https://github.com/JosiahSiegel/claude-code-marketplace/issues)
+- Documentation: [Plugin README](https://github.com/JosiahSiegel/claude-code-marketplace/tree/main/plugins/azure-to-docker-master)
 
-## Version History
+## License
 
-### 1.0.0 (2025-10-25)
-- Initial release
-- Azure infrastructure extraction scripts
-- Dockerfile generation
-- Docker Compose automation
-- Comprehensive documentation
-- Azure extraction expert agent
-- Docker Compose generator agent
-- 10 detailed documentation files
-- Support for all major Azure services
+MIT License - see LICENSE file for details
 
-## Credits
+## Author
 
-Created with ❤️ by Josiah Siegel
+Josiah Siegel (JosiahSiegel@users.noreply.github.com)
 
-Powered by:
-- Claude Code plugin system
-- Azure CLI
-- Docker & Docker Compose
-- Community feedback and testing
+## Version
+
+1.0.0 (2025)
+
+## Keywords
+
+azure, docker, migration, compose, emulator, azurite, local-dev, infrastructure, extraction, containerize, sql-server, cosmos, storage, devops, development-environment
+
+## References
+
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [Azurite Documentation](https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite)
+- [SQL Server 2025 in Docker](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker)
+- [Cosmos DB Emulator](https://learn.microsoft.com/en-us/azure/cosmos-db/local-emulator)
+- [Azure CLI Documentation](https://learn.microsoft.com/en-us/cli/azure/)

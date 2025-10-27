@@ -1,77 +1,66 @@
 ---
-description: Get comprehensive guidance on creating Claude Code plugins, from basics to advanced topics
+description: Comprehensive plugin development reference from beginner basics to advanced patterns
 ---
 
 # Plugin Guide
 
+Access tailored guidance on Claude Code plugin development based on your experience level and specific questions.
+
 ## Purpose
-This command provides detailed guidance on Claude Code plugin development, covering everything from "What is Claude Code?" to advanced topics like progressive disclosure, hooks, and marketplace publishing. It's your go-to reference for all plugin-related questions.
+
+Adaptive reference system that provides beginner tutorials, intermediate how-tos, or advanced patterns depending on user needs. Automatically activates plugin-master skill for complete documentation access.
 
 ## Instructions
 
-1. **Read the plugin-master skill** to access the complete guide
-2. **Determine the user's experience level**:
-   - Complete beginner: Start with basics (What is Claude Code?)
-   - First plugin: Focus on "Your First Plugin in 10 Minutes"
-   - Experienced: Provide advanced topics
-3. **Provide relevant information** based on their question:
-   - Plugin structure and components
-   - Best practices and conventions
-   - Platform compatibility (especially Windows issues)
-   - Installation methods (GitHub vs local)
-   - Troubleshooting guidance
-   - Publishing to marketplaces
-4. **Include practical examples** and code snippets
-5. **Reference official documentation** when appropriate
+1. **Activate plugin-master skill** - Provides full beginner's guide
+2. **Assess user needs**:
+   - Beginners: "What is Claude Code?" → "First Plugin in 10 Minutes" tutorial
+   - Intermediate: Specific topics (commands, agents, skills, hooks, MCP)
+   - Advanced: Progressive disclosure, environment vars, testing frameworks
+   - Troubleshooting: Platform issues, validation errors, loading problems
+3. **Provide targeted guidance** with code examples and practical steps
+4. **Reference official docs** when appropriate (docs.claude.com)
+5. **Adapt depth** - Quick answers for specific questions, comprehensive tutorials for broad topics
 
-## Topics Covered
+## Quick Topic Index
 
-### For Beginners
-- What is Claude Code and plugins?
-- Plugin structure and components
-- Your first plugin in 10 minutes
-- Installation methods
-- Basic troubleshooting
+**Getting Started:**
+- What is Claude Code and why plugins?
+- First plugin tutorial (10 minutes)
+- Installation methods (GitHub recommended)
 
-### For Intermediate Users
-- Creating commands, agents, and skills
-- Using hooks effectively
-- MCP server integration
-- Testing and debugging
-- Publishing to marketplaces
+**Core Concepts:**
+- Plugin structure (plugin.json, directories)
+- Commands (slash command creation)
+- Agents (specialized assistants)
+- Skills (knowledge documents)
+- Hooks (event automation)
+- MCP servers (external tool integration)
 
-### For Advanced Users
-- Progressive disclosure in skills
-- Dynamic hook configuration
-- Multi-plugin workflows
-- Environment variables
-- Plugin testing frameworks
+**Publishing:**
+- Marketplace structure
+- GitHub publishing workflow
+- Version management
+- Community distribution
+
+**Platform Issues:**
+- Windows path limitations (use GitHub method)
+- Mac/Linux local installation
+- Cross-platform compatibility
+
+**Troubleshooting:**
+- Plugin not loading
+- Commands not appearing
+- JSON validation errors
+- Marketplace setup issues
 
 ## Example Usage
 
 ```
-/plugin-guide - how do I get started?
-/plugin-guide - explain plugin structure
-/plugin-guide - how to publish to marketplace
-/plugin-guide - Windows installation issues
-/plugin-guide - advanced hook configuration
+/plugin-guide getting started
+/plugin-guide how to create commands
+/plugin-guide Windows installation help
+/plugin-guide advanced hooks
 ```
 
-## Quick Navigation Hints
-
-When users ask about:
-- **Getting started** → Direct to "What is Claude Code?" and "Your First Plugin"
-- **Structure** → Explain components (commands, agents, skills, hooks)
-- **Installation** → Emphasize GitHub method, note Windows limitations
-- **Publishing** → Guide through marketplace creation process
-- **Troubleshooting** → Provide debugging steps and common solutions
-- **Advanced topics** → Cover progressive disclosure, hooks, MCP integration
-
-## Output Guidelines
-
-- Keep explanations clear and beginner-friendly
-- Use code examples liberally
-- Highlight platform-specific considerations
-- Emphasize GitHub-first approach for reliability
-- Link to official documentation when appropriate
-- Encourage starting simple and iterating
+Returns context-appropriate guidance with examples and next steps.

@@ -129,6 +129,23 @@ global class ScheduledClassName implements Schedulable {
 
 ### Step 5: Governor Limits and Optimization
 
+**CRITICAL BREAKING CHANGE (API 62.0+)**:
+Collections cannot be modified during iteration:
+```apex
+// ❌ THROWS FinalException in API 62.0+
+Set<String> mySet = new Set<String>{'a', 'b', 'c'};
+for (String s : mySet) {
+    mySet.remove(s);  // System.FinalException!
+}
+
+// ✅ CORRECT pattern
+Set<String> itemsToRemove = new Set<String>();
+for (String s : mySet) {
+    if (condition) itemsToRemove.add(s);
+}
+mySet.removeAll(itemsToRemove);
+```
+
 **Critical Limits to Monitor**:
 - SOQL Queries: 100 (sync) / 200 (async) per transaction
 - DML Statements: 150 per transaction
@@ -206,7 +223,39 @@ private class TestClassName {
   ```
 
 ## Best Practices
-- Use `with sharing` for user-context security
+
+### Security (2025 Standards)
+- **Use `with sharing`** for user-context security (enforces sharing rules)
+- **Use `WITH SECURITY_ENFORCED`** in SOQL to enforce field-level security (API 62.0+)
+- **Use `Security.stripInaccessible()`** to remove inaccessible fields
+- **Enable MFA** for all users (mandatory 2025 requirement)
+- **Follow least privilege principle** (grant minimum necessary permissions)
+- **Zero Trust architecture** with Hyperforce (verify everything, trust nothing)
+
+```apex
+// Security-enforced query (API 62.0+)
+List<Account> accounts = [SELECT Id, Name, Revenue__c
+                          FROM Account
+                          WITH SECURITY_ENFORCED];
+
+// Strip inaccessible fields before DML
+List<Account> accounts = [SELECT Id, Name, Revenue__c FROM Account];
+SObjectAccessDecision decision = Security.stripInaccessible(
+    AccessType.READABLE, accounts);
+return decision.getRecords();
+
+// Secure DML with stripInaccessible (prevents field-level security bypass)
+public static void updateAccountsSafely(List<Account> accounts) {
+    // Remove fields user cannot update
+    SObjectAccessDecision decision = Security.stripInaccessible(
+        AccessType.UPDATABLE, accounts);
+
+    // Only update fields user has access to
+    update decision.getRecords();
+}
+```
+
+### Code Quality
 - Always bulkify (design for 200+ records)
 - One trigger per object with handler pattern
 - 100% test coverage goal (minimum 75%)

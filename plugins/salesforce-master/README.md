@@ -114,6 +114,35 @@ Design Salesforce data models including objects, fields, relationships, and vali
 - Implementing validation rules
 - Schema optimization for performance
 
+### Specialized Skills (2025)
+
+Deep-dive knowledge modules for cutting-edge Salesforce features:
+
+#### Agentforce 2025 (`agentforce-2025`)
+Comprehensive guide to building autonomous AI agents with Salesforce Agentforce platform. Covers Atlas Reasoning Engine, agent architecture, topics/actions/instructions, multi-channel deployment, and integration with external AI systems (OpenAI, Claude).
+
+**Topics**: AI agents, autonomous automation, LLM integration, agent actions, Platform Events for agents, monitoring AI performance
+
+#### Data Cloud 2025 (`data-cloud-2025`)
+Complete Data Cloud integration patterns including real-time streaming, batch import, zero-copy architecture (Snowflake/Databricks), identity resolution, calculated insights, segmentation, and activation patterns.
+
+**Topics**: Customer Data Platform (CDP), zero-copy integration, data harmonization, identity resolution, real-time activation, reverse ETL
+
+#### Flow Orchestrator 2025 (`flow-orchestrator-2025`)
+Multi-user, multi-stage workflow orchestration with interactive steps, background automation, fault paths, and SLA monitoring. Build complex business processes without code.
+
+**Topics**: Multi-user workflows, stage-based automation, fault handling, orchestration monitoring, FlowOrchestrationWorkItem queries
+
+#### Hyperforce 2025 (`hyperforce-2025`)
+Salesforce cloud-native infrastructure on AWS/Azure/GCP. Covers immutable infrastructure, multi-AZ design, Zero Trust security, data residency, and migration strategies.
+
+**Topics**: Public cloud architecture, Kubernetes/containers, data residency, AWS PrivateLink, Azure Private Link, Hyperforce migration
+
+#### Lightning 2025 Features (`lightning-2025-features`)
+Winter '26 Lightning Web Components updates including lightning/graphql module, local development, Lightning Out 2.0, SLDS 2.0 dark mode, and Agentforce targets.
+
+**Topics**: LWC GraphQL, local development, Lightning Out 2.0, SLDS dark mode, unified testing APIs
+
 ### Specialized Agents
 
 Expert agents for deep Salesforce knowledge:
@@ -250,12 +279,15 @@ Complete integration patterns expertise for connecting Salesforce with external 
 - **Middleware**: MuleSoft, Dell Boomi, Informatica, API Gateway
 - **Security**: OAuth 2.0, Named Credentials, JWT, encryption
 
-### Lightning Platform
+### Lightning Platform (2025)
 - **Lightning Web Components (LWC)**: Modern JavaScript, Shadow DOM, ES6+
+- **lightning/graphql module**: New GraphQL API (Winter '26)
+- **Local Development**: sf lightning dev component (instant feedback, no deployment)
 - **Component Communication**: Parent-child, events, Lightning Message Service
 - **Lightning Data Service**: Wire adapters, imperative Apex, DML operations
+- **Lightning Out 2.0**: Web components-based embedding (GA Winter '26)
 - **Testing**: Jest unit tests, mocking, DOM assertions
-- **SLDS**: Salesforce Lightning Design System, responsive layouts
+- **SLDS 2.0**: Dark mode support, SLDS linter with auto-fix
 
 ### Deployment and CI/CD
 - **SFDX CLI**: Project setup, retrieve/deploy, scratch orgs, source-driven development
@@ -266,7 +298,30 @@ Complete integration patterns expertise for connecting Salesforce with external 
 
 ## Salesforce Version Support
 
-The plugin provides guidance for the latest Salesforce API version (v60.0) and includes patterns that work across multiple versions. When version-specific features are mentioned, the documentation clearly indicates the minimum required version.
+The plugin provides guidance for **Salesforce API version 62.0+ (Winter '25/Winter '26/2025)** and includes the latest 2025 features:
+
+### API & Development (API 62.0+)
+- Lightning/graphql module (replaces deprecated lightning/uiGraphQLApi)
+- Lightning Out 2.0 (GA) - Web components-based embedding
+- LWC for Local Actions in Flows (client-side execution)
+- Enhanced local development with platform modules
+- API 62.0 breaking changes (collection iteration restrictions)
+- 2025 security standards (MFA mandatory, WITH SECURITY_ENFORCED, stripInaccessible)
+
+### AI & Automation (2025)
+- **Agentforce**: Autonomous AI agents with Atlas Reasoning Engine
+- **Agentforce Builder**: Build, test, deploy AI agents (Beta November 2025)
+- **Einstein Copilot → Agentforce Assistant**: Conversational AI evolution
+- **Flow Orchestrator**: Multi-user, multi-stage workflows with fault paths (Summer '25)
+- **Data Cloud**: Real-time CDP with 200+ connectors and zero-copy architecture
+
+### Infrastructure (2025)
+- **Hyperforce**: Cloud-native architecture on AWS/Azure/GCP
+- **Multi-AZ deployments**: 99.95%+ SLA with automatic failover
+- **Zero Trust security**: Verify everything, trust nothing
+- **Data residency**: 25+ global regions with compliance guarantees
+
+When version-specific features are mentioned, the documentation clearly indicates the minimum required version.
 
 ## Best Practices Enforced
 

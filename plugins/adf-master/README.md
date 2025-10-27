@@ -6,9 +6,33 @@ Complete Azure Data Factory expertise system for ALL platforms and deployment me
 
 The **adf-master** plugin provides comprehensive Azure Data Factory expertise, covering everything from pipeline design to CI/CD automation. It includes both modern npm-based deployment approaches and traditional methods, ensuring you can work with any ADF setup.
 
+## 🆕 What's New in 3.0.0 (2025 Update)
+
+### 🚨 Critical Databricks Updates
+- **Databricks Job activity** is now the ONLY recommended method (migrate from Notebook activities)
+- **Serverless by default** - No cluster configuration needed in linked service
+- **Advanced workflow features** - Run As, Task Values, If/Else tasks, AI/BI tasks, Repair Runs
+- **Correct activity type** - `DatabricksJob` (fixed from incorrect `DatabricksSparkJob`)
+
+### 🆕 New 2025 Connectors
+- **ServiceNow V2** - V1 is End of Support, migration required
+- **Microsoft Fabric Warehouse** - Native integration with Fabric data platform
+- **Enhanced connectors** - PostgreSQL, Snowflake with improved performance
+
+### 🔐 2025 Security & Authentication
+- **User-assigned managed identity** support for cross-factory scenarios
+- **Credentials consolidation** - Centralized Microsoft Entra ID credential management
+- **MFA enforcement ready** - October 2025 compliance built-in
+- **Principle of least privilege** - Updated RBAC patterns
+
+### 📦 Modern CI/CD Patterns
+- **Latest npm utilities** - `@microsoft/azure-data-factory-utilities` with preview mode
+- **Selective trigger management** - Only stop/start modified triggers with `--preview` flag
+- **Updated workflows** - GitHub Actions and Azure DevOps 2025 templates
+
 ## Key Features
 
-### 🛡️ **NEW: Comprehensive Validation & Edge-Case Handling**
+### 🛡️ **Comprehensive Validation & Edge-Case Handling**
 - **STRICT activity nesting validation** - Prevents prohibited combinations (ForEach in If, nested ForEach, etc.)
 - **Linked service validation** - Ensures required properties are set (e.g., accountKind for managed identity)
 - **Resource limit enforcement** - Validates activity counts, ForEach batching, Lookup limits
@@ -95,6 +119,32 @@ Claude: I'll guide you through setting up modern automated CI/CD for Azure Data 
 [Provides complete workflow templates, secret configuration guide, and testing steps]
 ```
 
+### `/adf-master:adf-validate`
+Validate existing Azure Data Factory pipelines against activity nesting rules, resource limits, and best practices.
+
+**What it does:**
+- **VALIDATES existing pipeline JSON** without modifying it
+- **CHECKS activity nesting** against permitted/prohibited combinations
+- **VERIFIES resource limits** (activities, parameters, ForEach batching)
+- **AUDITS linked services** for required properties
+- **GENERATES comprehensive validation report** with issues and fixes
+- **PROVIDES actionable recommendations** for each violation
+
+**When to use:**
+- Validating existing pipeline JSON before deployment
+- Auditing pipelines for compliance with ADF limitations
+- Troubleshooting why a pipeline design might fail
+- Code review of ADF pipelines
+- Pre-deployment validation checks
+
+**Example usage:**
+```
+User: "Validate this pipeline JSON for any issues"
+
+Claude: Let me validate your pipeline against ADF limitations...
+[Provides detailed validation report with critical issues, warnings, and recommendations]
+```
+
 ### `/adf-master:adf-pipeline-create`
 Create Azure Data Factory pipelines following Microsoft best practices **with STRICT validation enforcement**.
 
@@ -111,7 +161,7 @@ Create Azure Data Factory pipelines following Microsoft best practices **with ST
 
 **New Validation Features:**
 - ✅ Activity nesting validation (ForEach, If, Switch, Until)
-- ✅ Resource limit checks (activity count < 120, ForEach batchCount ≤ 50)
+- ✅ Resource limit checks (activity count < 80, ForEach batchCount ≤ 50)
 - ✅ Linked service property validation (accountKind, authentication requirements)
 - ✅ Automatic detection of Set Variable in parallel ForEach
 - ✅ Comprehensive validation checklist before finalization
@@ -336,7 +386,7 @@ The skill provides detailed reference information that agents and commands can a
 - **All popular connectors**: Configuration requirements, edge cases, validation rules
 
 **Resource Limits:**
-- Activity limits (120 per pipeline)
+- Activity limits (80 per pipeline - 2025 update)
 - ForEach limits (50 concurrent iterations max)
 - Lookup limits (5000 rows, 4 MB size)
 - Data Flow limits (column names, row size, transformation limits)
@@ -393,7 +443,7 @@ This plugin enforces Microsoft best practices **AND Azure Data Factory platform 
 ### 🚨 CRITICAL Validation Rules (ALWAYS ENFORCED)
 1. **Activity Nesting Validation** - REJECT prohibited combinations (ForEach in If, nested ForEach, etc.)
 2. **Linked Service Validation** - VERIFY required properties (accountKind for managed identity, etc.)
-3. **Resource Limits** - ENFORCE activity count < 120, ForEach batchCount ≤ 50, Lookup < 5000 rows
+3. **Resource Limits** - ENFORCE activity count < 80, ForEach batchCount ≤ 50, Lookup < 5000 rows
 4. **Variable Scope** - PREVENT Set Variable in parallel ForEach
 
 ### Standard Best Practices
@@ -459,7 +509,54 @@ For plugin-specific issues:
 
 ## Version History
 
-### 2.0.0 (January 2025) **[MAJOR UPDATE]**
+### 3.1.0 (January 2025) **[2025 Updates]**
+- **🆕 NEW COMMAND: /adf-master:adf-validate**
+  - Standalone validation for existing pipelines
+  - Comprehensive validation reports with actionable fixes
+  - Pre-deployment compliance checking
+- **🆕 MICROSOFT FABRIC INTEGRATION (2025)**
+  - Fabric Lakehouse connector (tables and files)
+  - Fabric Warehouse connector (T-SQL warehousing)
+  - OneLake shortcuts for zero-copy data access
+  - Cross-platform Invoke Pipeline activity (ADF ↔ Synapse ↔ Fabric)
+- **✅ CORRECTED: Activity Limit Update**
+  - Updated from 120 to 80 activities per pipeline (2025 platform limit)
+  - All documentation and validation rules updated
+- **🧹 OPTIMIZATION: 21% Content Reduction**
+  - Removed duplicate pattern examples from agent
+  - Consolidated validation guidance
+  - Improved maintainability and clarity
+- **📚 ENHANCED DOCUMENTATION**
+  - New fabric-onelake-2025 skill with comprehensive Fabric integration
+  - Invoke Pipeline cross-platform orchestration patterns
+  - Updated connector references (ServiceNow V2, enhanced PostgreSQL)
+
+### 3.0.0 (January 2025) **[MAJOR 2025 UPDATE]**
+- **🚨 CRITICAL: Databricks Job Activity Updates**
+  - Corrected activity type from `DatabricksSparkJob` to `DatabricksJob`
+  - Added serverless execution guidance (no cluster config needed)
+  - Documented advanced 2025 features: Run As, Task Values, If/Else, AI/BI Tasks, Repair Runs, DABs support
+  - Migration urgency from legacy Notebook/Python/JAR activities
+- **🆕 NEW CONNECTORS (2025)**
+  - ServiceNow V2 connector (V1 End of Support - migration required)
+  - Microsoft Fabric Warehouse connector (Q3 2024+)
+  - Enhanced PostgreSQL and Snowflake connectors
+- **🔐 MANAGED IDENTITY 2025 BEST PRACTICES**
+  - User-assigned managed identity support and guidance
+  - Credentials consolidation feature documentation
+  - MFA enforcement compatibility (October 2025 requirement)
+  - Principle of least privilege patterns
+- **📦 CI/CD ENHANCEMENTS**
+  - npm package `@microsoft/azure-data-factory-utilities` latest version patterns
+  - Preview mode (`--preview`) for selective trigger management
+  - Updated GitHub Actions and Azure DevOps examples
+- **🧹 DEDUPLICATION AND OPTIMIZATION**
+  - Removed redundant content across agents and skills
+  - Consolidated Databricks guidance into single skill
+  - Streamlined validation rules documentation
+  - Updated all 2024 references to 2025
+
+### 2.0.0 (January 2025)
 - **NEW: Comprehensive validation and edge-case handling**
 - **NEW: adf-validation-rules skill** with all ADF limitations
 - **ENHANCED: Activity nesting validation** - Enforces ForEach, If, Switch, Until rules

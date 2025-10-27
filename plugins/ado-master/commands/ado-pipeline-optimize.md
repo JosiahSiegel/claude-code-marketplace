@@ -124,7 +124,7 @@ stages:
 ```yaml
 # For Linux workloads
 pool:
-  vmImage: 'ubuntu-latest'  # Faster startup than Windows
+  vmImage: 'ubuntu-24.04'  # Recommended for 2025 - fast startup
 
 # For specific capabilities
 pool:
@@ -333,7 +333,7 @@ jobs:
 # Use cheaper agent for simple tasks
 - stage: Lint
   pool:
-    vmImage: 'ubuntu-latest'  # Cheapest option
+    vmImage: 'ubuntu-24.04'  # Linux agents are more cost-effective
   jobs:
     - job: Linting
       steps:

@@ -134,7 +134,7 @@ RETURNING Contact(Id, Name, Email WHERE MailingCity = 'San Francisco')
 
 **Create Records (Insert)**:
 ```json
-POST /services/data/v60.0/sobjects/Account
+POST /services/data/v62.0/sobjects/Account
 {
   "Name": "Acme Corporation",
   "Industry": "Technology",
@@ -144,12 +144,12 @@ POST /services/data/v60.0/sobjects/Account
 
 **Read Records (Query)**:
 ```
-GET /services/data/v60.0/query?q=SELECT+Id,Name+FROM+Account+WHERE+Industry='Technology'
+GET /services/data/v62.0/query?q=SELECT+Id,Name+FROM+Account+WHERE+Industry='Technology'
 ```
 
 **Update Records (Patch)**:
 ```json
-PATCH /services/data/v60.0/sobjects/Account/{Id}
+PATCH /services/data/v62.0/sobjects/Account/{Id}
 {
   "Industry": "Manufacturing",
   "AnnualRevenue": 5000000
@@ -158,12 +158,12 @@ PATCH /services/data/v60.0/sobjects/Account/{Id}
 
 **Delete Records**:
 ```
-DELETE /services/data/v60.0/sobjects/Account/{Id}
+DELETE /services/data/v62.0/sobjects/Account/{Id}
 ```
 
 **Upsert (Create or Update based on External ID)**:
 ```json
-PATCH /services/data/v60.0/sobjects/Account/ExternalIdField__c/externalIdValue
+PATCH /services/data/v62.0/sobjects/Account/ExternalIdField__c/externalIdValue
 {
   "Name": "Acme Corporation",
   "Industry": "Technology"
@@ -181,7 +181,7 @@ PATCH /services/data/v60.0/sobjects/Account/ExternalIdField__c/externalIdValue
 **Bulk API 2.0 Process**:
 1. **Create Job**:
    ```json
-   POST /services/data/v60.0/jobs/ingest
+   POST /services/data/v62.0/jobs/ingest
    {
      "object": "Account",
      "operation": "insert"

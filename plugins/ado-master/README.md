@@ -4,7 +4,18 @@ Master Azure DevOps pipelines with expert knowledge of YAML pipelines, CI/CD bes
 
 ## Overview
 
-The ADO Master plugin equips Claude Code with comprehensive Azure DevOps expertise, enabling you to create, optimize, secure, and debug Azure Pipelines following current Microsoft best practices.
+The ADO Master plugin equips Claude Code with comprehensive Azure DevOps expertise, enabling you to create, optimize, secure, and debug Azure Pipelines following current Microsoft 2025 best practices. Updated for Sprint 254-262 with Agent v4, Microsoft Security DevOps, template management, and GitHub Copilot integration.
+
+## What's New in v1.3.0
+
+**2025 Features:**
+- Microsoft Security DevOps (MSDO) extension integration (replaces deprecated CredScan)
+- Pipeline template management and reusability patterns
+- Agent v4 with .NET 8 and ARM64 support
+- Sprint 261-262 features: OAuth migration to Entra ID, GitHub Copilot integration
+- Workload identity federation (OIDC) for passwordless authentication
+- Continuous Access Evaluation (CAE) security features
+- Updated OS images: Ubuntu-24.04, Windows-2025, macOS-15
 
 ## Features
 
@@ -12,8 +23,9 @@ The ADO Master plugin equips Claude Code with comprehensive Azure DevOps experti
 
 - **`/ado-pipeline-create`** - Create new YAML pipelines following current best practices and industry standards
 - **`/ado-pipeline-optimize`** - Optimize pipelines for performance, cost, and efficiency
-- **`/ado-pipeline-security`** - Secure pipelines following security best practices and compliance standards
+- **`/ado-pipeline-security`** - Secure pipelines with Microsoft Security DevOps, Defender for DevOps, and compliance standards
 - **`/ado-pipeline-debug`** - Debug pipeline failures and troubleshoot common issues
+- **`/ado-templates`** - Create and manage reusable YAML templates for consistency and efficiency (NEW in v1.3.0)
 - **`/ado-tasks`** - Help with common Azure DevOps pipeline tasks and their usage
 - **`/ado-cli`** - Manage Azure DevOps using Azure DevOps CLI
 - **`/ado-repo`** - Manage repositories, branches, and Git operations
@@ -32,6 +44,8 @@ The ADO Master plugin equips Claude Code with comprehensive Azure DevOps experti
 ### Skills
 
 - **ado-pipeline-best-practices** - Best practices for Azure Pipelines structure, triggers, variables, and more
+- **sprint-254-features** - Azure DevOps Sprint 254-262 latest features including Agent v4, ARM64 support, GitHub Copilot integration
+- **defender-for-devops** - Microsoft Defender for DevOps integration with comprehensive security scanning (NEW in v1.3.0)
 
 ## Installation
 
