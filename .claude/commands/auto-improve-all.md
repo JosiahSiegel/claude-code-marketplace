@@ -136,9 +136,42 @@ After launching all agents in parallel:
 3. Primary context usage remains minimal
 4. Collect reports when all agents finish
 
-### Step 4: Summarize Aggregate Results
+### Step 4: Update README.md to Reflect Improvements
 
-After all agents complete, summarize:
+**CRITICAL: After all agents complete, update the main README.md**
+
+The README.md must stay synchronized with plugin improvements:
+
+1. **Read current marketplace.json** to get latest plugin descriptions and versions
+2. **Read current README.md** to understand current structure
+3. **Update plugin descriptions** in README.md to match marketplace.json exactly
+4. **Verify all plugins are listed** in the correct categories
+5. **Update version references** if mentioned in Quick Start or examples
+6. **Maintain organizational structure** (Core Development, Cloud & Infrastructure, etc.)
+7. **Keep formatting consistent** with existing README style
+
+**Why this is critical:**
+- README.md is the first thing users see
+- Outdated descriptions reduce plugin discoverability
+- Version mismatches confuse users
+- Missing plugins mean lost adoption
+
+**Implementation:**
+```
+After collecting all agent results:
+1. Read .claude-plugin/marketplace.json
+2. Read README.md
+3. For each plugin in each category:
+   - Update description to match marketplace.json
+   - Verify install command is correct
+   - Ensure link to plugin directory works
+4. Update documentation links section
+5. Update Quick Start examples if needed
+```
+
+### Step 5: Summarize Aggregate Results
+
+After all agents complete and README.md is updated, summarize:
 - **Total plugins improved**: Count (should be 14)
 - **New features added**: Aggregate across all plugins
 - **Files created**: Total new command/skill files
@@ -146,6 +179,7 @@ After all agents complete, summarize:
 - **Bugs fixed**: Critical issues corrected
 - **Content optimized**: Average deduplication percentage
 - **Versions bumped**: List all plugins with version updates
+- **README.md updated**: Confirm descriptions synchronized
 - **Production ready**: Percentage of plugins production-ready
 
 ## Expected Outcomes
@@ -158,8 +192,9 @@ After running this command, you will have **measurably improved** all plugins:
 4. **10-15 Bugs Fixed** - Critical issues, outdated info, and deprecated code corrected
 5. **25% Average Optimization** - Redundant content removed, clarity improved
 6. **8-12 Version Bumps** - ALL plugins updated in both plugin.json AND marketplace.json
-7. **100% Portable** - No user-specific paths, machine names, or personal information
-8. **100% Production Ready** - All plugins validated with working examples
+7. **README.md Synchronized** - Main README reflects all plugin improvements and current descriptions
+8. **100% Portable** - No user-specific paths, machine names, or personal information
+9. **100% Production Ready** - All plugins validated with working examples
 
 ## Usage Notes
 
@@ -176,6 +211,7 @@ After running this command, you will have **measurably improved** all plugins:
 - **Optimizes content** - Removes duplication, improves clarity
 - **Creates files** - New commands/skills for missing capabilities
 - **Bumps versions** - ALWAYS increments version in plugin.json AND marketplace.json
+- **Updates README.md** - Synchronizes main README with all plugin improvements
 - **Ensures portability** - Removes user paths, machine names, personal info
 
 **Performance:**
@@ -188,10 +224,11 @@ After running this command, you will have **measurably improved** all plugins:
 1. **Review improvements**: `git diff` to see all enhancements
 2. **Verify versions**: Confirm all plugin.json AND marketplace.json versions incremented
 3. **Validate version alignment**: Ensure plugins/*/\*.claude-plugin/plugin.json versions match .claude-plugin/marketplace.json
-4. **Check portability**: Search for any remaining user paths (C:\Users, /home/, D:\repos)
-5. **Test new features**: Validate new commands and examples work
-6. **Commit improvements**: Descriptive message highlighting key additions
-7. **Share updates**: Create PR or announce new capabilities to team
+4. **Verify README.md**: Confirm all plugin descriptions match marketplace.json and all plugins are listed
+5. **Check portability**: Search for any remaining user paths (C:\Users, /home/, D:\repos)
+6. **Test new features**: Validate new commands and examples work
+7. **Commit improvements**: Descriptive message highlighting key additions
+8. **Share updates**: Create PR or announce new capabilities to team
 
 ## Example Execution
 
@@ -225,6 +262,14 @@ Assistant: Launching 14 expert agents in parallel for autonomous improvement...
 
 [Collecting results from completed agents...]
 
+[Updating README.md to reflect all improvements...]
+✓ Read marketplace.json for current descriptions
+✓ Read README.md for current structure
+✓ Updated all 14 plugin descriptions to match marketplace.json
+✓ Verified all categories have correct plugins
+✓ Updated Quick Start examples
+✓ Synchronized documentation links
+
 AGGREGATE IMPROVEMENT SUMMARY:
 ✓ 14 plugins improved autonomously
 ✓ 43 new 2025 features added
@@ -233,6 +278,7 @@ AGGREGATE IMPROVEMENT SUMMARY:
 ✓ 8 critical bugs fixed
 ✓ 27% average content optimization
 ✓ 14 version bumps (ALL plugins - plugin.json + marketplace.json)
+✓ README.md synchronized with all improvements
 ✓ 100% portable (no user-specific content)
 ✓ 100% production ready
 
@@ -267,6 +313,13 @@ All plugins now include current 2025 best practices with minimal context usage!
 - Search for patterns: C:\Users, /home/, D:\repos, @company.com
 - Replace with generic examples: /path/to/project, user@example.com
 - Use environment variables: $HOME, %USERPROFILE%, ${PLUGIN_ROOT}
+
+**README.md Not Updated:**
+- Verify marketplace.json has all plugin entries with descriptions
+- Check that README.md categories match the organizational structure
+- Ensure Edit tool used with correct file path (D:\repos\claude-code-marketplace\README.md or ./README.md)
+- Manually verify all plugin links work (./plugins/PLUGIN_NAME/README.md)
+- Confirm descriptions in README match marketplace.json exactly
 
 ## Related Commands
 

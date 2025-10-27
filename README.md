@@ -1,40 +1,6 @@
 # Claude Code Marketplace
 
-> A curated collection of Claude Code plugins for plugin development, context optimization, and productivity tools
-
-## 📦 Available Plugins
-
-### [plugin-master](./plugins/plugin-master)
-Comprehensive plugin development toolkit that enables Claude to autonomously create, package, and publish Claude Code plugins.
-
-**What it does:**
-- Generates complete plugin structures with best practices
-- Creates marketplace-ready ZIP packages
-- Provides 5 slash commands, 1 specialized agent, and comprehensive documentation
-
-**Install:** `/plugin install plugin-master@claude-code-marketplace`
-
-### [context-master](./plugins/context-master)
-Optimal planning and context management for multi-file projects, reducing token usage by ~62% on average.
-
-**What it does:**
-- Plans optimal file creation order before implementation
-- Prevents redundant work through dependency-aware architecture
-- Provides extended thinking delegation patterns
-
-**Install:** `/plugin install context-master@claude-code-marketplace`
-
-### [azure-to-docker-master](./plugins/azure-to-docker-master)
-Complete Azure-to-Docker containerization system for creating local development environments from Azure infrastructure.
-
-**What it does:**
-- Programmatically extracts Azure resource configurations
-- Generates production-ready Dockerfiles and docker-compose.yml
-- Exports Azure SQL/PostgreSQL/MySQL databases for local containers
-- Provides 3 powerful automation scripts (2,000+ lines of code)
-- Includes comprehensive documentation (8,500+ lines)
-
-**Install:** `/plugin install azure-to-docker-master@claude-code-marketplace`
+> A curated collection of Claude Code plugins for plugin development, context optimization, cloud infrastructure, DevOps automation, and productivity tools
 
 ## 🚀 Quick Start
 
@@ -43,24 +9,50 @@ Complete Azure-to-Docker containerization system for creating local development 
 /plugin marketplace add JosiahSiegel/claude-code-marketplace
 ```
 
-**2. Install plugins:**
+**2. Install any plugin:**
 ```bash
-/plugin install plugin-master@claude-code-marketplace
-/plugin install context-master@claude-code-marketplace
-/plugin install azure-to-docker-master@claude-code-marketplace
+/plugin install <plugin-name>@claude-code-marketplace
 ```
 
-**3. Start using:**
-- Plugin Master: `"Create a Git workflow plugin"`
-- Context Master: `/plan-project` before multi-file tasks
-- Azure-to-Docker Master: `/extract-infrastructure` to containerize Azure resources
+**3. Browse available plugins below and install what you need!**
 
-## 📖 Documentation
+## 📦 Available Plugins
 
-Each plugin includes detailed documentation:
-- **plugin-master**: See [`plugins/plugin-master/README.md`](./plugins/plugin-master/README.md)
-- **context-master**: See [`plugins/context-master/README.md`](./plugins/context-master/README.md)
-- **azure-to-docker-master**: See [`plugins/azure-to-docker-master/README.md`](./plugins/azure-to-docker-master/README.md)
+### Core Development Tools
+
+- **[plugin-master](./plugins/plugin-master)** ([Docs](./plugins/plugin-master/README.md)) - Create, package, and publish Claude Code plugins
+- **[context-master](./plugins/context-master)** ([Docs](./plugins/context-master/README.md)) - Optimal planning and context management (~62% savings)
+
+### Cloud & Infrastructure
+
+- **[azure-master](./plugins/azure-master)** ([Docs](./plugins/azure-master/README.md)) - Azure cloud with 2025 features (AKS Automatic, Container Apps, OpenAI)
+- **[azure-to-docker-master](./plugins/azure-to-docker-master)** ([Docs](./plugins/azure-to-docker-master/README.md)) - Migrate Azure infrastructure to local Docker environments
+- **[terraform-master](./plugins/terraform-master)** ([Docs](./plugins/terraform-master/README.md)) - Multi-cloud infrastructure-as-code (Azure, AWS, GCP)
+
+### DevOps & CI/CD
+
+- **[docker-master](./plugins/docker-master)** ([Docs](./plugins/docker-master/README.md)) - Container expertise with security hardening and CIS compliance
+- **[ado-master](./plugins/ado-master)** ([Docs](./plugins/ado-master/README.md)) - Azure DevOps and Pipelines (YAML, debugging, optimization)
+- **[git-master](./plugins/git-master)** ([Docs](./plugins/git-master/README.md)) - Git 2.48+ features (sparse-checkout, partial clone, worktrees)
+
+### Scripting & Automation
+
+- **[bash-master](./plugins/bash-master)** ([Docs](./plugins/bash-master/README.md)) - Bash 5.3 scripting with 2025 security-first practices
+- **[powershell-master](./plugins/powershell-master)** ([Docs](./plugins/powershell-master/README.md)) - Cross-platform PowerShell (Az, Microsoft.Graph, AWS modules)
+
+### Testing & Quality
+
+- **[test-master](./plugins/test-master)** ([Docs](./plugins/test-master/README.md)) - Vitest + Playwright + MSW testing system
+
+### Database & Data
+
+- **[ssdt-master](./plugins/ssdt-master)** ([Docs](./plugins/ssdt-master/README.md)) - SQL Server Data Tools (SDK-style projects, SqlPackage, schema compare)
+- **[adf-master](./plugins/adf-master)** ([Docs](./plugins/adf-master/README.md)) - Azure Data Factory with STRICT validation enforcement
+
+### Platform-Specific
+
+- **[salesforce-master](./plugins/salesforce-master)** ([Docs](./plugins/salesforce-master/README.md)) - Complete Salesforce development (Apex, Lightning, APIs, integration)
+- **[windows-path-master](./plugins/windows-path-master)** ([Docs](./plugins/windows-path-master/README.md)) - Windows path resolution and Git Bash compatibility
 
 ## 🤝 Contributing
 
