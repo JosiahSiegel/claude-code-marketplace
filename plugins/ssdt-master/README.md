@@ -1,23 +1,56 @@
 # SSDT Master Plugin
 
-Complete SQL Server Data Tools (SSDT) expertise system for Claude Code. Master of SDK-style and legacy database projects, SqlPackage operations, Visual Studio features, schema/data comparison, dacpac/bacpac operations, MSBuild integration, refactoring, and cross-platform CLI tools.
+Complete SQL Server Data Tools (SSDT) expertise with **SQL Server 2025 RC** and **SqlPackage 170.2.70** support. Enterprise database development with cutting-edge 2025 features, modern CI/CD patterns, and comprehensive tooling.
+
+## Latest 2025 Updates
+
+### SQL Server 2025 RC Features (GA Expected Nov 2025)
+- **Optimized Locking** - TID Locking & Lock After Qualification (LAQ) for enhanced concurrency
+- **Fabric Mirroring** - Zero-ETL near real-time analytics with change feed technology
+- **Native JSON** - New JSON data type with enhanced functions
+- **RegEx Support** - REGEXP_LIKE, REGEXP_REPLACE, REGEXP_SUBSTR functions
+- **REST API Integration** - sp_invoke_external_rest_endpoint for external data enrichment
+- **Vector Database** - Native enterprise vector store with up to 3,996 dimensions
+- **DiskANN Indexing** - Efficient large-scale vector search
+- **AI Model Integration** - Built-in support for Azure OpenAI, Ollama, LangChain, Semantic Kernel, ONNX
+- **Hybrid Search** - Combine vector similarity with traditional SQL queries
+- **New Data Types** - VECTOR, JSON
+
+### SqlPackage 170.2.70 (October 2025)
+- **Data Virtualization** - Azure SQL Database external data source support
+- **Parquet Files** - Azure Blob Storage integration with automatic BCP fallback
+- **New Permissions** - ALTER ANY INFORMATION PROTECTION, ALTER ANY EXTERNAL MIRROR
+- **Deployment Options** - IgnorePreDeployScript, IgnorePostDeployScript
+- **Fabric Support** - Microsoft Fabric Data Warehouse deployment
+
+### Microsoft.Build.Sql 2.0.0 GA
+- **Production Ready** - No longer preview, recommended for all new projects
+- **.NET 8 Required** - Cross-platform support (Windows/Linux/macOS)
+- **Visual Studio 2022 17.12+** - Full SDK-style project support
+
+### CI/CD Best Practices 2025
+- **State-Based Deployment** - Source represents current state (NOT migration scripts)
+- **tSQLt Unit Testing** - T-SQL unit tests with automatic rollback and pipeline abort on failure
+- **Windows Authentication** - Preferred over SQL auth for CI/CD security (no passwords)
+- **Deployment Reports Required** - Always generate before production push
+- **Environment Promotion** - Dev → QA → Staging → Prod with gates
 
 ## Features
 
 ### Comprehensive SSDT Coverage
 
-- **SDK-Style Projects** - Modern cross-platform database projects (Microsoft.Build.Sql)
+- **SDK-Style Projects** - Microsoft.Build.Sql 2.0.0 GA (production-ready)
 - **Legacy Projects** - Traditional .sqlproj format support
-- **All Build Methods** - dotnet CLI, MSBuild, Visual Studio, VS Code, Azure Data Studio, Docker (Windows/Linux)
-- **SqlPackage Mastery** - ALL 7 actions with complete knowledge of 100+ deployment options
+- **All Build Methods** - dotnet CLI, MSBuild, Visual Studio, VS Code, Azure Data Studio
+- **SqlPackage 170.2.70** - ALL 7 actions with complete 100+ deployment options
   - Extract, Publish, Export, Import, Script, DeployReport, DriftReport
-  - Every deployment property documented and explained
+  - Data virtualization and parquet file support
   - All connection methods (SQL Auth, Windows Auth, Azure AD, Managed Identity)
-- **Schema Comparison** - Compare databases, DACPACs, and generate update scripts
-- **Database Refactoring** - Safe rename, schema changes, and data transformations
-- **Visual Studio Integration** - Table designer, T-SQL editor, refactoring tools
-- **Container Support** - Windows and Linux containers with full build/deploy capabilities
-- **Cross-Platform Support** - Windows, Linux, macOS compatibility
+- **Schema Comparison** - Compare databases, DACPACs, generate update scripts, drift detection
+- **Database Refactoring** - Safe rename, schema changes, data transformations
+- **Visual Studio 2022** - SDK-style support (17.12+), table designer, T-SQL editor
+- **CI/CD 2025 Patterns** - tSQLt unit testing, state-based deployment, Windows auth
+- **Cross-Platform** - Windows, Linux, macOS (.NET 8+)
 
 ### Safety First
 
@@ -36,6 +69,17 @@ Complete SQL Server Data Tools (SSDT) expertise system for Claude Code. Master o
 - CI/CD integration patterns
 
 ## Installation
+
+### Prerequisites
+
+**Required for SQL Server 2025 & SDK-style projects:**
+- **.NET 8.0 SDK or later** - `dotnet --version`
+- **SqlPackage 170.2.70** - `dotnet tool install -g Microsoft.SqlPackage`
+
+**Optional:**
+- **Visual Studio 2022 (17.12+)** - For SDK-style project GUI support
+- **Azure Data Studio** - SQL Database Projects extension
+- **VS Code** - SQL Database Projects extension
 
 ### Quick Install (Recommended)
 

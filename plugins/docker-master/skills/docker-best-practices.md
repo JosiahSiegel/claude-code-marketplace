@@ -11,28 +11,17 @@ This skill provides current Docker best practices across all aspects of containe
 
 ### Base Image Selection
 
-**DO:**
-- Use official images from Docker Hub
-- Specify exact version tags: `node:20.11.0-alpine3.19`
-- Prefer minimal variants: `-alpine`, `-slim`, `distroless`
+**2025 Recommended Hierarchy:**
+1. **Wolfi/Chainguard** (`cgr.dev/chainguard/*`) - Zero-CVE goal, SBOM included
+2. **Alpine** (`alpine:3.19`) - ~7MB, minimal attack surface
+3. **Distroless** (`gcr.io/distroless/*`) - ~2MB, no shell
+4. **Slim variants** (`node:20-slim`) - ~70MB, balanced
+
+**Key rules:**
+- Always specify exact version tags: `node:20.11.0-alpine3.19`
+- Never use `latest` (unpredictable, breaks reproducibility)
+- Use official images from trusted registries
 - Match base image to actual needs
-- Regularly update base images
-
-**DON'T:**
-- Use `latest` tag (unpredictable, breaks reproducibility)
-- Use full OS images when slim versions suffice
-- Use unverified or deprecated images
-- Ignore base image vulnerabilities
-
-**Example:**
-```dockerfile
-# Good
-FROM node:20.11.0-alpine3.19
-
-# Bad
-FROM node:latest
-FROM node  # implicitly :latest
-```
 
 ### Dockerfile Structure
 

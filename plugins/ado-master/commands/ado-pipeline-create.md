@@ -142,7 +142,7 @@ trigger:
       - develop
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-24.04'  # Ubuntu 24.04 LTS recommended for 2025
 
 variables:
   buildConfiguration: 'Release'
@@ -209,7 +209,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-24.04'
 
 variables:
   - group: 'app-secrets'  # Variable group
@@ -312,7 +312,7 @@ parameters:
 jobs:
   - job: Build
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-24.04'
     steps:
       - script: echo "Building with ${{ parameters.buildConfiguration }}"
       # Add build steps
@@ -327,7 +327,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-24.04'
 
 variables:
   nodeVersion: '20.x'
@@ -394,7 +394,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-24.04'
 
 variables:
   dockerRegistryServiceConnection: 'myACR'

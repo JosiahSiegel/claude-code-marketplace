@@ -118,7 +118,7 @@ export default class MyComponent extends LightningElement {
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>60.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>My Component</masterLabel>
     <description>Sample Lightning Web Component</description>
@@ -127,6 +127,8 @@ export default class MyComponent extends LightningElement {
         <target>lightning__RecordPage</target>
         <target>lightning__HomePage</target>
         <target>lightningCommunity__Page</target>
+        <!-- Winter '26: Agentforce targets -->
+        <target>lightning__FlowAction</target>
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage">
@@ -432,7 +434,77 @@ force-app/main/default/aura/MyAuraComponent/
 })
 ```
 
-### Step 8: Performance Optimization
+### Step 8: Winter '26 Features (2025)
+
+**Lightning/GraphQL Module** (Replaces deprecated lightning/uiGraphQLApi):
+```javascript
+// ✅ NEW (Winter '26)
+import { gql, graphql } from 'lightning/graphql';
+
+export default class MyComponent extends LightningElement {
+    @wire(graphql, {
+        query: gql`
+            query getAccount($id: ID!) {
+                uiapi {
+                    query {
+                        Account(where: { Id: { eq: $id } }) {
+                            edges {
+                                node {
+                                    Id
+                                    Name {value}
+                                    Industry {value}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        variables: '$variables'
+    })
+    results;
+}
+```
+
+**Lightning Out 2.0** (Web Components-based, GA):
+```html
+<!-- Modern web component embedding -->
+<script src="https://MyDomain.lightning.force.com/c/myComponent.js" type="module"></script>
+<c-my-component record-id="001..."></c-my-component>
+
+<!-- 50-70% smaller bundle size vs Lightning Out 1.0 -->
+```
+
+**Local Development** (Enhanced):
+```bash
+# Start local dev server with platform modules
+sf lightning dev component
+
+# Live reload, no deployment needed
+# Platform modules (LDS, navigation) now work in preview
+```
+
+**LWC for Local Actions in Flows** (Winter '26):
+```xml
+<!-- meta.xml -->
+<targets>
+    <target>lightning__FlowAction</target>
+</targets>
+```
+
+```javascript
+// Component runs client-side in flow
+export default class FlowAction extends LightningElement {
+    @api recordId;
+
+    @api invoke() {
+        // Execute logic in browser
+        // Can access browser APIs
+    }
+}
+```
+
+### Step 9: Performance Optimization
 
 **Best Practices**:
 - Use `@wire` for data instead of imperative calls

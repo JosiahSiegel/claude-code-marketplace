@@ -6,75 +6,104 @@ Implement comprehensive security scanning, compliance validation, and security b
 
 You are helping secure Terraform infrastructure. Provide security guidance, scanning, and compliance validation.
 
-## Security Scanning Tools
+## Security Scanning Tools (2025)
 
-### 1. tfsec (Static Security Scanner)
+### 1. Trivy (Unified Security Scanner) - RECOMMENDED
+
+**Overview:**
+- **tfsec functionality merged into Trivy in 2025** - tfsec no longer actively developed
+- Unified scanner for IaC, containers, filesystems, and more
+- Aqua Security's comprehensive security solution
+- Supports Terraform, CloudFormation, Kubernetes, Helm, Dockerfile
 
 **Installation**:
 ```bash
 # Windows (Chocolatey)
-choco install tfsec
+choco install trivy
 
 # macOS (Homebrew)
-brew install tfsec
+brew install trivy
 
 # Linux
-curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy
 
-# Or download binary from: https://github.com/aquasecurity/tfsec/releases
+# Or via script
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+# Docker
+docker pull aquasec/trivy:latest
 ```
 
-**Basic Usage**:
+**Terraform Scanning**:
 ```bash
-# Scan current directory
-tfsec .
+# Scan Terraform configuration
+trivy config .
 
 # Scan specific directory
-tfsec /path/to/terraform
+trivy config /path/to/terraform
 
 # Scan with minimum severity
-tfsec . --minimum-severity HIGH
-tfsec . --minimum-severity CRITICAL
+trivy config --severity HIGH,CRITICAL .
 
 # Output formats
-tfsec . --format json
-tfsec . --format junit
-tfsec . --format sarif
-tfsec . --format html > tfsec-report.html
+trivy config --format json .
+trivy config --format sarif -o trivy-results.sarif .
+trivy config --format table .
 
-# Scan with specific checks only
-tfsec . --include-rule azure-storage-use-secure-tls-policy
+# Include passed checks
+trivy config --include-passed .
 
-# Exclude specific checks
-tfsec . --exclude aws-s3-enable-bucket-logging
+# Scan specific module
+trivy config --namespaces terraform ./modules/networking
 ```
 
 **Inline Ignore**:
 ```hcl
 resource "aws_s3_bucket" "example" {
-  #tfsec:ignore:aws-s3-enable-versioning
+  #trivy:ignore:AVD-AWS-0086
   bucket = "my-bucket"
   # Versioning not required for temporary bucket
 }
 
 # Or with expiry date
 resource "azurerm_storage_account" "example" {
-  #tfsec:ignore:azure-storage-use-secure-tls-policy:exp:2024-12-31
+  #trivy:ignore:AVD-AZU-0037:exp:2025-12-31
   name = "example"
   # TLS 1.0 required for legacy client, upgrading by EOY
 }
 ```
 
-**.tfsec.yml Configuration**:
+**trivy.yaml Configuration**:
 ```yaml
-# .tfsec/config.yml
-severity_overrides:
-  azure-storage-use-secure-tls-policy: ERROR
+# trivy.yaml
+severity:
+  - HIGH
+  - CRITICAL
 
-exclude:
-  - aws-s3-enable-bucket-logging  # Global exclude
+scan:
+  skip-dirs:
+    - "**/.terraform"
 
-minimum_severity: MEDIUM
+skip-checks:
+  - AVD-AWS-0086  # S3 bucket versioning
+
+format: table
+```
+
+**Advanced Features**:
+```bash
+# Scan with custom policies
+trivy config --policy ./policies .
+
+# Check misconfigurations and secrets
+trivy fs --scanners config,secret .
+
+# Scan Terraform plan
+terraform show -json tfplan.bin > tfplan.json
+trivy config --tf-vars tfplan.json .
 ```
 
 ### 2. Checkov (Policy as Code)
@@ -516,7 +545,7 @@ resource "aws_cloudtrail" "example" {
 
 ## CI/CD Security Integration
 
-### GitHub Actions
+### GitHub Actions (2025)
 
 ```yaml
 name: Security Scan
@@ -524,28 +553,30 @@ name: Security Scan
 on: [pull_request]
 
 jobs:
-  tfsec:
+  trivy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: tfsec
-        uses: aquasecurity/tfsec-action@v1.0.0
+      - name: Run Trivy Scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          soft_fail: false
-          format: sarif
-          additional_args: --minimum-severity HIGH
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'HIGH,CRITICAL'
 
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Upload Trivy SARIF
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: tfsec.sarif
+          sarif_file: 'trivy-results.sarif'
 
   checkov:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Checkov
         uses: bridgecrewio/checkov-action@master
@@ -556,35 +587,42 @@ jobs:
           output_format: sarif
           output_file_path: checkov.sarif
 
-      - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Upload Checkov SARIF
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: checkov.sarif
 ```
 
-### Azure DevOps
+### Azure DevOps (2025)
 
 ```yaml
 - stage: SecurityScan
   jobs:
-  - job: tfsec
+  - job: trivy
     steps:
     - task: Bash@3
-      displayName: 'Run tfsec'
+      displayName: 'Install Trivy'
       inputs:
         targetType: 'inline'
         script: |
-          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
-          tfsec . --format junit > tfsec-results.xml
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+    - task: Bash@3
+      displayName: 'Run Trivy Scanner'
+      inputs:
+        targetType: 'inline'
+        script: |
+          trivy config --format sarif --output trivy-results.sarif .
+          trivy config --format table .
       continueOnError: false
 
-    - task: PublishTestResults@2
-      displayName: 'Publish tfsec Results'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Trivy Results'
       condition: always()
       inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: 'tfsec-results.xml'
+        PathtoPublish: 'trivy-results.sarif'
+        ArtifactName: 'Trivy Security Scan'
 
   - job: checkov
     steps:
@@ -595,6 +633,7 @@ jobs:
     - script: |
         pip install checkov
         checkov -d . --framework terraform -o junitxml > checkov-results.xml
+        checkov -d . --framework terraform
       displayName: 'Run Checkov'
       continueOnError: false
 
@@ -606,20 +645,20 @@ jobs:
         testResultsFiles: 'checkov-results.xml'
 ```
 
-## Pre-Commit Hooks
+## Pre-Commit Hooks (2025)
 
 ```yaml
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.86.0
+    rev: v1.90.0
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
       - id: terraform_docs
-      - id: terraform_tfsec
+      - id: terraform_trivy
         args:
-          - --args=--minimum-severity=MEDIUM
+          - --args=--severity=HIGH,CRITICAL
       - id: terraform_checkov
         args:
           - --args=--framework terraform
@@ -663,12 +702,429 @@ repos:
 - [ ] Compliance policies enforced
 - [ ] Regular security scans
 
-### Code Quality
-- [ ] tfsec scan passes
+### Code Quality (2025)
+- [ ] Trivy scan passes (replaces tfsec)
 - [ ] Checkov scan passes
 - [ ] No high/critical findings unaddressed
 - [ ] Security exceptions documented
 - [ ] Code review completed
+- [ ] Ephemeral values used for secrets (Terraform 1.10+)
+
+## NIST SP 800-53 Rev 5 Compliance (2025)
+
+HashiCorp and AWS have released 350+ pre-written Sentinel policies for NIST SP 800-53 Rev 5 compliance, making it easier to meet government and compliance requirements.
+
+### Overview
+
+**NIST SP 800-53 Rev 5:**
+- Security and privacy controls for information systems
+- Required for federal agencies and contractors
+- Widely adopted for commercial compliance frameworks (FedRAMP, StateRAMP, CMMC)
+
+**HashiCorp Sentinel for NIST:**
+- Policy-as-code framework integrated with HCP Terraform
+- 350+ pre-written policies covering NIST controls
+- Automatic enforcement during terraform plan/apply
+
+### Installing NIST Policies
+
+```bash
+# Clone NIST policy library
+git clone https://github.com/hashicorp/policy-library-NIST-800-53
+
+# Review available policies
+cd policy-library-NIST-800-53
+ls policies/
+# Access Control (AC)
+# Audit and Accountability (AU)
+# Configuration Management (CM)
+# Identification and Authentication (IA)
+# System and Communications Protection (SC)
+# ...and more
+```
+
+### Using NIST Policies in HCP Terraform
+
+**1. Create Policy Set:**
+```hcl
+# sentinel.hcl
+policy "nist-800-53-ac-2-account-management" {
+  source = "./policies/access-control/ac-2.sentinel"
+  enforcement_level = "advisory"  # or "soft-mandatory" or "hard-mandatory"
+}
+
+policy "nist-800-53-ac-3-access-enforcement" {
+  source = "./policies/access-control/ac-3.sentinel"
+  enforcement_level = "hard-mandatory"
+}
+
+policy "nist-800-53-au-2-audit-events" {
+  source = "./policies/audit/au-2.sentinel"
+  enforcement_level = "soft-mandatory"
+}
+
+policy "nist-800-53-sc-7-boundary-protection" {
+  source = "./policies/system-protection/sc-7.sentinel"
+  enforcement_level = "hard-mandatory"
+}
+```
+
+**2. Enforcement Levels:**
+- **Advisory**: Log violations but allow apply
+- **Soft-mandatory**: Require override to apply (approval workflow)
+- **Hard-mandatory**: Block apply on violation
+
+**3. Apply to Workspaces:**
+```bash
+# Via HCP Terraform UI:
+# Settings → Policy Sets → Create Policy Set
+# - Add NIST policies
+# - Select enforcement level
+# - Assign to workspaces
+
+# Or via API/Terraform:
+resource "tfe_policy_set" "nist-800-53" {
+  name         = "NIST-800-53-Rev5"
+  description  = "NIST SP 800-53 Rev 5 compliance policies"
+  organization = var.org_name
+
+  policy_ids = [
+    tfe_sentinel_policy.ac_2.id,
+    tfe_sentinel_policy.ac_3.id,
+    tfe_sentinel_policy.au_2.id,
+    tfe_sentinel_policy.sc_7.id,
+  ]
+
+  workspace_ids = [
+    tfe_workspace.production.id,
+  ]
+}
+```
+
+### Example NIST Policy Checks
+
+**AC-2: Account Management**
+```sentinel
+# Ensures IAM users/roles follow least privilege
+import "tfplan/v2" as tfplan
+
+# Check AWS IAM policies don't have wildcard permissions
+aws_iam_policies = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_iam_policy" and
+  rc.change.actions contains "create"
+}
+
+violating_policies = filter aws_iam_policies as _, policy {
+  policy.change.after.policy contains '"Action": "*"'
+}
+
+main = rule {
+  length(violating_policies) is 0
+}
+```
+
+**SC-7: Boundary Protection**
+```sentinel
+# Ensures security groups don't allow unrestricted inbound
+import "tfplan/v2" as tfplan
+
+security_groups = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_security_group" and
+  rc.change.actions contains "create"
+}
+
+violating_sgs = filter security_groups as _, sg {
+  any sg.change.after.ingress as rule {
+    rule.cidr_blocks contains "0.0.0.0/0"
+  }
+}
+
+main = rule {
+  length(violating_sgs) is 0
+}
+```
+
+**AU-2: Audit Events**
+```sentinel
+# Ensures logging is enabled
+import "tfplan/v2" as tfplan
+
+s3_buckets = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket"
+}
+
+buckets_without_logging = filter s3_buckets as _, bucket {
+  bucket.change.after.logging is empty
+}
+
+main = rule {
+  length(buckets_without_logging) is 0
+}
+```
+
+### NIST Control Families Covered
+
+| Control Family | Example Policies | Focus Area |
+|---------------|------------------|------------|
+| AC (Access Control) | Least privilege, MFA, role-based access | Who can access what |
+| AU (Audit & Accountability) | Logging enabled, audit trail, monitoring | Tracking activities |
+| CM (Configuration Management) | Baseline configs, change control | Managing changes |
+| IA (Identification & Authentication) | Strong passwords, MFA, certificate management | Verifying identity |
+| SC (System Protection) | Boundary protection, encryption, separation | Protecting systems |
+| SI (System Integrity) | Flaw remediation, malware protection, monitoring | System health |
+
+### CI/CD Integration with NIST Policies
+
+```yaml
+# GitHub Actions
+name: NIST Compliance Check
+
+on: [pull_request]
+
+jobs:
+  nist-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: NIST Policy Check
+        run: |
+          # HCP Terraform runs policies automatically
+          # Or run Sentinel CLI locally
+          sentinel test policies/
+
+      - name: Compliance Report
+        run: |
+          # Generate compliance attestation
+          echo "NIST SP 800-53 Rev 5 compliance verified"
+          echo "Date: $(date)" >> compliance-report.txt
+          echo "Policies passed: All" >> compliance-report.txt
+```
+
+### Benefits
+
+1. **Automated Compliance:** No manual checklist reviews
+2. **Shift-Left Security:** Catch violations before deployment
+3. **Audit Trail:** Policy decisions logged in HCP Terraform
+4. **Cost Savings:** Reduce manual compliance reviews
+5. **Consistency:** Same policies across all infrastructure
+
+### Best Practices
+
+1. **Start with Advisory:** Test policies before enforcement
+2. **Customize Policies:** Adapt to your organization's needs
+3. **Document Exceptions:** Clearly justify policy overrides
+4. **Regular Reviews:** Update policies as requirements change
+5. **Training:** Educate teams on NIST requirements
+
+## Private VCS Access (2025)
+
+Secure repository access for HCP Terraform without exposing source code or credentials over the public internet.
+
+### Overview
+
+**What is Private VCS Access?**
+- Direct, private connection between HCP Terraform and VCS (GitHub, GitLab, Bitbucket, Azure DevOps)
+- Traffic never traverses public internet
+- Eliminates exposure of source code in transit
+- Secures API tokens and credentials
+
+**When to Use:**
+- Enterprise security requirements
+- Highly regulated industries (finance, healthcare, government)
+- Zero-trust network architecture
+- Organizations with private code repositories
+- Compliance requirements (SOC2, ISO 27001, FedRAMP)
+
+### Architecture
+
+**Traditional VCS Connection:**
+```
+HCP Terraform → Public Internet → GitHub/GitLab/etc.
+❌ Source code exposed in transit
+❌ Credentials sent over internet
+❌ Subject to internet threats
+```
+
+**Private VCS Access:**
+```
+HCP Terraform → Private Link/VPN → VCS Provider
+✅ Private network connection
+✅ Traffic never leaves private network
+✅ End-to-end encryption
+✅ No public exposure
+```
+
+### Setup for GitHub Enterprise Server
+
+```bash
+# 1. Enable private connectivity in HCP Terraform
+# Settings → VCS Providers → Add VCS Provider
+# Select "GitHub Enterprise" with "Private Connectivity"
+
+# 2. Configure private endpoint
+# Provide internal URL (not public)
+GITHUB_URL="https://github.internal.example.com"
+
+# 3. Set up network path
+# Options:
+# - AWS PrivateLink
+# - Azure Private Link
+# - GCP Private Service Connect
+# - Site-to-site VPN
+```
+
+### Setup with AWS PrivateLink
+
+**1. Create VPC Endpoint Service (AWS side):**
+```hcl
+# Network load balancer for VCS
+resource "aws_lb" "vcs" {
+  name               = "vcs-nlb"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = var.private_subnet_ids
+}
+
+# VPC Endpoint Service
+resource "aws_vpc_endpoint_service" "vcs" {
+  acceptance_required        = true
+  network_load_balancer_arns = [aws_lb.vcs.arn]
+
+  tags = {
+    Name = "VCS Private Access"
+  }
+}
+```
+
+**2. Configure HCP Terraform:**
+```bash
+# In HCP Terraform UI:
+# Settings → Network Settings → AWS PrivateLink
+# - Add VPC Endpoint Service name
+# - Configure allowed principals
+# - Accept connection request
+
+# Or via Terraform:
+resource "tfe_organization_membership" "vcs_access" {
+  organization = var.org_name
+  email        = var.admin_email
+}
+```
+
+**3. Update VCS Provider:**
+```hcl
+# Point to internal hostname
+resource "tfe_oauth_client" "github_private" {
+  organization     = var.org_name
+  api_url          = "https://github.internal.example.com/api/v3"
+  http_url         = "https://github.internal.example.com"
+  oauth_token      = var.github_token
+  service_provider = "github_enterprise"
+
+  # Use private connectivity
+  private_connectivity = true
+}
+```
+
+### Setup with Azure Private Link
+
+```hcl
+# Azure DevOps with Private Link
+resource "azurerm_private_endpoint" "ado" {
+  name                = "ado-private-endpoint"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.subnet_id
+
+  private_service_connection {
+    name                           = "ado-connection"
+    private_connection_resource_id = var.ado_service_id
+    is_manual_connection           = false
+    subresource_names              = ["Dev Azure"]
+  }
+}
+
+# Configure in HCP Terraform
+resource "tfe_oauth_client" "ado_private" {
+  organization     = var.org_name
+  api_url          = "https://dev.azure.com"
+  http_url         = "https://dev.azure.com"
+  oauth_token      = var.ado_token
+  service_provider = "ado_server"
+
+  private_connectivity = true
+}
+```
+
+### Verify Private Connectivity
+
+```bash
+# Test connectivity
+curl -I https://github.internal.example.com
+
+# Check HCP Terraform connection status
+# UI: VCS Providers → Connection Status: "Private (Connected)"
+
+# Verify traffic doesn't traverse public internet
+# Monitor network logs - should show private IPs only
+```
+
+### Security Benefits
+
+1. **Zero Public Exposure:**
+   - Source code never on public internet
+   - Credentials stay private
+   - API tokens not exposed
+
+2. **Compliance:**
+   - Meets zero-trust requirements
+   - Satisfies data residency rules
+   - Enables air-gapped environments
+
+3. **Threat Reduction:**
+   - No man-in-the-middle attacks
+   - Protected from internet threats
+   - Reduced attack surface
+
+4. **Auditability:**
+   - All traffic auditable
+   - Clear network path
+   - Logging at multiple points
+
+### Cost Considerations
+
+- AWS PrivateLink: ~$7.50/month per endpoint + data transfer
+- Azure Private Link: Similar pricing structure
+- VPN: Variable based on throughput
+- Worth it for security-critical environments
+
+### Troubleshooting
+
+**Connection fails:**
+```bash
+# Check network path
+# 1. Verify VPC endpoint service exists
+aws ec2 describe-vpc-endpoint-services
+
+# 2. Check security groups allow traffic
+aws ec2 describe-security-groups --group-ids sg-xxx
+
+# 3. Verify DNS resolution
+nslookup github.internal.example.com
+
+# 4. Test from HCP Terraform network
+curl -v https://github.internal.example.com
+```
+
+**Performance issues:**
+- Check NLB/private link bandwidth
+- Verify no packet loss
+- Monitor latency metrics
+- Consider multi-AZ deployment
 
 ## Critical Security Warnings
 
@@ -680,5 +1136,20 @@ repos:
 - 🔴 ALWAYS use least privilege IAM/RBAC
 - 🔴 ALWAYS enable logging and monitoring
 - 🔴 ALWAYS scan infrastructure code before deployment
+- 🔴 **2025:** Use Trivy instead of tfsec (tfsec merged into Trivy)
+- 🔴 **2025:** Use ephemeral values for secrets (Terraform 1.10+)
+- 🔴 **2025:** Use NIST Sentinel policies for government/regulated workloads
+- 🔴 **2025:** Use private VCS access for sensitive repositories (HCP Terraform)
+- 🔴 **2025:** Consider HYOK for full encryption key control (HCP Terraform)
+
+## Tool Comparison 2025
+
+| Tool | Focus | Policies | Active Development | Recommendation |
+|------|-------|----------|-------------------|----------------|
+| **Trivy** | Unified IaC+Containers | Hundreds | ✅ Active | **Recommended** - replaces tfsec |
+| **Checkov** | Policy-as-code | 750+ | ✅ Active | Recommended |
+| tfsec | Terraform-only | Hundreds | ❌ Merged into Trivy | Legacy - use Trivy |
+| Terrascan | Compliance | 500+ | ✅ Active | Specialized use |
+| Sentinel | HCP Terraform | Custom | ✅ Active | Enterprise |
 
 Activate the terraform-expert agent for comprehensive security guidance.

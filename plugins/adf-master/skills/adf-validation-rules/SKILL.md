@@ -119,7 +119,7 @@ Instead of direct nesting, use the **Execute Pipeline Activity** to call a child
 ### Pipeline Limits
 | Resource | Limit | Notes |
 |----------|-------|-------|
-| **Activities per pipeline** | 120 (soft limit) | Includes inner activities for containers |
+| **Activities per pipeline** | 80 | Includes inner activities for containers |
 | **Parameters per pipeline** | 50 | - |
 | **ForEach concurrent iterations** | 50 (maximum) | Set via `batchCount` property |
 | **ForEach items** | 100,000 | - |
@@ -396,7 +396,7 @@ ConnectRetryInterval=10;
 - [ ] Check ForEach activities don't contain other ForEach/Until
 - [ ] Verify If/Switch activities don't contain ForEach/Until/If/Switch
 - [ ] Ensure Validation activities are at pipeline root level only
-- [ ] Confirm total activities < 120 per pipeline
+- [ ] Confirm total activities < 80 per pipeline
 - [ ] Verify no Set Variable activities in parallel ForEach
 
 ### Linked Service Validation

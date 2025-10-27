@@ -10,7 +10,7 @@
       "name": "context-master",
       "source": "./plugins/context-master",
       "description": "Universal context management and planning system. PROACTIVELY activate for: (1) ANY complex task requiring planning, (2) Multi-file projects/websites/apps, (3) Architecture decisions, (4) Research tasks, (5) Refactoring, (6) Long coding sessions, (7) Tasks with 3+ sequential steps. Provides: optimal file creation order, context-efficient workflows, extended thinking delegation (23x context efficiency), passive deep analysis architecture, progressive task decomposition, and prevents redundant work. Saves 62% context on average.",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -31,7 +31,7 @@
       "name": "plugin-master",
       "source": "./plugins/plugin-master",
       "description": "Complete Claude Code plugin development system. PROACTIVELY activate when users want to: (1) Create/build/make plugins, (2) Add/create skills/commands/agents, (3) Package existing code as plugins, (4) Publish to marketplace, (5) Validate plugin structure, (6) Get plugin development guidance, (7) Export skills for claude.ai web app. Autonomously creates complete, production-ready plugins with: plugin.json manifest, slash commands, specialized agents, agent skills, hooks, MCP server integration, and comprehensive README. ALWAYS fetches latest official documentation to ensure correct structure.",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -51,50 +51,65 @@
     {
       "name": "bash-master",
       "source": "./plugins/bash-master",
-      "description": "Expert bash/shell scripting system across ALL platforms. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) System automation, (3) DevOps/CI/CD scripts, (4) Build/deployment automation, (5) Script review/debugging, (6) Converting commands to scripts. Provides: Google Shell Style Guide compliance, ShellCheck validation, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, security hardening, error handling, performance optimization, testing with BATS, and production-ready patterns.",
-      "version": "1.1.0",
+      "description": "Expert bash/shell scripting system across ALL platforms with Bash 5.3 and 2025 security-first practices. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) Bash 5.3 features (${ } in-shell substitution, ${| } REPLY syntax), (3) Security-first patterns (60%+ exploits from poor validation), (4) ShellCheck validation (non-negotiable), (5) Modern automation (containers/CI/CD/cloud), (6) Scripts under 50 lines (Google Style), (7) Modern error handling trio, (8) Git hooks and pipeline integration, (9) Container-aware scripting, (10) DevOps/deployment automation. Provides: Bash 5.3 performance features (no-fork substitution), security-first mandatory validation patterns, ShellCheck enforcement, container/Kubernetes detection, cloud provider helpers (AWS/Azure), CI/CD platform integration (GitHub Actions/Azure DevOps), parallel processing patterns, blue-green/canary deployments, Google Shell Style Guide compliance, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, and production-ready 2025 patterns. Ensures secure, optimized, cloud-native scripts following latest 2025 standards.",
+      "version": "1.3.0",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
         "bash",
+        "bash53",
         "shell",
         "script",
         "automation",
+        "security",
         "devops",
         "shellcheck",
         "posix",
         "crossplatform",
         "cicd",
-        "deployment"
+        "deployment",
+        "container",
+        "kubernetes",
+        "cloud"
       ]
     },
     {
       "name": "git-master",
       "source": "./plugins/git-master",
-      "description": "Complete Git expertise system for ALL git operations. PROACTIVELY activate for: (1) ANY Git task (basic/advanced/dangerous), (2) Repository management, (3) Branch strategies and workflows, (4) Conflict resolution, (5) History rewriting/recovery, (6) Platform-specific operations (GitHub/Azure DevOps/Bitbucket), (7) Advanced commands (rebase/cherry-pick/filter-repo). Provides: complete Git command reference, safety guardrails for destructive operations, platform best practices, workflow strategies, reflog recovery techniques, and expert guidance for even the most risky operations. Always asks user preference for automatic commits vs manual control.",
-      "version": "1.1.0",
+      "description": "Complete Git expertise for ALL operations with 2025 features (Git 2.48+, GitHub CLI 2.x). PROACTIVELY activate for: (1) ANY Git task, (2) Git 2.48+ features (reftables, sparse-checkout, partial clone, worktrees), (3) Security (signed commits, secret scanning, CodeQL), (4) Trunk-Based Development, (5) GitHub CLI 2.x operations, (6) Modern workflows (monorepo, parallel development), (7) History rewriting/recovery. Provides: Git 2.48 features, sparse-checkout (90% space reduction), partial clone (90% faster), worktrees, GitHub secret scanning, signed commits (GPG/SSH), GitHub CLI 2.x, automatic backups, safety guardrails, reflog recovery.",
+      "version": "1.3.0",
       "author": {
         "name": "Josiah Siegel"
       },
       "keywords": [
         "git",
+        "git-2.48",
         "vcs",
-        "version",
-        "control",
+        "version-control",
         "github",
+        "github-cli",
+        "security",
+        "signed-commits",
+        "secret-scanning",
+        "sparse-checkout",
+        "partial-clone",
+        "worktrees",
         "azdo",
         "bitbucket",
+        "gitlab",
         "workflow",
         "rebase",
-        "recovery"
+        "recovery",
+        "monorepo",
+        "trunk-based-development"
       ]
     },
     {
       "name": "docker-master",
       "source": "./plugins/docker-master",
       "description": "Complete Docker expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize), (2) Dockerfile creation/review, (3) Docker Compose multi-container apps, (4) Container security scanning/hardening, (5) Performance optimization, (6) Production deployments, (7) Troubleshooting/debugging. Provides: current best practices (always researches latest), CIS Docker Benchmark compliance, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging.",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -115,7 +130,7 @@
       "name": "ado-master",
       "source": "./plugins/ado-master",
       "description": "Complete Azure DevOps and Azure Pipelines expertise system. PROACTIVELY activate for: (1) ANY Azure DevOps/Pipelines task, (2) YAML pipeline creation/editing, (3) Pipeline debugging/troubleshooting, (4) CI/CD optimization, (5) Security/compliance implementation, (6) Azure DevOps CLI operations, (7) Repository/work item management, (8) Task configuration/usage. Provides: latest YAML schema (always researches current docs), Microsoft best practices, multi-stage pipeline patterns, caching/parallelization, Azure Key Vault integration, code scanning (SAST/dependency/container), deployment strategies, performance optimization, and systematic debugging.",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -136,7 +151,7 @@
       "name": "test-master",
       "source": "./plugins/test-master",
       "description": "Complete Vitest + Playwright + MSW testing system. PROACTIVELY activate for: (1) ANY testing task (unit/integration/E2E), (2) Test creation and scaffolding, (3) Test debugging and failure analysis, (4) Coverage analysis and optimization, (5) MSW mock management, (6) Test configuration (Vitest/Playwright), (7) CI/CD test setup, (8) Multi-project test architecture. Provides: intelligent test running, auto-scaffolding with boilerplate, MSW handler generation, coverage gap analysis, Playwright trace debugging, snapshot management, parallel execution optimization, and comprehensive test infrastructure setup. Ensures production-ready testing with Vitest 3.x, Playwright 1.56+, MSW 2.x, happy-dom across all modern JavaScript projects.",
-      "version": "1.1.0",
+      "version": "1.4.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -157,7 +172,7 @@
       "name": "powershell-master",
       "source": "./plugins/powershell-master",
       "description": "Complete PowerShell expertise system across ALL platforms (Windows/Linux/macOS). PROACTIVELY activate for: (1) ANY PowerShell task (scripts/modules/cmdlets), (2) CI/CD automation (GitHub Actions/Azure DevOps/Bitbucket), (3) Cross-platform scripting, (4) Module discovery and management (PSGallery), (5) Azure/AWS/Microsoft 365 automation, (6) Script debugging and optimization, (7) Best practices and security. Provides: PowerShell 7+ features, popular module expertise (Az, Microsoft.Graph, PnP, AWS Tools), PSGallery integration, platform-specific guidance, CI/CD pipeline patterns, cmdlet syntax mastery, and production-ready scripting patterns.",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -178,7 +193,7 @@
       "name": "terraform-master",
       "source": "./plugins/terraform-master",
       "description": "Complete Terraform expertise system for all cloud providers (Azure, AWS, Google Cloud) and platforms. PROACTIVELY activate for: (1) ANY Terraform task (init/plan/apply/validate), (2) Infrastructure-as-code design, (3) Resource import and state management, (4) Multi-environment architectures, (5) CI/CD pipeline integration, (6) Security scanning and best practices, (7) Version-aware code generation, (8) CLI mastery with -chdir and all flags. Provides: comprehensive provider knowledge (AzureRM/AWS/GCP/community), version-aware implementations, state operations (mv/rm/import), bulk import strategies (Terraformer/aztfexport), security scanning (tfsec/Checkov), enterprise architecture patterns, complete CLI reference, and platform-specific guidance (Windows/Linux/macOS).",
-      "version": "1.3.0",
+      "version": "1.5.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -204,7 +219,7 @@
       "name": "ssdt-master",
       "source": "./plugins/ssdt-master",
       "description": "Complete SQL Server Data Tools (SSDT) expertise system across ALL platforms. PROACTIVELY activate for: (1) ANY SSDT task (database projects/SqlPackage/schema compare), (2) SDK-style and legacy database project creation/migration, (3) DACPAC/BACPAC build and deployment operations, (4) SqlPackage command-line operations (publish/extract/export/import), (5) Schema and data comparison workflows, (6) Database refactoring operations (rename/schema changes/data transformations), (7) MSBuild integration and CI/CD pipeline setup, (8) Visual Studio database project troubleshooting, (9) Cross-platform CLI tools (dotnet/sqlpackage), (10) Deployment script generation and validation. Provides: comprehensive SqlPackage reference with all actions and parameters, SDK-style project structure expertise, legacy project migration patterns, schema compare functionality, deployment option mastery, refactoring best practices, CI/CD integration patterns (GitHub Actions/Azure DevOps), MSBuild property configuration, and version-specific guidance. Ensures production-ready, secure, efficient database development following Microsoft SQL Server best practices.",
-      "version": "1.1.0",
+      "version": "1.4.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -229,7 +244,7 @@
       "name": "adf-master",
       "source": "./plugins/adf-master",
       "description": "Complete Azure Data Factory expertise system with STRICT validation enforcement for ALL platforms. PROACTIVELY activate for: (1) ANY Azure Data Factory task (pipelines/datasets/triggers/linked services) WITH automatic validation, (2) Activity nesting validation (ForEach/If/Switch/Until limitations), (3) Linked service configuration validation (Blob Storage accountKind, SQL Database auth), (4) CI/CD setup and automation (GitHub Actions/Azure DevOps), (5) ARM template generation and deployment, (6) Pipeline debugging and troubleshooting, (7) Modern npm-based deployments (@microsoft/azure-data-factory-utilities), (8) Performance optimization and best practices. Provides: comprehensive ADF knowledge with validation enforcement, activity nesting rules (REJECTS prohibited combinations like ForEach in If), linked service requirements (Azure Blob Storage, SQL Database, ADLS), resource limit checks, Execute Pipeline workarounds, common pitfall prevention, CI/CD patterns, troubleshooting guides, and production-ready VALIDATED solutions. Ensures ONLY valid, compliant, optimized ADF pipelines are created following Microsoft best practices AND platform limitations.",
-      "version": "2.0.0",
+      "version": "3.1.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -250,7 +265,7 @@
       "name": "salesforce-master",
       "source": "./plugins/salesforce-master",
       "description": "Complete Salesforce expertise system across ALL platforms and integration scenarios. PROACTIVELY activate for: (1) ANY Salesforce task (API/data/Apex/Lightning/Flow), (2) SOQL/SOSL query design and optimization, (3) REST/SOAP API integration and authentication, (4) Apex development (classes/triggers/batch/scheduled), (5) Lightning Web Components and Aura development, (6) Data model design and schema management (objects/fields/relationships), (7) Integration patterns (source-to-Salesforce, Salesforce-to-target), (8) Deployment and metadata management (change sets/SFDX/CLI), (9) Security model implementation (profiles/permissions/sharing), (10) Flow/Process Builder automation. Provides: comprehensive SFDC object schema knowledge (standard/custom objects, all fields, relationships), complete API reference (REST/SOAP/Bulk/Streaming), Apex language mastery, Lightning platform expertise, SOQL/SOSL optimization, authentication methods (OAuth/JWT/Session), limits and best practices, governor limits handling, integration patterns (ETL/real-time/batch), metadata API operations, SFDX CLI commands, version-specific guidance, and platform event architecture. Ensures production-ready, scalable, secure Salesforce solutions following Salesforce best practices and Well-Architected Framework.",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "author": {
         "name": "Josiah Siegel"
       },
@@ -270,6 +285,60 @@
         "schema",
         "authentication",
         "deployment"
+      ]
+    },
+    {
+      "name": "azure-master",
+      "source": "./plugins/azure-master",
+      "description": "Complete Azure cloud expertise system with 2025 features including AKS Automatic, Container Apps GPU support, and Deployment Stacks. PROACTIVELY activate for: (1) ANY Azure resource provisioning or management, (2) AKS Automatic with Karpenter autoscaling, (3) Container Apps with serverless GPU and Dapr integration, (4) Azure OpenAI GPT-5 and reasoning models (o4-mini, o3), (5) Deployment Stacks for infrastructure lifecycle management, (6) Bicep v0.37+ with externalInput() and custom extensions, (7) Azure CLI 2.79+ with latest breaking changes, (8) SRE Agent integration for monitoring and incident response, (9) Azure AI Foundry model deployment, (10) Security, networking, and cost optimization. Provides: AKS Automatic GA features, Container Apps GPU workloads, Deployment Stacks best practices, latest Azure OpenAI models, Bicep 2025 patterns, Azure CLI expertise, comprehensive service configurations (compute, networking, storage, databases, AI/ML), Well-Architected Framework guidance, high availability patterns, security hardening, cost optimization strategies, and production-ready configurations. Ensures enterprise-ready, secure, scalable Azure infrastructure following Microsoft 2025 standards.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "azure",
+        "cloud",
+        "infrastructure",
+        "aks",
+        "container-apps",
+        "bicep",
+        "azure-cli",
+        "openai",
+        "ai-foundry",
+        "deployment-stacks",
+        "kubernetes",
+        "devops",
+        "networking",
+        "storage",
+        "databases",
+        "security",
+        "cost-optimization",
+        "monitoring",
+        "well-architected"
+      ]
+    },
+    {
+      "name": "azure-to-docker-master",
+      "source": "./plugins/azure-to-docker-master",
+      "description": "Complete Azure-to-Docker migration system for local development. PROACTIVELY activate for: (1) ANY Azure-to-Docker migration task, (2) Azure infrastructure extraction and Docker Compose generation, (3) Azure service emulator setup (Azurite, SQL Server 2025, Cosmos DB, Service Bus), (4) Local development environment creation from Azure configs, (5) Database export from Azure SQL/PostgreSQL/MySQL to Docker, (6) Dockerfile generation from Azure App Service configurations, (7) Multi-container orchestration with proper networking and dependencies, (8) Production-ready Docker Compose with health checks and security, (9) Azure service mapping (App Service/SQL/Storage/Redis/Cosmos), (10) Development-to-production parity with Azure emulators. Provides: Azure resource extraction and analysis, complete Docker Compose generation with 2025 best practices, Azure emulator configuration (Azurite for Storage, SQL Server 2025, Cosmos DB emulator, Service Bus emulator), database export automation, App Service to Dockerfile conversion, service dependency mapping, network isolation patterns, volume management strategies, environment variable templating, health check implementation, resource limit configuration, security hardening (non-root users, read-only filesystems, capability drops), development override patterns, and Azure-to-Docker best practices. Ensures production-ready local development environments that mirror Azure infrastructure.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        "azure",
+        "docker",
+        "migration",
+        "compose",
+        "emulator",
+        "azurite",
+        "local-dev",
+        "infrastructure",
+        "extraction",
+        "containerize",
+        "sql-server",
+        "cosmos",
+        "storage"
       ]
     }
   ]

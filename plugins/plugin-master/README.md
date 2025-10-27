@@ -6,14 +6,16 @@ Give Claude the ability to autonomously create, test, and publish Claude Code pl
 
 ## 🎯 What This Plugin Does
 
-This plugin teaches Claude how to create plugins by providing:
+This plugin teaches Claude how to create plugins with 2025 features:
 
 - **Autonomous plugin generation** - Creates complete structures with sensible defaults
 - **Latest documentation fetching** - Always uses current Claude Code specifications
+- **2025 features** - Agent Skills, hooks, MCP integration, repository configuration
 - **Best practices** - Applies proven patterns automatically
-- **All component types** - Supports commands, agents, skills, hooks, MCP servers
+- **All component types** - Commands, agents, Agent Skills, hooks (PreToolUse/PostToolUse/SessionStart), MCP servers
+- **Team distribution** - Repository-level configuration (.claude/settings.json)
+- **Context efficiency** - Agent Skills for dynamic knowledge loading
 - **GitHub-ready outputs** - Marketplace structures ready for publishing
-- **Skill export** - Optional export of skills for claude.ai web app
 
 ## 📦 Installation
 
@@ -105,7 +107,7 @@ Every plugin Claude creates includes:
 ## 📋 Available Commands
 
 ### `/plugin-master:create-plugin`
-Create a comprehensive Claude Code plugin from scratch with all necessary components.
+Create a comprehensive Claude Code plugin with 2025 features (Agent Skills, hooks, MCP, repository config).
 
 **Example:**
 ```
@@ -113,15 +115,23 @@ Create a comprehensive Claude Code plugin from scratch with all necessary compon
 ```
 
 ### `/plugin-master:generate-plugin`
-Generate a complete, ready-to-use Claude Code plugin with all necessary files and structure.
+Generate a complete, production-ready plugin with all 2025 capabilities.
 
 **Example:**
 ```
 /plugin-master:generate-plugin
 ```
 
+### `/plugin-master:setup-repo-plugins`
+Configure repository-level automatic plugin installation for team standardization.
+
+**Example:**
+```
+/plugin-master:setup-repo-plugins
+```
+
 ### `/plugin-master:plugin-guide`
-Get comprehensive guidance on creating Claude Code plugins, from basics to advanced topics.
+Get comprehensive guidance on creating Claude Code plugins with 2025 features.
 
 **Example:**
 ```
@@ -137,7 +147,7 @@ Prepare and publish Claude Code plugins to GitHub marketplaces with complete doc
 ```
 
 ### `/plugin-master:validate-plugin`
-Validate Claude Code plugin structure, manifests, and configuration files.
+Validate plugin structure, manifests, and configuration files against 2025 standards.
 
 **Example:**
 ```
@@ -170,13 +180,25 @@ Comprehensive beginner's guide providing step-by-step guidance for creating Clau
 **Covers:**
 - What Claude Code plugins are
 - Your first plugin in 10 minutes
-- Creating plugin structures
+- Creating plugin structures with 2025 features
 - Publishing to marketplaces
 - Testing workflows
 - Best practices
 - Troubleshooting
 
-This skill is automatically available when the plugin is installed.
+### advanced-features-2025
+Complete guide to cutting-edge 2025 plugin capabilities.
+
+**Covers:**
+- Agent Skills patterns and best practices
+- Hooks system (PreToolUse, PostToolUse, SessionStart, etc.)
+- MCP server integration
+- Repository-level configuration
+- Environment variables (${CLAUDE_PLUGIN_ROOT})
+- Context efficiency strategies
+- Migration from legacy plugins
+
+Both skills are automatically available when the plugin is installed.
 
 ## 🔧 Plugin Creation Workflow
 
@@ -226,15 +248,23 @@ This plugin includes comprehensive documentation:
 ## 🔍 Technical Details
 
 **Plugin Name:** plugin-master
-**Version:** 1.0.1
+**Version:** 2.0.0
 **Author:** Josiah Siegel
 **License:** MIT
 **Repository:** https://github.com/JosiahSiegel/claude-code-marketplace
 
 **Components:**
-- 5 slash commands
-- 1 specialized agent
-- 1 comprehensive skill
+- 6 slash commands (including repository config)
+- 1 specialized agent (plugin-architect)
+- 2 comprehensive skills (plugin-master + advanced-features-2025)
+
+**New in 2.0.0:**
+- Agent Skills support and documentation
+- Hooks system for automated workflows
+- MCP server integration guidance
+- Repository-level configuration command
+- 2025 best practices throughout
+- Context-optimized skill structure
 
 ## 🤝 Contributing
 

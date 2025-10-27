@@ -1,22 +1,32 @@
 {
   "name": "git-master",
-  "version": "1.1.0",
-  "description": "Complete Git expertise system for ALL git operations. PROACTIVELY activate for: (1) ANY Git task (basic/advanced/dangerous), (2) Repository management, (3) Branch strategies and workflows, (4) Conflict resolution, (5) History rewriting/recovery, (6) Platform-specific operations (GitHub/Azure DevOps/Bitbucket), (7) Advanced commands (rebase/cherry-pick/filter-repo). Provides: complete Git command reference, safety guardrails for destructive operations, platform best practices, workflow strategies, reflog recovery techniques, and expert guidance for even the most risky operations. Always asks user preference for automatic commits vs manual control.",
+  "version": "1.3.0",
+  "description": "Complete Git expertise for ALL operations with 2025 features. PROACTIVELY activate for: (1) ANY Git task (basic/advanced/dangerous), (2) Git 2.48+ features (reftables 50-80% faster, sparse-checkout, partial clone, worktrees), (3) Security (signed commits GPG/SSH, GitHub secret scanning with AI push protection, CodeQL, Gitleaks), (4) Trunk-Based Development with < 1 day branches (Google/Microsoft scale), (5) GitHub CLI 2.x (multiple accounts, OAuth clipboard, attestation, triangular workflows, agent tasks), (6) Repository management and optimization, (7) Modern workflows (monorepo, parallel development), (8) Branch strategies (Gitflow, Feature Branch, TBD), (9) Conflict resolution, (10) History rewriting/recovery with safety guardrails, (11) Platform operations (GitHub/GitLab/Azure DevOps/Bitbucket), (12) Advanced commands (rebase/cherry-pick/filter-repo). Provides: Git 2.48 reftables migration, sparse-checkout for monorepos (90% space reduction), partial clone (90% faster), worktrees for parallel development, GitHub secret scanning with AI detection, CodeQL security scanning with Copilot Autofix, signed commits (GPG and modern SSH signing), Gitleaks integration, GitHub CLI 2.x operations, complete command reference, automatic backups before destructive operations, safety guardrails, platform best practices, reflog recovery, emergency procedures. Ensures modern, secure, efficient Git workflows following 2025 industry standards.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
   },
   "keywords": [
     "git",
+    "git-2.48",
     "vcs",
-    "version",
-    "control",
+    "version-control",
     "github",
+    "github-cli",
+    "security",
+    "signed-commits",
+    "secret-scanning",
+    "sparse-checkout",
+    "partial-clone",
+    "worktrees",
     "azdo",
     "bitbucket",
+    "gitlab",
     "workflow",
     "rebase",
-    "recovery"
+    "recovery",
+    "monorepo",
+    "trunk-based-development"
   ],
   "license": "MIT"
 }

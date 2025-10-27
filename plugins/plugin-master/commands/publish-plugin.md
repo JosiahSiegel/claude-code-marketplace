@@ -1,74 +1,65 @@
 ---
-description: Prepare and publish Claude Code plugins to GitHub marketplaces with complete documentation
+description: Prepare and publish plugins to GitHub marketplaces with validation and distribution guidance
 ---
 
-# Publish Plugin Command
+# Publish Plugin
 
-Guide you through publishing your plugin to a GitHub marketplace with all necessary setup and documentation.
+Guide the complete publishing workflow from validation to GitHub marketplace setup and community distribution.
 
-## Usage
+## Purpose
 
-This command helps you:
-- Create marketplace-ready structure
-- Generate marketplace.json
-- Package plugin files
-- Create repository structure
-- Provide publishing instructions
-- Set up version management
+End-to-end publishing assistance that validates plugin structure, creates marketplace-ready packaging, generates documentation, and provides step-by-step GitHub publishing instructions.
 
-## Process
+## Instructions
 
-Claude will:
+1. **Pre-publishing validation**:
+   - Run validation checks (same as /validate-plugin)
+   - Ensure all critical issues resolved
+   - Verify version number incremented if updating
+2. **Determine publishing strategy**:
+   - Individual plugin repository (simple, single plugin)
+   - Marketplace collection (multiple plugins, team distribution)
+   - Private/internal (enterprise access control)
+3. **Create marketplace structure**:
+   - Generate marketplace.json with owner and plugin entries
+   - Create README with installation instructions
+   - Package as GitHub-ready directory structure
+4. **Provide GitHub workflow**:
+   - Repository creation steps
+   - File upload instructions
+   - Public visibility requirements
+   - Installation command format
+5. **Post-publishing guidance**:
+   - Version management best practices
+   - Community directory submissions (claudecodemarketplace.com)
+   - Update procedures for future releases
 
-1. **Validate plugin** - Check plugin structure and files
-2. **Create marketplace structure** - Generate marketplace-ready layout
-3. **Generate marketplace.json** - With proper owner and plugin metadata
-4. **Create documentation** - README with installation instructions
-5. **Package as ZIP** - GitHub-ready marketplace archive
-6. **Provide GitHub guide** - Step-by-step publishing instructions
+## Publishing Checklist
 
-## Examples
+**Pre-Publish:**
+- [ ] Plugin validates without critical errors
+- [ ] Version incremented appropriately (major.minor.patch)
+- [ ] README includes clear examples
+- [ ] No sensitive data (API keys, credentials) in files
+- [ ] License file present
 
-**First time publishing:**
-> /publish-plugin for my-first-plugin
+**GitHub Setup:**
+- [ ] Create public repository
+- [ ] Upload all marketplace files
+- [ ] Verify .claude-plugin/marketplace.json in root
+- [ ] Test installation with /plugin marketplace add
 
-**Update existing:**
-> /publish-plugin to update version 2.0
+**Post-Publish:**
+- [ ] Submit to community directories
+- [ ] Share in Claude Developers Discord
+- [ ] Document plugin in your README or blog
 
-**Team marketplace:**
-> /publish-plugin for company internal tools
+## Example Usage
 
-## Publishing Options
+```
+/publish-plugin my-awesome-plugin
+/publish-plugin for team distribution
+/publish-plugin with version 2.0 update
+```
 
-**Individual Plugin:**
-- Single plugin in its own repository
-- Direct installation: `/plugin marketplace add user/repo`
-
-**Marketplace Collection:**
-- Multiple plugins in one repository
-- Organized catalog with categories
-- Team or community distribution
-
-**Private/Internal:**
-- Private GitHub repositories
-- Enterprise team distribution
-- Access control via GitHub permissions
-
-## Output
-
-- Marketplace ZIP file ready for GitHub
-- Complete README.md with installation instructions
-- Publishing checklist
-- Version management guidance
-- GitHub repository setup instructions
-- Marketing tips for community plugins
-
-## After Publishing
-
-Share your plugin:
-1. Upload to GitHub
-2. Add to community directories:
-   - claudecodemarketplace.com
-   - claude-plugins.dev
-3. Share in Claude Developers Discord
-4. Create usage examples and tutorials
+Generates complete publishing package and instructions.

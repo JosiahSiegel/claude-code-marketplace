@@ -180,6 +180,40 @@ test('should open and close modal', async ({ page }) => {
 });
 ```
 
+### Iframe Interactions (Playwright 1.56+)
+
+```javascript
+test('should interact with iframe content', async ({ page }) => {
+  await page.goto('https://example.com/embedded');
+
+  // Use frameLocator API to interact with iframe
+  const iframe = page.frameLocator('iframe[title="Payment"]');
+
+  // Fill form inside iframe
+  await iframe.locator('input[name="cardNumber"]').fill('4242424242424242');
+  await iframe.locator('input[name="expiry"]').fill('12/25');
+  await iframe.locator('input[name="cvc"]').fill('123');
+
+  // Click button inside iframe
+  await iframe.locator('button:has-text("Pay")').click();
+
+  // Verify outcome (may be outside iframe)
+  await expect(page.locator('.payment-success')).toBeVisible();
+});
+
+test('should handle nested iframes', async ({ page }) => {
+  await page.goto('https://example.com/nested');
+
+  // Navigate through nested iframes
+  const outerFrame = page.frameLocator('#outer-iframe');
+  const innerFrame = outerFrame.frameLocator('#inner-iframe');
+
+  // Interact with deeply nested content
+  await innerFrame.locator('button').click();
+  await expect(innerFrame.locator('.result')).toContainText('Success');
+});
+```
+
 ## Selector Strategies
 
 **Best practices for reliable selectors:**

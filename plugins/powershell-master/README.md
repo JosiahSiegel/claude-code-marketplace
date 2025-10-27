@@ -4,16 +4,16 @@ Complete PowerShell expertise across all platforms (Windows, Linux, macOS) for s
 
 ## 🎯 What This Plugin Does
 
-This plugin makes Claude a PowerShell expert with knowledge of:
+This plugin makes Claude a PowerShell expert with comprehensive 2025 knowledge:
 
-- **Cross-Platform PowerShell** - Windows, Linux, macOS compatibility
-- **PowerShell 7+** - Latest features, performance, parallel execution
-- **Module Management** - PSGallery discovery, installation, updates
-- **Popular Modules** - Az, Microsoft.Graph, PnP, AWS Tools, Pester
+- **PowerShell 7.5.4 / 7.6 Preview** - Latest features, .NET 9 performance, ConvertTo/From-CliXml
+- **2025 Breaking Changes** - MSOnline/AzureAD retirement, PowerShell 2.0 removal, WMIC replacement
+- **Modern Security** - JEA (Just Enough Administration), WDAC, Constrained Language Mode
+- **PSResourceGet** - Modern package manager (2x faster than PowerShellGet)
+- **Latest Modules** - Az 14.5.0, Microsoft.Graph 2.32.0, PnP, AWS Tools, Pester
+- **Migration Guidance** - From deprecated modules to current 2025 standards
+- **Cross-Platform** - Windows, Linux, macOS with .NET 9 performance
 - **CI/CD Integration** - GitHub Actions, Azure DevOps, Bitbucket Pipelines
-- **Cloud Automation** - Azure, AWS, Microsoft 365 management
-- **Best Practices** - Security, performance, code quality
-- **Script Development** - Functions, error handling, testing
 
 ## 📦 Installation
 
@@ -216,17 +216,17 @@ All examples and scripts are tested for cross-platform compatibility.
 
 ## 📚 Knowledge Base
 
-The plugin includes comprehensive documentation on:
+The plugin includes comprehensive 2025 documentation on:
 
-- PowerShell 7+ features and syntax
-- 50+ popular PowerShell modules
-- CI/CD integration patterns
-- Azure, AWS, and M365 automation
-- Security best practices
-- Performance optimization techniques
-- Cross-platform compatibility
-- Testing with Pester
-- Code quality with PSScriptAnalyzer
+- **PowerShell 7.5.4 / 7.6 features** - ConvertTo/From-CliXml, Test-Path time filtering, .NET 9 performance
+- **2025 Breaking Changes** - MSOnline/AzureAD retirement (March-May 2025), PowerShell 2.0 removal, WMIC replacement
+- **Migration Paths** - Detailed guides for deprecated modules to current standards
+- **Modern Security** - JEA, WDAC, Constrained Language Mode, Script Block Logging
+- **PSResourceGet** - Modern package management (2x faster), Azure Artifacts integration
+- **Latest Modules** - Az 14.5.0 (zone redundancy, symbolic links), Microsoft.Graph 2.32.0
+- **CI/CD Patterns** - GitHub Actions, Azure DevOps, Bitbucket with latest practices
+- **Cross-Platform** - Windows 11 24H2, Server 2025, Linux, macOS compatibility
+- **Testing & Quality** - Pester, PSScriptAnalyzer with 2025 rules
 
 ## 🎓 Learning Resources
 
@@ -262,18 +262,30 @@ The plugin will automatically activate and provide expert guidance with working 
 ## 🔍 Technical Details
 
 **Plugin Name:** powershell-master
-**Version:** 1.0.2
+**Version:** 1.3.0
 **Author:** Josiah Siegel
 **License:** MIT
+**Last Updated:** October 2025
 
 **Components:**
-- 1 comprehensive skill (powershell-master)
+- 3 comprehensive skills (powershell-master, powershell-7.5-features, powershell-2025-changes)
 - 4 specialized commands
 - 1 expert agent
 
 **Supported PowerShell Versions:**
-- PowerShell 7.0+  (Recommended)
-- Windows PowerShell 5.1 (Legacy support)
+- PowerShell 7.5.4 (Stable, Recommended)
+- PowerShell 7.6.0-preview.5 (Latest Preview)
+- PowerShell 7.0+ (Supported)
+- Windows PowerShell 5.1 (Legacy, limited support)
+
+**Knowledge Currency:**
+- PowerShell 7.5.4 stable / 7.6.0-preview.5 (October 2025)
+- Az Module 14.5.0 (October 2025)
+- Microsoft.Graph 2.32.0 (October 2025)
+- PSResourceGet 1.1.0+ (October 2025)
+- .NET 9.0.306 / 9.0.101
+- 2025 breaking changes and migrations
+- Modern security practices (JEA, WDAC)
 
 ## 🤝 Contributing
 

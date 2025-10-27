@@ -42,12 +42,17 @@ Complete Terraform expertise system for Claude Code. Provides comprehensive infr
 - **macOS**: Homebrew integration, BSD utilities
 - **CI/CD**: Azure DevOps, GitHub Actions, GitLab CI, Jenkins
 
-### Security & Compliance
-- Integrated security scanning (tfsec, Checkov, Terrascan)
+### Security & Compliance (2025)
+- **Trivy integration** (tfsec functionality merged into Trivy in 2025)
+- Checkov policy-as-code scanning (750+ policies)
+- Terrascan compliance scanning
+- NIST SP 800-53 Rev 5 Sentinel policies (350+ policies)
 - Best practice enforcement
 - Secrets management patterns
+- Ephemeral values for secure secrets (Terraform 1.10+)
 - Network security guidance
 - Encryption standards
+- HYOK (Hold Your Own Key) support
 - Compliance validation
 
 ## Installation
@@ -70,9 +75,50 @@ Complete Terraform expertise system for Claude Code. Provides comprehensive infr
 /plugin install terraform-master@local
 ```
 
+## 2025 Feature Highlights
+
+### Terraform 1.10+ Features
+- **Ephemeral Values**: Secure secrets handling without persistence in state or plan files
+- **Write-Only Arguments**: Accept ephemeral values in managed resources (Terraform 1.11+)
+- **Testing Framework**: Native terraform test command with JUnit XML output (1.6+, enhanced 1.11+)
+- **Terraform Query**: Execute list operations against existing infrastructure (Terraform 1.14+)
+- **Actions Blocks**: Imperative operations outside CRUD model (Terraform 1.14+)
+
+### OpenTofu Alternative (2025)
+- **Open-Source Fork**: MPL 2.0 licensed, Linux Foundation governance
+- **Built-in State Encryption**: Client-side encryption without cloud costs
+- **Enhanced Import Blocks**: Loop-able imports with for_each (1.7+)
+- **Early Variable Evaluation**: Use variables in terraform blocks and module sources (1.8+)
+- **100% Compatible**: Drop-in replacement for Terraform 1.5.x
+- **Fast Migration**: < 1 hour for most projects, no code changes required
+
+### HCP Terraform 2025
+- **Terraform Stacks (GA)**: Multi-deployment orchestration, Linked Stacks for dependencies
+- **Module Lifecycle Management (GA)**: Revoke compromised modules, version control
+- **HYOK (Hold Your Own Key)**: Full control over encryption keys for state and plan files
+- **Private VCS Access**: Direct private connections to VCS without public internet exposure
+- **AI Integration**: Experimental MCP servers for AI-driven infrastructure automation
+- **Project Infragraph** (Private Beta Dec 2025): Centralized data substrate for autonomous agents
+
+### Testing & Quality (2025)
+- **terraform test**: Native testing framework with assertions and mocks (1.6+)
+- **JUnit XML Output**: CI/CD test reporting integration (1.11+)
+- **Terratest**: Go-based integration testing with real resources
+- **TDD/BDD**: Test-driven development patterns and best practices
+
+### Security & Compliance 2025
+- **Trivy Scanner**: tfsec functionality merged into Trivy - unified IaC and container scanning
+- **NIST SP 800-53 Rev 5 Policies**: 350+ pre-written Sentinel policies for government compliance
+- **Enhanced Checkov**: 750+ policies covering CIS, GDPR, PCI-DSS, HIPAA standards
+
+### Provider Updates
+- **AzureRM 4.x**: Latest stable with 1,101+ resources, 360+ data sources
+- **AWS 6.0 (GA)**: Multi-region support, bucket_region attribute, service deprecations
+- **GCP 6.x**: Incremental improvements and new services
+
 ## Components
 
-### Slash Commands (15 Total)
+### Slash Commands (17 Total)
 
 #### `/terraform-master:tf-init`
 Initialize Terraform projects with best practices and platform-specific guidance.
@@ -110,14 +156,20 @@ Complete CI/CD pipeline generation and troubleshooting.
 #### `/terraform-master:tf-architecture`
 Architecture design and review for enterprise-scale Terraform.
 
-#### `/terraform-master:tf-import` ⭐ NEW
+#### `/terraform-master:tf-import`
 Import existing cloud resources into Terraform management with traditional imports, import blocks (Terraform 1.5+), bulk import strategies, and migration from manual deployments.
 
-#### `/terraform-master:tf-state` ⭐ NEW
+#### `/terraform-master:tf-state`
 Comprehensive state management including move, remove, inspect, backup, recovery, and state migration operations.
 
-#### `/terraform-master:tf-cli` ⭐ NEW
+#### `/terraform-master:tf-cli`
 Complete Terraform CLI reference with all commands, flags, options, and advanced usage patterns including -chdir, environment variables, and platform-specific examples.
+
+#### `/terraform-master:tf-test` ⭐ NEW
+Comprehensive testing with Terraform 1.6+ test framework, Terratest integration, unit/integration testing, TDD/BDD patterns, and CI/CD test reporting.
+
+#### `/terraform-master:tf-stacks`
+Terraform Stacks for multi-deployment orchestration with Linked Stacks, deployment management, and HCP Terraform integration.
 
 ### Terraform Expert Agent
 
@@ -281,27 +333,105 @@ Steps:
 - Save plans as artifacts
 - Implement drift detection
 
-## Version Compatibility
+## Version Compatibility (2025)
 
-- **Terraform**: 0.12+ (1.x recommended)
-- **Providers**: Azure 2.x/3.x/4.x, AWS 3.x/4.x/5.x, GCP 4.x/5.x
+- **Terraform**: 1.0+ (1.6+ for testing, 1.10+ for ephemeral values, 1.11+ for JUnit XML, 1.14+ for latest features)
+- **OpenTofu**: 1.6+ (1.7+ for loop-able imports and state encryption, 1.8+ for early variable evaluation)
+- **Providers**:
+  - **AzureRM**: 4.x recommended (3.x supported), 1,101+ resources, 360+ data sources
+  - **AWS**: 6.0 GA (multi-region support, breaking changes), 5.x still supported
+  - **GCP**: 5.x/6.x recommended
+- **HCP Terraform**: Stacks (GA 2025), Linked Stacks, Module Lifecycle Management, HYOK, Private VCS Access
 - **Platforms**: Windows, Linux, macOS
 - **CI/CD**: Azure DevOps, GitHub Actions, GitLab CI, Jenkins
+- **Testing**: terraform test (1.6+), Terratest (Go), JUnit XML (1.11+)
+- **Security Tools**: Trivy (recommended - replaces tfsec), Checkov, Terrascan, Sentinel
 
-## Documentation Resources
+## Documentation Resources (2025)
 
 - [Terraform Documentation](https://www.terraform.io/docs)
+- [OpenTofu Documentation](https://opentofu.org/docs)
 - [Terraform Registry](https://registry.terraform.io/)
+- [OpenTofu Registry](https://registry.opentofu.org/)
+- [HCP Terraform Documentation](https://developer.hashicorp.com/terraform/cloud-docs)
+- [Terraform Stacks](https://developer.hashicorp.com/terraform/cloud-docs/stacks)
 - [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 - [AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [tfsec](https://github.com/aquasecurity/tfsec)
-- [Checkov](https://www.checkov.io/)
+- [Trivy](https://trivy.dev/) - Unified security scanner (replaces tfsec)
+- [Checkov](https://www.checkov.io/) - Policy-as-code
+- [Terratest](https://terratest.gruntwork.io/) - Integration testing
 
 ## License
 
 Part of the Claude Code Marketplace.
 
 ## Changelog
+
+### Version 1.5.0 (2025)
+
+**Major New Features:**
+- **OpenTofu Support**: Complete OpenTofu expertise and migration guidance
+  - State encryption configuration and best practices
+  - Loop-able import blocks (for_each in imports)
+  - Early variable evaluation in terraform blocks
+  - Migration paths and decision matrix
+  - New skill: `opentofu-guide`
+- **Testing Framework**: Comprehensive testing guidance
+  - Terraform 1.6+ native test framework
+  - Terratest integration testing
+  - Unit, integration, and E2E testing patterns
+  - TDD/BDD best practices
+  - CI/CD test reporting (JUnit XML 1.11+)
+  - New command: `/tf-test`
+
+**Provider Updates:**
+- **AWS 6.0 GA**: Multi-region support, bucket_region attribute, service deprecations
+- **AzureRM 4.x**: Updated to latest stable (1,101+ resources, 360+ data sources)
+- **Terraform 1.11+**: JUnit XML test output, write-only arguments
+
+**Agent Enhancements:**
+- Added OpenTofu expertise section (licensing, features, migration)
+- Added comprehensive testing knowledge section
+- Updated version-specific knowledge (Terraform 1.11+, OpenTofu 1.8+)
+- AWS Provider 6.0 breaking changes documented
+- Enhanced proactive behavior for testing and OpenTofu scenarios
+
+**Documentation Updates:**
+- README: Added OpenTofu section and testing highlights
+- README: Updated provider versions and compatibility
+- README: Added OpenTofu documentation resources
+- Command count: 15 → 17 total commands
+
+### Version 1.4.0 (2025)
+
+**2025 Feature Updates:**
+- **Terraform Stacks (GA)**: Production-ready with Linked Stacks
+- **Module Lifecycle Management (GA)**: Revoke compromised modules
+- **Linked Stacks**: Cross-stack dependencies with automatic triggers
+- **HCP Terraform Enhancements**: Private VCS Access, HYOK documentation
+
+### Version 1.3.0 (2025)
+
+**2025 Feature Updates:**
+- **Terraform 1.10+ Support**: Added ephemeral values and write-only arguments
+- **Terraform 1.14+ Support**: Added terraform query command and Actions blocks
+- **HCP Terraform 2025**: Terraform Stacks GA status, Linked Stacks, HYOK, Private VCS Access
+- **Security Tool Updates**: Trivy replaces tfsec (merged), updated CI/CD examples
+- **Provider Version Updates**: AzureRM 4.x, AWS 6.0 beta, GCP 6.x recommendations
+- **NIST SP 800-53 Rev 5**: Added 350+ Sentinel policy documentation
+- **Enhanced Security**: Checkov 750+ policies, Trivy unified scanning
+
+**Agent Enhancements:**
+- Updated version-specific knowledge through Terraform 1.14+
+- Added HCP Terraform 2025 features section
+- Added Terraform Stacks expertise
+- Updated security scanning tools (Trivy focus)
+- Enhanced proactive behavior for 2025 features
+
+**Command Updates:**
+- `/tf-stacks`: Updated with GA status and 2025 features
+- `/tf-security`: Trivy integration, NIST policies, Private VCS Access
+- All commands: Updated examples and best practices for 2025
 
 ### Version 1.2.0
 

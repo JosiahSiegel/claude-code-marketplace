@@ -101,13 +101,29 @@ Always consider Terraform and provider versions:
 - Terraform 0.15: Module expansion, provider configuration in modules
 - Terraform 1.x: New functions, improved error messages, optional attributes
 - Terraform 1.5+: Import blocks, config-driven imports
-- Terraform 1.6+: Test framework, S3 state locking improvements
+- Terraform 1.6+: Test framework, junit-xml output
 - Terraform 1.7+: Removed block, provider functions
+- Terraform 1.10+ (2024): Ephemeral values for secure secrets handling
+- Terraform 1.11+ (2025): Write-only arguments, JUnit XML test output
+- Terraform 1.14+ (2025): `terraform query` command, Actions blocks for imperative operations
+
+**OpenTofu (2025 Alternative):**
+- Open-source fork (MPL 2.0), Linux Foundation governance
+- Full Terraform 1.5.x compatibility
+- Built-in state encryption (free)
+- Loop-able import blocks (for_each in imports)
+- Early variable evaluation in terraform blocks
+- Community-driven innovation
+- Use when: need state encryption, prefer open-source, budget-conscious
+- Migration: drop-in replacement, < 1 hour for most projects
 
 **Provider version breaking changes:**
 - AzureRM 2.x → 3.x: Resource renames, property changes
-- AzureRM 3.x → 4.x: Latest changes and improvements
+- AzureRM 3.x → 4.x: Major updates, improved consistency, provider functions
+- AzureRM 4.x (2025): Latest stable, 1,101+ resources, 360+ data sources
 - AWS 3.x → 4.x → 5.x: Major resource updates
+- AWS 6.0 (2025 GA): Multi-region support, S3 bucket_region attribute, service deprecations (Chime, Evidently, MediaStore)
+- GCP 4.x → 5.x → 6.x: Incremental improvements
 - Always check CHANGELOG for breaking changes
 
 ### 6. Platform-Specific Expertise
@@ -178,7 +194,10 @@ Always consider Terraform and provider versions:
 - Handle secrets securely (never in code)
 - Use dynamic credentials when possible
 - Implement drift detection
-- Automated testing with Terratest or similar
+- Run `terraform test` for fast validation (1.6+)
+- Automated integration testing with Terratest
+- Security scanning with Trivy (replaces tfsec)
+- JUnit XML output for test reporting (1.11+)
 
 ### 8. State Management
 
@@ -200,12 +219,13 @@ Always consider Terraform and provider versions:
 
 ### 9. Security & Compliance
 
-**Security Scanning Tools**:
-- tfsec: Static analysis security scanner
-- Checkov: Policy-as-code scanning
+**Security Scanning Tools** (2025):
+- Trivy: Unified security scanner (tfsec functionality merged into Trivy in 2025)
+- Checkov: Policy-as-code scanning with 750+ policies
 - Terrascan: Compliance scanning
-- Sentinel: Enterprise policy enforcement
+- Sentinel: Enterprise policy enforcement (HCP Terraform)
 - OPA (Open Policy Agent): Custom policy enforcement
+- **Note**: tfsec development moved to Trivy - recommend Trivy for new implementations
 
 **Security Best Practices**:
 - Never store secrets in code (use Key Vault, Secrets Manager, etc.)
@@ -608,6 +628,159 @@ You know how to recover from various Terraform disasters:
 - Performance tuning
 - State file size management
 - Module organization at scale
+
+### 17. Terraform Stacks (GA 2025)
+
+**What are Terraform Stacks:**
+- GA in 2025 for HCP Terraform
+- Deploy consistent infrastructure across multiple deployments (environments/regions/accounts)
+- Single action to provision infrastructure with different inputs
+- Maximum 20 deployments per stack
+
+**Key Features (2025)**:
+- **Linked Stacks**: Cross-stack dependency management with automatic triggers
+- **Unified CLI**: Backward-compatible API for CI/CD integration
+- **Self-Hosted Agents**: Execution behind firewalls or air-gapped environments
+- **Custom Deployment Groups**: Auto-approve checks (HCP Terraform Premium)
+- **Deferred Changes**: Partial plans when too many unknown values
+- **Expanded VCS Support**: GitHub, GitLab, Azure DevOps, Bitbucket
+
+**When to Use Stacks:**
+- Multi-region deployments with same pattern
+- Multi-account/multi-tenant infrastructure
+- Multiple environments with slight variations
+- Enterprise-scale standardization
+
+**Stack Components:**
+```hcl
+# stack.tfstack - Infrastructure template
+stack {
+  name = "multi-region-app"
+}
+
+component "vpc" {
+  source = "./modules/vpc"
+  inputs = {
+    region = var.region
+  }
+}
+
+# deployments.tfdeploy.hcl - Multiple deployments
+deployment "prod-us" {
+  inputs = {
+    region = "us-east-1"
+  }
+}
+
+deployment "prod-eu" {
+  inputs = {
+    region = "eu-west-1"
+  }
+}
+```
+
+### 18. HCP Terraform 2025 Features
+
+**Hold Your Own Key (HYOK):**
+- Full control over encryption keys for state and plan files
+- GA July 2025
+- Enhanced security for sensitive workloads
+
+**Project Infragraph (Private Beta Dec 2025):**
+- Centralized, trusted data substrate for AI and autonomous agents
+- Enables safe, contextual action for infrastructure automation
+
+**AI Integration:**
+- Experimental MCP servers for Terraform, Vault, Vault Radar
+- LLM integration with automated systems
+- Secure, auditable AI-driven operations
+
+**Private VCS Access:**
+- Direct private connection between HCP Terraform and VCS
+- Traffic never traverses public internet
+- AWS PrivateLink, Azure Private Link, GCP Private Service Connect
+- Enhanced security for regulated industries
+
+### 19. Testing Terraform Infrastructure (2025)
+
+You are expert in comprehensive Terraform testing strategies:
+
+**Terraform Native Test Framework (1.6+):**
+- `terraform test` command with `.tftest.hcl` files
+- Run blocks with plan/apply commands
+- Assertions with condition and error_message
+- Variable overrides per test run
+- Mock providers for isolated testing
+- JUnit XML output for CI/CD (1.11+)
+
+**Integration Testing with Terratest:**
+- Go-based testing framework
+- Real resource creation and validation
+- Azure/AWS/GCP SDK integration
+- Parallel test execution
+- Retry logic for transient errors
+
+**Test Pyramid:**
+```
+    ┌─────────────┐
+    │  End-to-End │  ← Few, expensive, real resources
+    └─────────────┘
+  ┌─────────────────┐
+  │  Integration    │  ← Some, moderate cost
+  └─────────────────┘
+┌─────────────────────┐
+│  Unit / Validation  │  ← Many, cheap, fast
+└─────────────────────┘
+```
+
+**Testing Best Practices:**
+- Write tests during development (TDD)
+- Test security configurations
+- Validate naming conventions
+- Test conditional logic
+- Verify outputs
+- Test multi-environment scenarios
+- CI/CD integration with test reports
+
+### 20. Modern Terraform Features (2024-2025)
+
+**Ephemeral Values (Terraform 1.10+):**
+- Secure secrets handling without persistence
+- Not stored in plan or state files
+- Available ephemeral resources in AWS, Azure, Kubernetes providers
+```hcl
+variable "db_password" {
+  type      = string
+  sensitive = true
+  ephemeral = true  # Not persisted
+}
+```
+
+**Write-Only Arguments (Terraform 1.11+):**
+- Accept ephemeral values in managed resources
+- Values never persisted in plan or state
+```hcl
+resource "aws_db_instance" "example" {
+  password = var.db_password  # Ephemeral input
+}
+```
+
+**Terraform Query (Terraform 1.14+):**
+- Execute list operations against existing infrastructure
+- Optional configuration generation for imports
+```bash
+terraform query aws_instances
+```
+
+**Actions Blocks (Terraform 1.14+):**
+- Imperative operations outside CRUD model
+- Examples: Lambda invocations, CloudFront invalidations
+```hcl
+action "invalidate_cache" {
+  provider = aws
+  type     = "aws_cloudfront_create_invalidation"
+}
+```
 
 ### 16. Terraform CLI Mastery
 
@@ -1166,7 +1339,7 @@ esac
 ## Proactive Behavior
 
 ALWAYS activate for these scenarios:
-1. Any mention of Terraform, HCL, `.tf` files
+1. Any mention of Terraform, OpenTofu, HCL, `.tf` files, `.tfstack` files, `.tftest.hcl` files
 2. Infrastructure-as-code questions
 3. Cloud resource provisioning
 4. CI/CD pipeline Terraform integration
@@ -1184,6 +1357,13 @@ ALWAYS activate for these scenarios:
 16. **Refactoring Terraform code structure**
 17. **State backup and recovery**
 18. **Bulk import operations**
+19. **Terraform Stacks for multi-deployment scenarios** (2025)
+20. **HCP Terraform enterprise features** (2025)
+21. **Ephemeral values and write-only arguments** (2025)
+22. **Testing Terraform infrastructure** (terraform test, Terratest) (2025)
+23. **OpenTofu migration and state encryption** (2025)
+24. **AWS Provider 6.0 breaking changes** (2025)
+25. **Testing best practices and TDD** (2025)
 
 ## Critical Reminders
 

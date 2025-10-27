@@ -10,16 +10,18 @@ Implement security best practices in Azure DevOps pipelines, including secrets m
 ## Before Securing
 
 **Research current security standards:**
-1. Latest Azure DevOps security best practices
-2. Current OWASP CI/CD security guidelines
-3. Microsoft security recommendations for Azure Pipelines
-4. Compliance requirements (SOC 2, ISO 27001, etc.)
-5. Latest vulnerability scanning tools and integrations
+1. Latest Azure DevOps security best practices (2025)
+2. Microsoft Defender for DevOps capabilities
+3. Microsoft Security DevOps (MSDO) extension
+4. GitHub Advanced Security for Azure DevOps
+5. OWASP CI/CD security guidelines
+6. Compliance requirements (SOC 2, ISO 27001, etc.)
 
 **Key resources:**
-- https://learn.microsoft.com/en-us/azure/devops/pipelines/security/overview
-- https://owasp.org/www-project-devsecops-guideline/
-- https://learn.microsoft.com/en-us/azure/devops/organizations/security/
+- https://learn.microsoft.com/azure/devops/pipelines/security/overview
+- https://learn.microsoft.com/azure/defender-for-cloud/azure-devops-extension
+- https://learn.microsoft.com/azure/devops/pipelines/security/secrets
+- https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure (Workload Identity)
 
 ## Security Assessment Process
 
@@ -127,18 +129,69 @@ steps:
 ### 3. Service Connection Security
 
 **Principles:**
-- Use managed identities over service principals
+- **Prefer workload identity federation** (OIDC) over secrets
+- Use managed identities over service principals where possible
 - Scope connections to specific pipelines
-- Use time-limited credentials
-- Regular credential rotation
+- Avoid long-lived credentials
+- Regular credential rotation for service principals
 - Audit access logs
 
-**Secure service connection:**
+#### A. Workload Identity Federation (OIDC) - Recommended
+
+**Best practice for 2025:** Use OpenID Connect (OIDC) for passwordless authentication to Azure.
+
+**Setup:**
+1. Create service connection with workload identity federation in Azure DevOps UI
+2. No secrets stored in Azure DevOps
+3. Azure DevOps issues tokens automatically
+
+**Usage:**
 ```yaml
 steps:
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'production-connection'
+      azureSubscription: 'production-connection-oidc'  # Workload identity federation enabled
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Automatic OIDC authentication - no secrets!
+        az account show
+        az group list
+```
+
+**Benefits:**
+- No secrets to manage or rotate
+- Tokens are short-lived and automatically refreshed
+- Reduced attack surface
+- Meets zero-trust requirements
+- Microsoft recommended approach
+
+#### B. Managed Identity (For Azure-hosted agents)
+
+```yaml
+pool:
+  name: 'azure-vm-pool'  # Self-hosted agents on Azure VMs
+
+steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'managed-identity-connection'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      useGlobalConfig: true
+      inlineScript: |
+        # Uses VM's managed identity
+        az account show
+```
+
+#### C. Service Principal (Legacy - Avoid if possible)
+
+**Only use if OIDC/Managed Identity unavailable:**
+```yaml
+steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'production-connection'  # Service principal with secret
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       addSpnToEnvironment: true
@@ -146,21 +199,73 @@ steps:
         # Service principal added to environment
         # Credentials not exposed in logs
         az account show
+
+# Rotate credentials every 90 days
+# Use Azure Key Vault for secret storage
 ```
 
-### 4. Code Security Scanning
+### 4. Code Security Scanning (2025 - Microsoft Security DevOps)
 
-#### A. Static Application Security Testing (SAST)
+#### A. Microsoft Security DevOps Extension (Recommended)
 
-**Microsoft Security Code Analysis:**
+**Replaces legacy tools:** CredScan deprecated September 2023. Use MSDO extension for comprehensive security scanning.
+
+**Install:** Azure DevOps Marketplace → Microsoft Security DevOps
+
+**Complete Security Scan:**
 ```yaml
 steps:
-  - task: CredScan@3
-    displayName: 'Run Credential Scanner'
+  # Build application first
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Application'
     inputs:
-      suppressionsFile: '$(Build.SourcesDirectory)/CredScanSuppressions.json'
+      command: 'build'
+      projects: '**/*.csproj'
 
-  - task: AntiMalware@4
+  # Comprehensive security scanning
+  - task: MicrosoftSecurityDevOps@1
+    displayName: 'Microsoft Security DevOps'
+    inputs:
+      categories: 'secrets,code,dependencies,IaC,containers'
+      break: true  # Fail pipeline on critical/high findings
+      breakSeverity: 'high'
+      publishResults: true
+
+  # Publish SARIF results
+  - task: PublishSecurityAnalysisLogs@3
+    displayName: 'Publish Security Logs'
+    inputs:
+      ArtifactName: 'CodeAnalysisLogs'
+
+  # Display in Scans tab
+  - task: PostAnalysis@2
+    displayName: 'Post Analysis'
+    inputs:
+      break: true
+
+# View results: Pipeline run → Scans tab
+```
+
+**What MSDO Scans:**
+- **Secrets:** API keys, tokens, credentials (replaces CredScan)
+- **Code:** Static analysis (SAST) for vulnerabilities
+- **Dependencies:** Known CVEs in packages
+- **IaC:** Terraform, ARM, Bicep security issues
+- **Containers:** Image vulnerabilities with Trivy
+
+#### B. GitHub Advanced Security for Azure DevOps
+
+**Alternative/Complement to MSDO:**
+
+Provides:
+- Secret scanning with GitHub's detection engine
+- CodeQL for advanced code analysis
+- Dependency vulnerability alerts
+- Security overview dashboard
+
+**Note:** Requires GitHub Advanced Security license
+
+#### C. Legacy Security Tasks (Pre-2025 - Deprecated)
     displayName: 'Anti-Malware Scan'
 
   - task: BinSkim@4
@@ -468,7 +573,7 @@ steps:
 **Use Microsoft-hosted agents when possible:**
 ```yaml
 pool:
-  vmImage: 'ubuntu-latest'  # Managed and updated by Microsoft
+  vmImage: 'ubuntu-24.04'  # Managed and updated by Microsoft, latest LTS
 ```
 
 **Advantages:**
@@ -499,19 +604,61 @@ pool:
   --noRestart
 ```
 
-### 9. Security Best Practices Summary
+### 9. Continuous Access Evaluation (CAE) - 2025
+
+**New Security Feature (GA: August 2025):**
+
+Azure DevOps now supports Continuous Access Evaluation, enabling near real-time enforcement of Conditional Access policies.
+
+**Automatic Benefits:**
+- Instant access revocation on security events
+- No configuration required (enabled automatically)
+- Works with Microsoft Entra ID policies
+
+**When Access is Revoked Immediately:**
+- User account disabled
+- Password reset
+- Location/IP changes
+- Risk detection events
+- Policy violations
+
+**Example Impact:**
+```yaml
+stages:
+  - stage: Production
+    jobs:
+      - deployment: Deploy
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    # If user credentials revoked mid-deployment,
+                    # CAE terminates access immediately (seconds, not hours)
+                    az webapp deployment source config --name myapp
+```
+
+**Security Improvements:**
+- Reduces attack window from hours/days to seconds
+- Complements existing security measures
+- Zero-trust enforcement
+
+### 10. Security Best Practices Summary
 
 **DO:**
+- ✅ Use **workload identity federation (OIDC)** for Azure connections (2025 best practice)
 - ✅ Use Azure Key Vault for secrets
 - ✅ Implement SAST and dependency scanning
 - ✅ Require code reviews and approvals
 - ✅ Use service connections with least privilege
 - ✅ Enable branch protection
 - ✅ Scan container images
-- ✅ Use managed identities
+- ✅ Use managed identities where possible
 - ✅ Implement deployment gates
 - ✅ Enable audit logging
 - ✅ Regular security reviews
+- ✅ Leverage Continuous Access Evaluation (automatic)
 
 **DON'T:**
 - ❌ Hardcode secrets in YAML
@@ -525,7 +672,7 @@ pool:
 - ❌ Share service connection passwords
 - ❌ Skip approval gates
 
-### 10. Security Incident Response
+### 11. Security Incident Response
 
 **Pipeline compromise response:**
 1. Immediately disable compromised service connections

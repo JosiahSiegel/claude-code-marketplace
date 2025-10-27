@@ -149,7 +149,24 @@ Get-ChildItem | Where-Object {$_.Length -gt 1MB} | ForEach-Object {$_.Name}
 $content | Set-Content -Path $file -Encoding UTF8NoBOM
 ```
 
-### 5. Line Endings
+### 5. Environment Variables (Cross-Platform)
+
+```powershell
+# BEST PRACTICE: Use .NET Environment class for cross-platform compatibility
+[Environment]::UserName      # Works on all platforms
+[Environment]::MachineName   # Works on all platforms
+[IO.Path]::GetTempPath()     # Works on all platforms
+
+# AVOID: These are platform-specific
+$env:USERNAME                # Windows only
+$env:USER                    # Linux/macOS only
+
+# Environment variable names are CASE-SENSITIVE on Linux/macOS
+$env:PATH    # Correct on Linux/macOS
+$env:Path    # May not work on Linux/macOS
+```
+
+### 6. Line Endings
 
 ```powershell
 # PowerShell handles line endings automatically
@@ -160,78 +177,94 @@ git config core.autocrlf true   # Windows
 
 ---
 
-## 📦 Module Management (PSGallery)
+## 📦 Module Management (PSResourceGet & PSGallery)
+
+### PSResourceGet - Modern Package Manager (2025)
+
+**PSResourceGet** is 2x faster than PowerShellGet and actively maintained:
+
+```powershell
+# PSResourceGet ships with PowerShell 7.4+ (or install manually)
+Install-Module -Name Microsoft.PowerShell.PSResourceGet -Force
+
+# Modern commands (PSResourceGet)
+Install-PSResource -Name Az -Scope CurrentUser        # 2x faster
+Find-PSResource -Name "*Azure*"                       # Faster search
+Update-PSResource -Name Az                            # Batch updates
+Get-InstalledPSResource                               # List installed
+Uninstall-PSResource -Name OldModule                  # Clean uninstall
+
+# Compatibility: Your old Install-Module commands still work
+# They automatically call PSResourceGet internally
+Install-Module -Name Az -Scope CurrentUser            # Works, uses PSResourceGet
+```
 
 ### Finding Modules
 
 ```powershell
-# Search PSGallery for modules
+# PSResourceGet (Modern)
+Find-PSResource -Name "*Azure*"
+Find-PSResource -Tag "Security"
+Find-PSResource -Name Az | Select-Object Name, Version, PublishedDate
+
+# Legacy PowerShellGet (still works)
 Find-Module -Name "*Azure*"
-Find-Module -Tag "Security"
-
-# Get module details
-Find-Module -Name Az -AllVersions
-Find-Module -Name Az | Select-Object Version, PublishedDate, Description
-
-# Search for commands within modules
 Find-Command -Name Get-AzVM
-Find-DscResource -Name File
 ```
 
 ### Installing Modules
 
 ```powershell
-# Install from PSGallery (requires admin/sudo on system scope)
+# RECOMMENDED: PSResourceGet (2x faster)
+Install-PSResource -Name Az -Scope CurrentUser -TrustRepository
+Install-PSResource -Name Microsoft.Graph -Version 2.32.0
+
+# Legacy: PowerShellGet (slower, but still works)
 Install-Module -Name Az -Scope CurrentUser -Force
-
-# Install specific version
-Install-Module -Name Microsoft.Graph -RequiredVersion 2.0.0
-
-# Install for all users (requires elevation)
-Install-Module -Name Pester -Scope AllUsers
-
-# Install without prompts
-Install-Module -Name PnP.PowerShell -Force -SkipPublisherCheck
+Install-Module -Name Pester -Scope AllUsers  # Requires elevation
 ```
 
 ### Managing Installed Modules
 
 ```powershell
-# List installed modules
-Get-InstalledModule
-Get-Module -ListAvailable
+# List installed (PSResourceGet)
+Get-InstalledPSResource
+Get-InstalledPSResource -Name Az
 
-# Update modules
-Update-Module -Name Az
-Update-Module  # Updates all modules
+# Update modules (PSResourceGet)
+Update-PSResource -Name Az
+Update-PSResource                              # Updates all
 
-# Uninstall modules
-Uninstall-Module -Name OldModule -AllVersions
+# Uninstall (PSResourceGet)
+Uninstall-PSResource -Name OldModule -AllVersions
 
-# Import module into session
+# Import module
 Import-Module -Name Az.Accounts
 ```
 
 ### Offline Installation
 
 ```powershell
-# Save module for offline installation
-Save-Module -Name Az -Path C:\OfflineModules
+# Save module (works with both)
+Save-PSResource -Name Az -Path C:\OfflineModules
+# Or: Save-Module -Name Az -Path C:\OfflineModules
 
 # Install from saved location
-Install-Module -Name Az -Repository PSGallery -Scope CurrentUser `
-    -Source C:\OfflineModules
+Install-PSResource -Name Az -Path C:\OfflineModules
 ```
 
 ---
 
 ## 🌟 Popular PowerShell Modules
 
-### Azure (Az Module)
+### Azure (Az Module 14.5.0)
+
+**Latest:** Az 14.5.0 (October 2025) with zone redundancy and symbolic links
 
 ```powershell
-# Install Azure module
-Install-Module -Name Az -Scope CurrentUser -Force
+# Install Azure module 14.5.0
+Install-PSResource -Name Az -Scope CurrentUser
+# Or: Install-Module -Name Az -Scope CurrentUser -Force
 
 # Connect to Azure
 Connect-AzAccount
@@ -240,22 +273,32 @@ Connect-AzAccount
 Get-AzVM
 Get-AzResourceGroup
 New-AzResourceGroup -Name "MyRG" -Location "EastUS"
-Get-AzStorageAccount
+
+# NEW in Az 14.5: Zone redundancy for storage
+New-AzStorageAccount -ResourceGroupName "MyRG" -Name "storage123" `
+    -Location "EastUS" -SkuName "Standard_LRS" -EnableZoneRedundancy
+
+# NEW in Az 14.5: Symbolic links in NFS File Share
+New-AzStorageFileSymbolicLink -Context $ctx -ShareName "nfsshare" `
+    -Path "symlink" -Target "/target/path"
 ```
 
-**Submodules:**
-- `Az.Accounts` - Authentication
+**Key Submodules:**
+- `Az.Accounts` - Authentication (MFA required Sep 2025+)
 - `Az.Compute` - VMs, scale sets
-- `Az.Storage` - Storage accounts
+- `Az.Storage` - Storage accounts (zone redundancy support)
 - `Az.Network` - Virtual networks, NSGs
 - `Az.KeyVault` - Key Vault operations
 - `Az.Resources` - Resource groups, deployments
 
-### Microsoft Graph (Microsoft.Graph)
+### Microsoft Graph (Microsoft.Graph 2.32.0)
+
+**CRITICAL:** MSOnline and AzureAD modules retired (March-May 2025). Use Microsoft.Graph instead.
 
 ```powershell
-# Install Microsoft Graph
-Install-Module -Name Microsoft.Graph -Scope CurrentUser
+# Install Microsoft Graph 2.32.0 (October 2025)
+Install-PSResource -Name Microsoft.Graph -Scope CurrentUser
+# Or: Install-Module -Name Microsoft.Graph -Scope CurrentUser
 
 # Connect with required scopes
 Connect-MgGraph -Scopes "User.Read.All", "Group.ReadWrite.All"
@@ -263,8 +306,14 @@ Connect-MgGraph -Scopes "User.Read.All", "Group.ReadWrite.All"
 # Common operations
 Get-MgUser
 Get-MgGroup
-New-MgUser -DisplayName "John Doe" -UserPrincipalName "john@domain.com"
+New-MgUser -DisplayName "John Doe" -UserPrincipalName "john@domain.com" -MailNickname "john"
 Get-MgTeam
+
+# Migration from AzureAD/MSOnline
+# OLD: Connect-AzureAD / Connect-MsolService
+# NEW: Connect-MgGraph
+# OLD: Get-AzureADUser / Get-MsolUser
+# NEW: Get-MgUser
 ```
 
 ### PnP PowerShell (SharePoint/Teams)
@@ -620,7 +669,92 @@ $ErrorActionPreference = "SilentlyContinue"  # Suppress errors
 
 ---
 
-## 🔒 Security Best Practices
+## 🔒 Security Best Practices (2025 Standards)
+
+### Modern Security Framework (JEA + WDAC + Logging)
+
+**2025 Security Requirements:**
+1. **JEA** - Just Enough Administration for role-based access
+2. **WDAC** - Windows Defender Application Control for script approval
+3. **Constrained Language Mode** - For non-admin users
+4. **Script Block Logging** - For audit trails
+
+### Just Enough Administration (JEA)
+
+**Required for production environments in 2025:**
+
+```powershell
+# Create JEA session configuration file
+New-PSSessionConfigurationFile -SessionType RestrictedRemoteServer `
+    -Path "C:\JEA\HelpDesk.pssc" `
+    -VisibleCmdlets @{
+        Name = 'Restart-Service'
+        Parameters = @{ Name = 'Name'; ValidateSet = 'Spooler', 'Wuauserv' }
+    }, @{
+        Name = 'Get-Service'
+    } `
+    -LanguageMode NoLanguage `
+    -ExecutionPolicy RemoteSigned
+
+# Register JEA endpoint
+Register-PSSessionConfiguration -Name HelpDesk `
+    -Path "C:\JEA\HelpDesk.pssc" `
+    -Force
+
+# Connect with limited privileges
+Enter-PSSession -ComputerName Server01 -ConfigurationName HelpDesk
+```
+
+### Windows Defender Application Control (WDAC)
+
+**Replaces AppLocker for PowerShell script control:**
+
+```powershell
+# Create WDAC policy for approved scripts
+New-CIPolicy -FilePath "C:\WDAC\PowerShellPolicy.xml" `
+    -ScanPath "C:\ApprovedScripts" `
+    -Level FilePublisher `
+    -Fallback Hash
+
+# Convert to binary
+ConvertFrom-CIPolicy -XmlFilePath "C:\WDAC\PowerShellPolicy.xml" `
+    -BinaryFilePath "C:\Windows\System32\CodeIntegrity\SIPolicy.p7b"
+
+# Deploy via Group Policy or MDM
+```
+
+### Constrained Language Mode
+
+**Recommended for all non-admin users:**
+
+```powershell
+# Check current language mode
+$ExecutionContext.SessionState.LanguageMode
+# Output: FullLanguage (admin) or ConstrainedLanguage (standard user)
+
+# Enable system-wide via environment variable
+[Environment]::SetEnvironmentVariable(
+    "__PSLockdownPolicy",
+    "4",
+    [System.EnvironmentVariableTarget]::Machine
+)
+```
+
+### Script Block Logging
+
+**Enable for security auditing:**
+
+```powershell
+# Enable via Group Policy or Registry
+# HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+# EnableScriptBlockLogging = 1
+# EnableScriptBlockInvocationLogging = 1
+
+# Check logs
+Get-WinEvent -LogName "Microsoft-Windows-PowerShell/Operational" |
+    Where-Object Id -eq 4104 |  # Script Block Logging
+    Select-Object TimeCreated, Message -First 10
+```
 
 ### Execution Policy
 
@@ -628,37 +762,33 @@ $ErrorActionPreference = "SilentlyContinue"  # Suppress errors
 # Check current execution policy
 Get-ExecutionPolicy
 
-# Set execution policy (Windows only, requires admin)
+# Set for current user (no admin needed)
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-# Bypass for single session
-powershell.exe -ExecutionPolicy Bypass -File script.ps1
+# Bypass for single session (use sparingly)
+pwsh -ExecutionPolicy Bypass -File script.ps1
 ```
-
-**Policies:**
-- `Restricted` - No scripts allowed (Windows default)
-- `RemoteSigned` - Remote scripts must be signed
-- `Unrestricted` - All scripts allowed with prompts
-- `Bypass` - Nothing blocked, no warnings
 
 ### Credential Management
 
 ```powershell
-# Never hardcode credentials
+# NEVER hardcode credentials
 # BAD: $password = "MyP@ssw0rd"
 
-# Use Get-Credential
+# Use SecretManagement module (modern approach)
+Install-PSResource -Name Microsoft.PowerShell.SecretManagement
+Install-PSResource -Name SecretManagement.KeyVault
+
+Register-SecretVault -Name AzureKeyVault -ModuleName SecretManagement.KeyVault
+$secret = Get-Secret -Name "DatabasePassword" -Vault AzureKeyVault
+
+# Legacy: Get-Credential for interactive
 $cred = Get-Credential
 
-# Use secure strings
-$securePassword = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("username", $securePassword)
-
-# Store encrypted credentials (Windows only)
-$cred | Export-Clixml -Path credentials.xml
-$cred = Import-Clixml -Path credentials.xml
-
-# Use Azure Key Vault or similar for production
+# Azure Key Vault for production
+$vaultName = "MyKeyVault"
+$secret = Get-AzKeyVaultSecret -VaultName $vaultName -Name "DatabasePassword"
+$secret.SecretValue
 ```
 
 ### Input Validation
@@ -1019,6 +1149,16 @@ Before running any PowerShell script, ensure:
 ---
 
 ## 🚨 Common Pitfalls & Solutions
+
+### Pitfall: Out-GridView Search Broken in 7.5
+```powershell
+# Known Issue: Out-GridView search doesn't work in PowerShell 7.5 due to .NET 9 changes
+# Workaround: Use Where-Object or Select-Object for filtering
+Get-Process | Where-Object CPU -gt 100 | Format-Table
+
+# Or export to CSV and use external tools
+Get-Process | Export-Csv processes.csv -NoTypeInformation
+```
 
 ### Pitfall: Case Sensitivity
 ```powershell

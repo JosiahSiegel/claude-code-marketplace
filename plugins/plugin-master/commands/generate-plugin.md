@@ -1,63 +1,46 @@
 ---
-description: Generate a complete, ready-to-use Claude Code plugin with all necessary files and structure
+description: Rapidly generate a complete Claude Code plugin with all files and structure ready to use
 ---
 
 # Generate Plugin
 
+Quickly scaffold a production-ready plugin with sensible defaults and minimal user input required.
+
 ## Purpose
-This command helps you quickly generate a complete Claude Code plugin, including all necessary files and directory structure. Perfect for both beginners creating their first plugin and experienced developers who want to accelerate plugin creation.
+
+Accelerated plugin creation optimized for speed - autonomously generates complete plugin structures by inferring requirements from brief descriptions. Ideal for rapid prototyping or when you have a clear plugin concept.
 
 ## Instructions
 
-1. **Automatically read the plugin-master skill** to understand the complete plugin creation process and best practices
-2. **Gather requirements** from the user's request:
-   - Infer the plugin's purpose and functionality
-   - Determine components needed (commands, agents, skills)
-   - Derive an appropriate name if not specified
-3. **Be autonomous** - only ask clarifying questions if the request is genuinely ambiguous
-4. **Create comprehensive output** including:
-   - Complete directory structure
-   - plugin.json manifest
-   - All command, agent, and skill files
-   - Comprehensive README.md
-   - Installation instructions
-5. **Provide guidance** on:
-   - GitHub marketplace publishing (recommended)
-   - Local installation (Mac/Linux)
-   - Optional: Skill export for claude.ai web app
+1. **Auto-activate plugin-master skill** for templates and best practices
+2. **Infer everything possible**:
+   - Plugin name from description
+   - Required components (commands/agents/skills)
+   - Appropriate keywords and metadata
+3. **Be maximally autonomous** - ask zero questions unless critical ambiguity exists
+4. **Generate immediately**:
+   - Fetch latest docs if needed
+   - Detect git context automatically
+   - Create all files with working examples
+   - Provide GitHub-ready structure
+5. **Output concise instructions** focused on immediate next steps
 
-## Best Practices
+## Key Differences from /create-plugin
 
-- **Default to comprehensive**: Include commands, agents, and skills by default
-- **Make it functional**: Create working examples, not placeholders
-- **GitHub-first approach**: Recommend GitHub installation for cross-platform compatibility
-- **Include examples**: Add usage examples in all documentation
-- **Follow conventions**: Use kebab-case for names, clear descriptions
+- **More autonomous** - Asks fewer questions, infers more aggressively
+- **Faster** - Optimized for speed over customization
+- **Simpler output** - Streamlined instructions for experienced users
+- **Default templates** - Uses proven patterns without extensive explanation
+
+Use `/create-plugin` for guided creation with more control.
+Use `/generate-plugin` for fast scaffolding with smart defaults.
 
 ## Example Usage
 
 ```
-/generate-plugin for managing Git workflows
-/generate-plugin that helps with code reviews
-/generate-plugin for deployment automation
+/generate-plugin for API testing
+/generate-plugin deployment helper
+/generate-plugin code quality checks
 ```
 
-## What Gets Created
-
-1. **Full plugin directory** with proper structure
-2. **plugin.json** with metadata
-3. **Command files** in markdown format
-4. **Agent files** with clear roles
-5. **Skills** with SKILL.md files
-6. **README.md** with installation guide
-7. **Marketplace structure** for GitHub publishing
-
-## Output Format
-
-After generation, provide:
-- Complete plugin file structure in your working directory
-- Installation instructions (GitHub method recommended)
-- Local installation guide (Mac/Linux)
-- Quick start guide
-- Platform-specific notes
-- Optional: Skill export instructions for claude.ai web app
+Provides complete plugin ready for immediate testing or customization.

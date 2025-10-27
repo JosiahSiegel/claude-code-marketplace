@@ -10,9 +10,10 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 
 ### Commands
 
+- **`/docker-ai`** - Use Docker AI Assistant (Project Gordon) for intelligent container development (Docker Desktop 4.38+)
 - **`/docker-build`** - Build Docker images following current best practices and industry standards
 - **`/docker-run`** - Run Docker containers with proper configuration and best practices
-- **`/docker-compose`** - Manage multi-container applications with Docker Compose using best practices
+- **`/docker-compose`** - Manage multi-container applications with Docker Compose v2.40+ using best practices
 - **`/docker-optimize`** - Optimize Docker images for size, build time, and runtime performance
 - **`/docker-security`** - Scan and harden Docker containers following security best practices
 - **`/docker-debug`** - Debug Docker containers and troubleshoot common issues across all platforms
@@ -31,6 +32,7 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 
 ### Skills
 
+- **docker-2025-features** - Latest Docker 2025 features including AI Assistant, Enhanced Container Isolation, and Moby 25
 - **docker-best-practices** - Comprehensive Docker best practices for images, containers, and production deployments
 - **docker-security-guide** - Complete security guidelines and threat mitigation strategies
 - **docker-platform-guide** - Platform-specific considerations for Windows, Linux, and macOS
@@ -46,6 +48,21 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 
 ## Usage
 
+### Using Docker AI Assistant (NEW 2025)
+
+```bash
+/docker-ai
+```
+
+Claude will help you leverage Docker's AI Assistant (Project Gordon) for:
+1. Natural language Docker queries
+2. Intelligent troubleshooting
+3. Automated Dockerfile optimization
+4. Context-aware best practice recommendations
+5. Local AI model execution (Model Runner)
+
+**Requires:** Docker Desktop 4.38+ with AI beta features enabled
+
 ### Building Optimized Images
 
 ```bash
@@ -53,12 +70,13 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 ```
 
 Claude will:
-1. Check latest Docker best practices
+1. Check latest Docker best practices (2025 standards)
 2. Analyze your current Dockerfile
 3. Detect target platform (Windows/Linux/macOS)
 4. Apply security and optimization best practices
-5. Provide build commands with recommended flags
-6. Validate the result
+5. **Generate SBOM** (Software Bill of Materials) for supply chain security
+6. Provide build commands with recommended flags
+7. Validate the result
 
 ### Running Containers Securely
 
@@ -107,12 +125,14 @@ Claude will:
 ```
 
 Claude will:
-1. Scan for vulnerabilities (CVEs)
-2. Check against CIS benchmarks
-3. Harden Dockerfile and runtime config
-4. Implement secrets management
-5. Apply principle of least privilege
-6. Provide security audit report
+1. Scan for vulnerabilities (CVEs) with Docker Scout/Trivy
+2. Check against **CIS Docker Benchmark v1.7.0** (2025)
+3. **Generate SBOM** for supply chain transparency
+4. Recommend **Wolfi/Chainguard images** for zero-CVE deployments
+5. Harden Dockerfile and runtime config
+6. Implement secrets management
+7. Apply principle of least privilege
+8. Provide comprehensive security audit report
 
 ### Debugging Issues
 
@@ -180,6 +200,17 @@ The Docker Expert agent can help with:
 - Windows containers support
 - Cross-platform compatibility
 
+## What's New in 2025
+
+This plugin includes the latest Docker 2025 features:
+
+- **Docker AI (Project Gordon)** - AI-powered assistant for intelligent Docker development
+- **Enhanced Container Isolation (ECI)** - New security layer for Docker Desktop 4.38+
+- **Moby 25 Engine** - 20-30% faster container startup and improved resource management
+- **Compose v2.40+** - Modern format (no version field), new watch features
+- **Model Runner** - Run AI models locally without cloud APIs
+- **Multi-Node Kubernetes** - Test realistic cluster scenarios in Docker Desktop
+
 ## Key Principles
 
 This plugin ensures Claude always:
@@ -190,23 +221,27 @@ This plugin ensures Claude always:
 4. **Explains Why** - Teaches principles, not just commands
 5. **Production-Ready** - Provides configurations suitable for production use
 6. **Comprehensive** - Covers full Docker lifecycle from build to deployment
+7. **Future-Ready** - Includes 2025 features (AI, ECI, Moby 25)
 
 ## Best Practices Applied
 
 ### Images
 - Official, minimal base images with exact version tags
-- Multi-stage builds for smaller, more secure images
+- **2025:** Wolfi/Chainguard images for zero-CVE production deployments
+- Multi-stage builds for smaller, more secure images (60-80% size reduction)
 - Efficient layer caching for faster builds
 - Comprehensive .dockerignore files
-- Vulnerability scanning before deployment
+- **MANDATORY:** SBOM generation for every build
 
-### Security
-- Non-root users
+### Security (2025 Standards)
+- **CIS Docker Benchmark v1.7.0** compliance
+- Non-root users (always)
 - Dropped capabilities
 - Read-only filesystems where possible
-- Secrets management (no hardcoded secrets)
-- Regular vulnerability scanning
-- CIS Docker Benchmark compliance
+- BuildKit secrets (no hardcoded secrets)
+- Regular vulnerability scanning (Docker Scout, Trivy)
+- **SBOM** generation and continuous monitoring
+- BuildKit frontend verification
 
 ### Performance
 - Optimized layer ordering
@@ -270,20 +305,23 @@ This plugin ensures Claude always:
 
 ## Requirements
 
-- Docker Engine 20.10+ (for latest features)
-- Docker Compose 2.0+ (for compose commands)
+- Docker Engine 25+ (Moby 25 for latest features)
+- Docker Compose v2.40+ (for modern compose format)
+- Docker Desktop 4.38+ (for AI Assistant, ECI, and 2025 features)
 - Platform-specific:
   - **Linux:** Docker CE/EE installed
-  - **macOS:** Docker Desktop for Mac
+  - **macOS:** Docker Desktop for Mac (Intel or Apple Silicon)
   - **Windows:** Docker Desktop for Windows with WSL2 (recommended)
 
 ## Recommended Tools
 
 This plugin references these tools (install as needed):
-- **Docker Scout** - Built-in CVE scanning
-- **Trivy** - Comprehensive security scanner
-- **Dive** - Image layer analyzer
-- **docker-bench-security** - CIS compliance checker
+- **Docker Scout** - Built-in CVE scanning and SBOM generation
+- **Trivy** - Comprehensive security scanner with secret detection
+- **Syft** - Industry-standard SBOM generation tool (2025 recommended)
+- **Grype** - Vulnerability scanner for images and SBOMs
+- **Dive** - Image layer analyzer for optimization
+- **docker-bench-security** - CIS Docker Benchmark v1.7.0 compliance checker
 
 ## Learning Resources
 

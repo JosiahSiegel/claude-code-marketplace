@@ -77,6 +77,34 @@ FROM ubuntu:22.04          # ~77MB with more packages
 - Faster downloads and starts
 - Less disk space
 
+### Micro-Distros for Security-Critical Applications (2025)
+
+**Wolfi/Chainguard Images:**
+- Zero-CVE goal, SBOM included by default
+- Nightly security patches, signed with provenance
+- Available for: Node, Python, Go, Java, .NET, etc.
+
+**Usage:**
+```dockerfile
+# Development stage (includes build tools)
+FROM cgr.dev/chainguard/node:latest-dev AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Production stage (minimal, zero-CVE goal)
+FROM cgr.dev/chainguard/node:latest
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+USER node
+ENTRYPOINT ["node", "server.js"]
+```
+
+**When to use:** Security-critical apps, compliance requirements (SOC2, HIPAA, PCI-DSS), zero-trust environments, supply chain security emphasis.
+
+See `docker-best-practices` skill for full image comparison table.
+
 ### Vulnerability Scanning
 
 **Tools:**
@@ -161,6 +189,198 @@ RUN --mount=type=secret,id=github_token \
 ```bash
 # Build with secret (not in image)
 docker build --secret id=github_token,src=./token.txt .
+```
+
+### BuildKit Frontend Security (2025)
+
+**Threat:** Malicious or compromised BuildKit frontends can execute arbitrary code during build
+
+**🚨 2025 CRITICAL WARNING:** BuildKit supports custom frontends (parsers) via `# syntax=` directive. Untrusted frontends have FULL BUILD-TIME code execution and can:
+- Steal secrets from build context
+- Modify build outputs
+- Exfiltrate data
+- Compromise the build environment
+
+**Risk Example:**
+```dockerfile
+# 🔴 DANGER - Untrusted frontend (code execution risk!)
+# syntax=docker/dockerfile:1@sha256:abc123...untrusted
+
+FROM alpine
+RUN echo "This frontend could do anything during build"
+```
+
+**Mitigation:**
+
+1. **Only use official Docker frontends:**
+```dockerfile
+# ✅ Safe - Official Docker frontend
+# syntax=docker/dockerfile:1
+
+# ✅ Safe - Specific version
+# syntax=docker/dockerfile:1.5
+
+# ✅ Safe - Pinned with digest (verify from docker.com)
+# syntax=docker/dockerfile:1@sha256:ac85f380a63b13dfcefa89046420e1781752bab202122f8f50032edf31be0021
+```
+
+2. **Verify frontend sources:**
+- Use ONLY `docker/dockerfile:*` frontends
+- Pin to specific versions with SHA256 digest
+- Verify digests from official Docker documentation
+- Never use third-party frontends without thorough vetting
+
+3. **Audit all Dockerfiles for unsafe syntax directives:**
+```bash
+# Check all Dockerfiles for potentially malicious syntax directives
+grep -r "^# syntax=" . --include="Dockerfile*"
+
+# Verify all frontends are official Docker images
+grep -r "^# syntax=" . --include="Dockerfile*" | grep -v "docker/dockerfile"
+```
+
+4. **BuildKit security configuration (defense in depth):**
+```bash
+# Restrict frontend sources in BuildKit config
+# /etc/buildkit/buildkitd.toml
+[frontend."dockerfile.v0"]
+  # Only allow official Docker frontends
+  allowedImages = ["docker.io/docker/dockerfile:*"]
+```
+
+**Supply Chain Protection:**
+- Treat custom frontends as HIGH RISK code execution vectors
+- Review ALL `# syntax=` directives in Dockerfiles before builds
+- Use content trust for frontend images
+- Monitor for frontend vulnerabilities
+- Include frontend verification in CI/CD security gates
+
+### SBOM (Software Bill of Materials) Generation (2025)
+
+**Critical 2025 Requirement:** Document origin and history of all components for supply chain transparency and compliance.
+
+**Why SBOM is Mandatory:**
+- Supply chain security visibility
+- Vulnerability tracking and response
+- Compliance requirements (Executive Order 14028, etc.)
+- License compliance
+- Incident response readiness
+
+**Generate SBOM with Docker Scout:**
+```bash
+# Generate SBOM for image
+docker scout sbom IMAGE_NAME
+
+# Export SBOM in different formats
+docker scout sbom --format spdx IMAGE_NAME > sbom.spdx.json
+docker scout sbom --format cyclonedx IMAGE_NAME > sbom.cyclonedx.json
+
+# Include SBOM attestation during build
+# ⚠️ WARNING: BuildKit attestations are NOT cryptographically signed!
+docker buildx build \
+  --sbom=true \
+  --provenance=true \
+  --tag my-image:latest \
+  .
+
+# View SBOM attestations (unsigned metadata only)
+docker buildx imagetools inspect my-image:latest --format "{{ json .SBOM }}"
+```
+
+**🚨 CRITICAL SECURITY LIMITATION:**
+BuildKit attestations (`--sbom=true`, `--provenance=true`) are **NOT cryptographically signed**. This means:
+- Anyone with push access can create tampered attestations
+- SBOMs can be incomplete or falsified
+- Provenance data cannot be trusted without external verification
+- **For production:** Use external signing tools (cosign, Notary) and Syft for SBOM generation
+
+**Generate SBOM with Syft:**
+```bash
+# Install Syft
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh
+
+# Generate SBOM from image
+syft my-image:latest
+
+# Generate in specific format
+syft my-image:latest -o spdx-json > sbom.spdx.json
+syft my-image:latest -o cyclonedx-json > sbom.cyclonedx.json
+
+# Generate from Dockerfile
+syft dir:. -o spdx-json > sbom.spdx.json
+```
+
+**SBOM in CI/CD Pipeline:**
+```yaml
+# GitHub Actions example
+name: Build with SBOM
+
+jobs:
+  build:
+    steps:
+      - name: Build image with SBOM
+        run: |
+          docker buildx build \
+            --sbom=true \
+            --provenance=true \
+            --tag my-image:${{ github.sha }} \
+            --push \
+            .
+
+      - name: Generate SBOM with Syft
+        run: |
+          syft my-image:${{ github.sha }} -o spdx-json > sbom.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.json
+
+      - name: Scan SBOM for vulnerabilities
+        run: |
+          grype sbom:sbom.json --fail-on high
+```
+
+**SBOM Best Practices:**
+
+1. **Generate for every image:**
+   - Production images: mandatory
+   - Development images: recommended
+   - Base images: critical
+
+2. **Store SBOMs with provenance:**
+   - Version control alongside Dockerfile
+   - Artifact registry with image
+   - Dedicated SBOM repository
+
+3. **Automate SBOM generation:**
+   - Integrate into CI/CD pipeline
+   - Generate on every build
+   - Fail builds if SBOM generation fails
+
+4. **Use SBOM for vulnerability management:**
+```bash
+# Scan SBOM instead of image (faster)
+grype sbom:sbom.json
+trivy sbom sbom.json
+
+# Compare SBOMs between versions
+diff <(syft old-image:1.0 -o json) <(syft new-image:2.0 -o json)
+```
+
+5. **SBOM formats:**
+   - **SPDX:** Industry standard, ISO/IEC 5962:2021
+   - **CycloneDX:** OWASP standard, security-focused
+   - Choose based on compliance requirements
+
+**Chainguard Images with Built-in SBOM:**
+```bash
+# Chainguard images include SBOM attestation by default
+docker buildx imagetools inspect cgr.dev/chainguard/node:latest
+
+# Extract SBOM
+cosign download sbom cgr.dev/chainguard/node:latest > chainguard-node-sbom.json
 ```
 
 **Or use multi-stage and don't include secrets:**

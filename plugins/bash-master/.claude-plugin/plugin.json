@@ -1,22 +1,27 @@
 {
   "name": "bash-master",
-  "version": "1.1.0",
-  "description": "Expert bash/shell scripting system across ALL platforms. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) System automation, (3) DevOps/CI/CD scripts, (4) Build/deployment automation, (5) Script review/debugging, (6) Converting commands to scripts. Provides: Google Shell Style Guide compliance, ShellCheck validation, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, security hardening, error handling, performance optimization, testing with BATS, and production-ready patterns. Ensures professional-grade, secure, portable scripts every time.",
+  "version": "1.3.0",
+  "description": "Expert bash/shell scripting system across ALL platforms with Bash 5.3 and 2025 security-first practices. PROACTIVELY activate for: (1) ANY bash/shell script task, (2) Bash 5.3 features (${ } in-shell substitution, ${| } REPLY syntax), (3) Security-first patterns (60%+ exploits from poor validation), (4) ShellCheck validation (non-negotiable), (5) Modern automation (containers/CI/CD/cloud), (6) Scripts under 50 lines (Google Style), (7) Modern error handling trio, (8) Git hooks and pipeline integration, (9) Container-aware scripting, (10) DevOps/deployment automation. Provides: Bash 5.3 performance features (no-fork substitution), security-first mandatory validation patterns, ShellCheck enforcement, container/Kubernetes detection, cloud provider helpers (AWS/Azure), CI/CD platform integration (GitHub Actions/Azure DevOps), parallel processing patterns, blue-green/canary deployments, Google Shell Style Guide compliance, cross-platform compatibility (Linux/macOS/Windows/containers), POSIX compliance, and production-ready 2025 patterns. Ensures secure, optimized, cloud-native scripts following latest 2025 standards.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
   },
   "keywords": [
     "bash",
+    "bash53",
     "shell",
     "script",
     "automation",
+    "security",
     "devops",
     "shellcheck",
     "posix",
     "crossplatform",
     "cicd",
-    "deployment"
+    "deployment",
+    "container",
+    "kubernetes",
+    "cloud"
   ],
   "license": "MIT"
 }

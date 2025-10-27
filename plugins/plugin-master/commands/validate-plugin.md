@@ -1,60 +1,72 @@
 ---
-description: Validate Claude Code plugin structure, manifests, and configuration files
+description: Comprehensive validation of plugin structure, manifests, and configuration against 2025 standards
 ---
 
-# Validate Plugin Command
+# Validate Plugin
 
-Validate the structure and configuration of a Claude Code plugin to ensure it meets all requirements.
+Systematically validate plugin files against current Claude Code requirements and best practices.
 
-## Usage
+## Purpose
 
-Check plugin files for:
-- Valid plugin.json structure
-- Required fields and proper formatting
-- Correct directory structure
-- Command file format
-- Agent configuration
-- Hook definitions
-- MCP server configs
-- Marketplace compatibility
+Pre-publishing validation that checks plugin.json schema, directory structure, component files, and marketplace compatibility. Identifies errors, warnings, and optimization opportunities.
 
-## Process
+## Instructions
 
-Claude will:
+1. **Locate plugin** - Use current directory or specified path
+2. **Validate plugin.json** (2025 standards):
+   - Required field: `name`
+   - Schema validation: `author` as object, `version` as string, `keywords` as array
+   - Recommended fields: description, license, homepage, repository
+   - Check paths use ${CLAUDE_PLUGIN_ROOT} for portability
+   - Verify MCP servers use proper configuration format
+3. **Check directory structure**:
+   - `.claude-plugin/` contains plugin.json (and optionally .mcp.json)
+   - Component directories (commands/, agents/, skills/) at plugin root
+   - Files properly named (kebab-case, .md extensions)
+   - Hook configuration (hooks/hooks.json or inline in plugin.json)
+4. **Validate components** (2025 features):
+   - Commands have frontmatter with description
+   - Agents have proper frontmatter with capabilities
+   - Agent Skills have SKILL.md with name and description
+   - Hooks have valid event types (PreToolUse, PostToolUse, SessionStart, etc.)
+   - MCP servers reference valid commands and args
+5. **Check 2025 best practices**:
+   - Use of Agent Skills for dynamic knowledge loading
+   - Hooks configured for automated workflows
+   - Environment variables properly used (${CLAUDE_PLUGIN_ROOT})
+   - Repository-level configuration support (.claude/settings.json template)
+6. **Check marketplace.json** if present:
+   - Validate owner structure
+   - Check plugin entries have required fields
+   - Verify source paths are correct (relative paths start with ./)
+   - Confirm descriptions and keywords are synchronized
+7. **Report findings** with severity levels and actionable fixes
 
-1. **Check manifest** - Validate plugin.json syntax and required fields
-2. **Verify structure** - Ensure proper directory layout
-3. **Test components** - Check commands, agents, hooks, MCP configs
-4. **Marketplace check** - Validate marketplace.json if present
-5. **Report issues** - Provide actionable feedback on problems
-6. **Suggest fixes** - Recommend corrections for any issues found
+## Validation Checklist
 
-## Examples
+**Critical (Must Fix):**
+- plugin.json exists and has valid JSON
+- name field present
+- author is object not string
+- version is string not number
+- keywords is array not string
 
-**Validate local plugin:**
-> /validate-plugin in current directory
+**Warnings (Should Fix):**
+- Missing recommended fields (description, license)
+- Inconsistent naming conventions
+- Missing frontmatter in components
 
-**Check specific plugin:**
-> /validate-plugin for my-awesome-plugin
+**Suggestions (Nice to Have):**
+- Add homepage and repository URLs
+- Expand keywords for better discovery
+- Add examples to README
 
-**Pre-publish check:**
-> /validate-plugin before publishing to marketplace
+## Example Usage
 
-## What Gets Checked
+```
+/validate-plugin
+/validate-plugin in plugins/my-plugin
+/validate-plugin before publishing
+```
 
-- **Required files:** `.claude-plugin/plugin.json` exists
-- **JSON syntax:** All JSON files are valid
-- **Required fields:** name, version, description present
-- **Directory structure:** Correct placement of components
-- **Command format:** Markdown files with proper frontmatter
-- **Agent format:** Valid agent definitions
-- **Paths:** Relative paths start with `./`
-- **Environment vars:** Proper use of `${CLAUDE_PLUGIN_ROOT}`
-
-## Output
-
-Validation results showing:
-- ✅ What's correct
-- ⚠️ Warnings (optional improvements)
-- ❌ Errors (must fix before publishing)
-- 💡 Suggestions for enhancement
+Returns structured validation report with pass/fail status.
