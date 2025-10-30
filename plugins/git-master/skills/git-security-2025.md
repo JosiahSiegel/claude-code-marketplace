@@ -1,9 +1,134 @@
 ---
 name: git-security-2025
-description: Git security best practices for 2025 including signed commits, secret scanning, and verification
+description: Git security best practices for 2025 including signed commits, zero-trust workflows, secret scanning, and verification
+---
+
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
 ---
 
 # Git Security Best Practices 2025
+
+## Zero-Trust Security Model (2025 Standard)
+
+**What:** Every developer identity must be authenticated and authorized explicitly. All Git operations are logged, signed, and continuously monitored.
+
+**Core Principles:**
+1. **Never trust, always verify** - Every commit verified
+2. **Least privilege access** - Minimal permissions required
+3. **Continuous monitoring** - All operations logged and audited
+4. **Assume breach** - Defense in depth strategies
+
+### Implementing Zero-Trust for Git
+
+**1. Mandatory Signed Commits:**
+```bash
+# Global requirement
+git config --global commit.gpgsign true
+git config --global tag.gpgsign true
+
+# Enforce via branch protection (GitHub/GitLab/Azure DevOps)
+# Repository Settings → Branches → Require signed commits
+```
+
+**2. Identity Verification:**
+```bash
+# Every commit must verify identity
+git log --show-signature -10
+
+# Reject unsigned commits in CI/CD
+# .github/workflows/verify.yml
+- name: Verify all commits are signed
+  run: |
+    git log --pretty="%H" origin/main..HEAD | while read commit; do
+      if ! git verify-commit "$commit" 2>/dev/null; then
+        echo "ERROR: Unsigned commit $commit"
+        exit 1
+      fi
+    done
+```
+
+**3. Continuous Audit Logging:**
+```bash
+# Enable Git audit trail
+git config --global alias.audit 'log --all --pretty="%H|%an|%ae|%ad|%s|%GK" --date=iso'
+
+# Export audit log
+git audit > git-audit.log
+
+# Monitor for suspicious activity
+git log --author="*" --since="24 hours ago" --pretty=format:"%an %ae %s"
+```
+
+**4. Least Privilege Access:**
+```yaml
+# GitHub branch protection (zero-trust model)
+branches:
+  main:
+    protection_rules:
+      required_pull_request_reviews: true
+      dismiss_stale_reviews: true
+      require_code_owner_reviews: true
+      required_approving_review_count: 2
+      require_signed_commits: true
+      enforce_admins: true
+      restrictions:
+        users: []  # No direct push
+        teams: ["security-team"]
+```
+
+**5. Continuous Monitoring:**
+```bash
+# Monitor all repository changes
+# .github/workflows/security-monitor.yml
+name: Security Monitoring
+on: [push, pull_request]
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for unsigned commits
+        run: git verify-commit HEAD || echo "::warning::Unsigned commit detected"
+
+      - name: Scan for secrets
+        run: gitleaks detect --exit-code 1
+
+      - name: Check commit author
+        run: |
+          AUTHOR=$(git log -1 --format='%an <%ae>')
+          echo "Commit by: $AUTHOR"
+          # Log to SIEM/security monitoring
+```
 
 ## Signed Commits (Mandatory in 2025)
 

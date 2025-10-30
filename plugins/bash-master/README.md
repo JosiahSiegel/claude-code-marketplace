@@ -6,9 +6,11 @@ Empower Claude with comprehensive bash scripting expertise across all platforms 
 
 When installed, Claude becomes an expert in:
 
-### 2025 New Features
-- **Bash 5.3 Features** - In-shell command substitution (${ }), REPLY variable syntax (${| }), enhanced read/source/compgen, GLOBSORT variable
-- **Security-First Patterns** - Mandatory input validation (60%+ exploits from poor validation), injection prevention, path traversal protection
+### 2025 New Features (v1.4.0)
+- **Bash 5.3 Complete** - In-shell command substitution (${ }), REPLY variable syntax (${| }), BASH_TRAPSIG for signal handlers, C23 conformance, GLOBSORT variable
+- **ShellCheck v0.11.0** - Latest rules (SC2327/SC2328/SC2294/SC2295), POSIX.1-2024 compliance, Bash 5.3 support
+- **Security-First 2025** - Mandatory input validation (60%+ exploits from poor validation), HISTFILE protection, absolute path usage, injection prevention
+- **Comprehensive Debugging** - Tracing, profiling, breakpoints, interactive debugging, error recovery, performance analysis
 - **Container-Aware Scripting** - Docker/Kubernetes detection, health checks, PID 1 signal handling, minimal Alpine scripts
 - **Cloud Provider Integration** - AWS/Azure helpers, secrets management (Secrets Manager/Key Vault), cloud-native patterns
 - **Modern CI/CD** - GitHub Actions, Azure DevOps, GitLab CI integration, multi-platform detection
@@ -16,11 +18,12 @@ When installed, Claude becomes an expert in:
 
 ### Core Capabilities
 - **Cross-platform bash scripting** - Linux, macOS, Windows (Git Bash/WSL), containers
-- **Industry best practices** - Google Shell Style Guide (50-line scripts), ShellCheck mandatory validation
-- **POSIX compliance** - Portable scripts that work everywhere
+- **Industry best practices** - Google Shell Style Guide (50-line scripts), ShellCheck v0.11.0 mandatory validation
+- **POSIX.1-2024 compliance** - Latest POSIX standard support, portable scripts that work everywhere
 - **Performance optimization** - Bash 5.3 no-fork substitution (~40% faster), built-in optimizations
+- **Debugging & Troubleshooting** - Comprehensive tracing, profiling, breakpoints, and error recovery techniques
 - **Testing** - Unit testing with BATS, integration testing, CI/CD integration
-- **Error handling** - Robust error management (set -euo pipefail), exit codes, trap handlers
+- **Error handling** - Robust error management (set -euo pipefail), exit codes, trap handlers with BASH_TRAPSIG
 
 ## 📦 Installation
 
@@ -46,17 +49,20 @@ unzip bash-master.zip -d ~/.local/share/claude/plugins/
 
 This plugin includes comprehensive bash-master skills that teach Claude:
 
-1. **Bash 5.3 Features (2025)**
-   - In-shell command substitution (${ command; })
+1. **Bash 5.3 Features (2025) - Complete**
+   - In-shell command substitution (${ command; }) - runs in current shell context
    - REPLY variable substitution (${| command; })
+   - BASH_TRAPSIG variable for signal handlers (know which signal triggered trap)
    - Enhanced read builtin with -E option (readline support)
    - Enhanced source builtin with -p PATH option
    - compgen variable output option
    - GLOBSORT variable for sorting glob results
    - fltexpr loadable builtin for floating-point arithmetic
+   - C23 language standard conformance
    - Performance improvements (~40% faster in benchmarks)
+   - Latest stable version (no Bash 5.4 as of October 2025)
 
-2. **Security-First Patterns (2025)**
+2. **Security-First Patterns (2025 Enhanced)**
    - Mandatory input validation (pattern matching, length checks)
    - Command injection prevention (no eval, array usage, -- separator)
    - Path traversal protection (sanitization, validation)
@@ -64,6 +70,8 @@ This plugin includes comprehensive bash-master skills that teach Claude:
    - Secrets management (no hardcoding, cloud secret managers)
    - Privilege management (least privilege, root rejection)
    - Environment variable sanitization
+   - **HISTFILE protection** (disable history for credential operations)
+   - **Absolute path usage** (prevent PATH hijacking attacks)
    - Automated security scanning patterns
 
 3. **Modern Automation Patterns (2025)**
@@ -75,7 +83,10 @@ This plugin includes comprehensive bash-master skills that teach Claude:
    - Deployment patterns (blue-green, canary)
    - Structured logging (JSON logs)
 
-4. **ShellCheck CI/CD Integration (2025)**
+4. **ShellCheck v0.11.0 CI/CD Integration (2025)**
+   - **Latest version (August 2025)** with Bash 5.3 support
+   - **New rules**: SC2327/SC2328 (capture groups), SC2294 (eval arrays), SC2295 (quote expansions)
+   - **POSIX.1-2024 compliance** (SC3013 removed - operators now standard)
    - Mandatory validation in pipelines
    - GitHub Actions integration patterns
    - Azure DevOps integration patterns
@@ -91,7 +102,17 @@ This plugin includes comprehensive bash-master skills that teach Claude:
    - Container environments (Docker, Kubernetes)
    - Cross-platform compatibility patterns
 
-6. **Best Practices & Standards**
+6. **Debugging & Troubleshooting (2025 New)**
+   - Debug mode techniques (set -x, PS4 customization)
+   - Execution time profiling and performance analysis
+   - Function call tracing and variable inspection
+   - Trap-based error handlers with stack traces
+   - Dry-run mode and rollback on failure
+   - Interactive breakpoints for debugging
+   - Common issue patterns and solutions
+   - Structured logging and log rotation
+
+7. **Best Practices & Standards**
    - Script structure templates (with 2025 standards)
    - Safety settings (set -euo pipefail)
    - Naming conventions and style guidelines
@@ -213,10 +234,11 @@ Claude will analyze using knowledge of:
 
 The plugin includes comprehensive reference documentation:
 
-- **bash-53-features.md** - Complete Bash 5.3 feature guide with examples
-- **security-first-2025.md** - Security-first patterns and mandatory validation
+- **bash-53-features.md** - Complete Bash 5.3 feature guide (BASH_TRAPSIG, C23, all features)
+- **security-first-2025.md** - Security-first patterns (HISTFILE, absolute paths, validation)
 - **modern-automation-patterns.md** - Container, cloud, and CI/CD patterns
-- **shellcheck-cicd-2025.md** - ShellCheck integration for 2025 workflows
+- **shellcheck-cicd-2025.md** - ShellCheck v0.11.0 integration with latest rules
+- **debugging-troubleshooting-2025.md** - **NEW** Comprehensive debugging techniques
 - **platform_specifics.md** - Detailed platform differences and workarounds
 - **best_practices.md** - Industry standards and comprehensive guidelines
 - **patterns_antipatterns.md** - Common patterns and pitfalls with solutions
@@ -249,14 +271,15 @@ Every script Claude creates with this plugin will:
 
 This plugin teaches Claude to use and recommend:
 
-- **Bash 5.3** - Latest bash features (July 2025)
-- **ShellCheck** - Static analysis for shell scripts (mandatory in 2025)
+- **Bash 5.3** - Latest bash features (July 2025, no 5.4 yet)
+- **ShellCheck v0.11.0** - Latest static analysis (August 2025, mandatory)
+- **POSIX.1-2024** - Latest POSIX standard compliance
 - **shfmt** - Shell script formatter
 - **BATS** - Bash Automated Testing System
 - **checkbashisms** - POSIX compliance checker
 - **Google Shell Style Guide** - Industry-standard practices (50-line recommendation)
-- **POSIX standards** - Portable scripting
 - **Security scanners** - Custom security linting patterns
+- **Debugging tools** - Tracing, profiling, and troubleshooting utilities
 
 ## 🤝 Contributing
 

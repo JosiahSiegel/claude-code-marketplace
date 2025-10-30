@@ -1,13 +1,51 @@
 ---
 name: git-2025-features
-description: Git 2.47+ features including reftables, sparse-checkout, partial clone, and worktrees
+description: Git 2.49+ features including reftables, sparse-checkout, partial clone, git-backfill, and worktrees
+---
+
+**📌 NOTE:** For detailed Git 2.49+ features (git-backfill, path-walk API, zlib-ng), see git-2-49-features.md skill.
+
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
 ---
 
 # Git 2025 Features - Advanced Capabilities
 
-## Git 2.48 (Released January 2025)
+## Git 2.49 (March 2025) - Latest
 
-### Reftables Migration
+**Major additions:** git-backfill, path-walk API, zlib-ng performance, improved delta compression.
+
+**See git-2-49-features.md for complete coverage.**
+
+## Git 2.48-2.49 Features
+
+### Reftables Migration (Completed in 2.48)
 
 **What:** New reference storage format replacing loose ref files and packed-refs.
 
@@ -15,7 +53,7 @@ description: Git 2.47+ features including reftables, sparse-checkout, partial cl
 - Faster ref operations (50-80% improvement)
 - Atomic ref updates
 - Better scalability for repositories with many refs
-- Reflogs now fully migratable
+- Reflogs fully migratable (completed in 2.48)
 
 **Migration:**
 
@@ -40,13 +78,21 @@ git refs migrate --ref-storage=files
 - CI/CD systems creating many temporary refs
 - Monorepos with extensive branching
 
-### Memory Leak Free Milestone
+### Performance Milestones (2.48-2.49)
 
-Git 2.48 achieved memory leak free status. Benefit automatically in long-running operations:
+**Git 2.48:**
+- Memory leak free status achieved
+- Stable memory usage in long-running operations
 
+**Git 2.49:**
+- zlib-ng integration: 20-30% faster compression
+- Path-walk API: 50-70% better delta compression
+- New name-hashing algorithm for optimal packfiles
+
+Benefits automatically in:
 - Large repository clones
 - Extended rebase sessions
-- Bulk operations (filter-repo, GC)
+- Bulk operations (filter-repo, GC, repack)
 
 ## Sparse-Checkout (Enhanced in 2.48)
 

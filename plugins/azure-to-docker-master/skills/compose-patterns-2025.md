@@ -1,3 +1,32 @@
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+---
+
+
 # Docker Compose Patterns for Production (2025)
 
 ## Overview
@@ -6,7 +35,7 @@ This skill documents production-ready Docker Compose patterns and best practices
 
 ## File Format Changes (2025)
 
-**IMPORTANT:** The `version` field is now **obsolete** in Docker Compose v2.40+.
+**IMPORTANT:** The `version` field is now **obsolete** in Docker Compose v2.42+.
 
 **Correct (2025):**
 ```yaml
@@ -827,5 +856,5 @@ docker compose up --force-recreate service-name
 ## References
 
 - [Docker Compose Documentation](https://docs.docker.com/compose/)
-- [Compose v2.40+ Release Notes](https://github.com/docker/compose/releases)
+- [Compose v2.42+ Release Notes](https://github.com/docker/compose/releases)
 - [Best Practices](https://docs.docker.com/compose/how-tos/production/)

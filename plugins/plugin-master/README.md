@@ -10,11 +10,13 @@ This plugin teaches Claude how to create plugins with 2025 features:
 
 - **Autonomous plugin generation** - Creates complete structures with sensible defaults
 - **Latest documentation fetching** - Always uses current Claude Code specifications
-- **2025 features** - Agent Skills, hooks, MCP integration, repository configuration
-- **Best practices** - Applies proven patterns automatically
-- **All component types** - Commands, agents, Agent Skills, hooks (PreToolUse/PostToolUse/SessionStart), MCP servers
+- **Progressive disclosure** - Agent Skills with three-tier loading (frontmatter → body → linked files)
+- **Comprehensive hooks** - Nine event types for workflow automation
+- **Context efficiency** - Unbounded capacity through filesystem retrieval
+- **All component types** - Commands, agents, Agent Skills, hooks, MCP servers
+- **Testing automation** - Built-in validation and cross-platform testing
 - **Team distribution** - Repository-level configuration (.claude/settings.json)
-- **Context efficiency** - Agent Skills for dynamic knowledge loading
+- **Portability** - ${CLAUDE_PLUGIN_ROOT} for cross-platform paths
 - **GitHub-ready outputs** - Marketplace structures ready for publishing
 
 ## 📦 Installation
@@ -109,50 +111,23 @@ Every plugin Claude creates includes:
 ### `/plugin-master:create-plugin`
 Create a comprehensive Claude Code plugin with 2025 features (Agent Skills, hooks, MCP, repository config).
 
-**Example:**
-```
-/plugin-master:create-plugin for Git workflow automation
-```
-
 ### `/plugin-master:generate-plugin`
 Generate a complete, production-ready plugin with all 2025 capabilities.
 
-**Example:**
-```
-/plugin-master:generate-plugin
-```
-
-### `/plugin-master:setup-repo-plugins`
-Configure repository-level automatic plugin installation for team standardization.
-
-**Example:**
-```
-/plugin-master:setup-repo-plugins
-```
-
-### `/plugin-master:plugin-guide`
-Get comprehensive guidance on creating Claude Code plugins with 2025 features.
-
-**Example:**
-```
-/plugin-master:plugin-guide
-```
-
-### `/plugin-master:publish-plugin`
-Prepare and publish Claude Code plugins to GitHub marketplaces with complete documentation.
-
-**Example:**
-```
-/plugin-master:publish-plugin
-```
+### `/plugin-master:test-plugin`
+Test plugin structure, validation, and cross-platform functionality before publishing.
 
 ### `/plugin-master:validate-plugin`
 Validate plugin structure, manifests, and configuration files against 2025 standards.
 
-**Example:**
-```
-/plugin-master:validate-plugin
-```
+### `/plugin-master:publish-plugin`
+Prepare and publish Claude Code plugins to GitHub marketplaces with complete documentation.
+
+### `/plugin-master:setup-repo-plugins`
+Configure repository-level automatic plugin installation for team standardization.
+
+### `/plugin-master:plugin-guide`
+Get comprehensive guidance on creating Claude Code plugins with 2025 features.
 
 ## 🤖 Available Agents
 
@@ -248,23 +223,24 @@ This plugin includes comprehensive documentation:
 ## 🔍 Technical Details
 
 **Plugin Name:** plugin-master
-**Version:** 2.0.0
+**Version:** 2.1.0
 **Author:** Josiah Siegel
 **License:** MIT
 **Repository:** https://github.com/JosiahSiegel/claude-code-marketplace
 
 **Components:**
-- 6 slash commands (including repository config)
+- 7 slash commands (create, generate, test, validate, publish, setup, guide)
 - 1 specialized agent (plugin-architect)
 - 2 comprehensive skills (plugin-master + advanced-features-2025)
 
-**New in 2.0.0:**
-- Agent Skills support and documentation
-- Hooks system for automated workflows
-- MCP server integration guidance
-- Repository-level configuration command
-- 2025 best practices throughout
-- Context-optimized skill structure
+**New in 2.1.0:**
+- Plugin testing command with automated validation
+- Progressive disclosure patterns for Agent Skills
+- Unbounded capacity context strategies
+- Nine hook event types documented
+- Enhanced portability guidelines with ${CLAUDE_PLUGIN_ROOT}
+- Evaluation-driven skill development practices
+- Structural scalability patterns
 
 ## 🤝 Contributing
 

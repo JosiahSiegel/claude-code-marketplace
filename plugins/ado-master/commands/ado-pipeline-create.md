@@ -2,6 +2,36 @@
 description: Create Azure DevOps YAML pipelines following current best practices and industry standards
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Create Azure DevOps Pipeline
 
 ## Purpose
@@ -18,10 +48,10 @@ Before creating any pipeline, search for and review:
 4. Latest task versions and deprecation notices
 
 **Essential resources to check:**
-- https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/
-- https://learn.microsoft.com/en-us/azure/devops/pipelines/security/overview
-- https://learn.microsoft.com/en-us/azure/devops/pipelines/process/tasks
-- Azure DevOps release notes for latest features
+- [YAML Schema](https://learn.microsoft.com/azure/devops/pipelines/yaml-schema/)
+- [Security Overview](https://learn.microsoft.com/azure/devops/pipelines/security/overview)
+- [Tasks Documentation](https://learn.microsoft.com/azure/devops/pipelines/process/tasks)
+- [Azure DevOps Release Notes](https://learn.microsoft.com/azure/devops/release-notes/)
 
 ## Pipeline Creation Process
 

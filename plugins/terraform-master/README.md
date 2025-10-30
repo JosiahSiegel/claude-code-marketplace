@@ -86,9 +86,12 @@ Complete Terraform expertise system for Claude Code. Provides comprehensive infr
 
 ### OpenTofu Alternative (2025)
 - **Open-Source Fork**: MPL 2.0 licensed, Linux Foundation governance
+- **Latest Stable**: OpenTofu 1.10.6 (Beta: 1.11.0-beta1)
 - **Built-in State Encryption**: Client-side encryption without cloud costs
 - **Enhanced Import Blocks**: Loop-able imports with for_each (1.7+)
 - **Early Variable Evaluation**: Use variables in terraform blocks and module sources (1.8+)
+- **OpenTofu 1.10**: OCI Registry support, native S3 locking (no DynamoDB), OpenTelemetry tracing
+- **OpenTofu 1.11** (Beta): Ephemeral resources, enabled meta-argument for conditional deployment
 - **100% Compatible**: Drop-in replacement for Terraform 1.5.x
 - **Fast Migration**: < 1 hour for most projects, no code changes required
 
@@ -111,14 +114,21 @@ Complete Terraform expertise system for Claude Code. Provides comprehensive infr
 - **NIST SP 800-53 Rev 5 Policies**: 350+ pre-written Sentinel policies for government compliance
 - **Enhanced Checkov**: 750+ policies covering CIS, GDPR, PCI-DSS, HIPAA standards
 
+### Policy-as-Code & Governance (2025)
+- **Sentinel Policies**: NIST SP 800-53 Rev 5 compliance with 350+ pre-written policies
+- **Open Policy Agent (OPA)**: Rego policy language with conftest integration
+- **Checkov**: 750+ policies for CIS, GDPR, PCI-DSS, HIPAA compliance
+- **Private Registry**: Module lifecycle management, revoke compromised modules, no-code provisioning
+- **No-Code Provisioning**: Self-service infrastructure for non-technical users with curated modules
+
 ### Provider Updates
 - **AzureRM 4.x**: Latest stable with 1,101+ resources, 360+ data sources
-- **AWS 6.0 (GA)**: Multi-region support, bucket_region attribute, service deprecations
+- **AWS 6.0 (GA)**: Multi-region support, bucket_region attribute, service deprecations (CloudWatch Evidently EOL Oct 2025, MediaStore EOL Nov 2025)
 - **GCP 6.x**: Incremental improvements and new services
 
 ## Components
 
-### Slash Commands (17 Total)
+### Slash Commands (19 Total)
 
 #### `/terraform-master:tf-init`
 Initialize Terraform projects with best practices and platform-specific guidance.
@@ -165,11 +175,17 @@ Comprehensive state management including move, remove, inspect, backup, recovery
 #### `/terraform-master:tf-cli`
 Complete Terraform CLI reference with all commands, flags, options, and advanced usage patterns including -chdir, environment variables, and platform-specific examples.
 
-#### `/terraform-master:tf-test` ⭐ NEW
+#### `/terraform-master:tf-test`
 Comprehensive testing with Terraform 1.6+ test framework, Terratest integration, unit/integration testing, TDD/BDD patterns, and CI/CD test reporting.
 
 #### `/terraform-master:tf-stacks`
 Terraform Stacks for multi-deployment orchestration with Linked Stacks, deployment management, and HCP Terraform integration.
+
+#### `/terraform-master:tf-policy` ⭐ NEW
+Policy-as-code governance with Sentinel, Open Policy Agent (OPA), and Checkov. Implement NIST SP 800-53 Rev 5 compliance (350+ policies), cost control, security enforcement, and CI/CD policy integration.
+
+#### `/terraform-master:tf-registry` ⭐ NEW
+Private module registry setup, module lifecycle management, no-code provisioning enablement, and enterprise module governance with terraform-docs and testing integration.
 
 ### Terraform Expert Agent
 
@@ -335,17 +351,19 @@ Steps:
 
 ## Version Compatibility (2025)
 
-- **Terraform**: 1.0+ (1.6+ for testing, 1.10+ for ephemeral values, 1.11+ for JUnit XML, 1.14+ for latest features)
-- **OpenTofu**: 1.6+ (1.7+ for loop-able imports and state encryption, 1.8+ for early variable evaluation)
+- **Terraform**: 1.0+ (1.6+ for testing, 1.10+ for ephemeral values, 1.11+ for JUnit XML, 1.14+ for actions/query)
+- **OpenTofu**: 1.6+ (1.10+ for OCI registry and S3 locking, 1.11+ beta for ephemeral resources and enabled meta-argument)
 - **Providers**:
   - **AzureRM**: 4.x recommended (3.x supported), 1,101+ resources, 360+ data sources
-  - **AWS**: 6.0 GA (multi-region support, breaking changes), 5.x still supported
+  - **AWS**: 6.0 GA (multi-region support, service EOLs), 5.x still supported
   - **GCP**: 5.x/6.x recommended
 - **HCP Terraform**: Stacks (GA 2025), Linked Stacks, Module Lifecycle Management, HYOK, Private VCS Access
 - **Platforms**: Windows, Linux, macOS
 - **CI/CD**: Azure DevOps, GitHub Actions, GitLab CI, Jenkins
 - **Testing**: terraform test (1.6+), Terratest (Go), JUnit XML (1.11+)
 - **Security Tools**: Trivy (recommended - replaces tfsec), Checkov, Terrascan, Sentinel
+- **Policy Frameworks**: Sentinel (HCP Terraform), Open Policy Agent (OPA), Checkov
+- **Module Registry**: HCP Terraform, Terraform Enterprise, Citizen (open source)
 
 ## Documentation Resources (2025)
 
@@ -366,6 +384,49 @@ Steps:
 Part of the Claude Code Marketplace.
 
 ## Changelog
+
+### Version 1.6.0 (2025)
+
+**Major New Features:**
+- **Policy-as-Code Framework**: Complete policy governance with Sentinel, OPA, and Checkov
+  - NIST SP 800-53 Rev 5 policies (350+ controls)
+  - Compliance validation (CIS, GDPR, PCI-DSS, HIPAA)
+  - Pre-commit and CI/CD integration
+  - New command: `/tf-policy`
+- **Private Module Registry**: Enterprise module distribution and governance
+  - Module lifecycle management (revoke compromised modules)
+  - No-code provisioning for self-service infrastructure
+  - Module curation and approval workflows
+  - terraform-docs integration
+  - New command: `/tf-registry`
+- **OpenTofu 1.10/1.11 Features**: Latest OpenTofu capabilities
+  - OCI Registry support for module distribution
+  - Native S3 locking (no DynamoDB required)
+  - Ephemeral resources (1.11 beta)
+  - Enabled meta-argument for conditional resources
+  - OpenTelemetry tracing for observability
+- **Terraform 1.14 Features**: Enhanced with actions and query
+  - Actions blocks for imperative operations
+  - Query command for infrastructure discovery
+  - Lifecycle action triggers
+- **AWS Provider 6.0 GA**: Updated breaking changes documentation
+  - Multi-region support details
+  - Service deprecations (CloudWatch Evidently, MediaStore)
+  - Redshift public accessibility changes
+
+**Agent Enhancements:**
+- Added OpenTofu 1.10/1.11 features section with examples
+- Added Terraform 1.14 actions and query command expertise
+- Added policy-as-code mastery section
+- Added private registry and no-code provisioning guidance
+- Updated proactive behavior with 5 new activation scenarios
+- Enhanced version-specific knowledge through OpenTofu 1.11 and Terraform 1.14
+
+**Documentation Updates:**
+- README: Added policy-as-code and registry highlights
+- README: Updated OpenTofu to 1.10/1.11 versions
+- README: Added no-code provisioning patterns
+- Command count: 17 → 19 total commands
 
 ### Version 1.5.0 (2025)
 

@@ -2,6 +2,36 @@
 description: Extract Azure infrastructure and generate Docker Compose stack for local development
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Extract Azure Infrastructure to Docker Compose
 
 ## Purpose
@@ -11,7 +41,7 @@ Analyze existing Azure infrastructure and generate a complete Docker Compose sta
 
 **Required tools:**
 - Azure CLI (`az`) installed and configured
-- Docker Desktop 4.38+ with Compose v2.40+
+- Docker Desktop 4.40+ with Compose v2.42+
 - Sufficient local resources (minimum 8GB RAM for full Azure stack)
 
 **Azure access:**
@@ -203,13 +233,13 @@ Use this mapping table:
 |---------------|--------------|---------------------|
 | App Service (Windows) | Custom build | Extract runtime stack from config |
 | App Service (Linux) | Custom build | Use specified container image |
-| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-RC0` | Use Developer edition |
+| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-latest` | Use Developer edition |
 | PostgreSQL Flexible Server | `postgres:16-alpine` | Match version from Azure |
 | MySQL Flexible Server | `mysql:8.4` | Match version from Azure |
 | Redis Cache | `redis:7.4-alpine` | Configure persistence |
 | Storage Account (Blob/Queue/Table) | `mcr.microsoft.com/azure-storage/azurite` | All storage types in one |
 | Cosmos DB | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator` | NoSQL emulator |
-| Service Bus | Custom or `rabbitmq:3.13-alpine` | Limited emulator support |
+| Service Bus | Custom or `rabbitmq:3.14-alpine` | Limited emulator support |
 | Application Insights | `jaegertracing/all-in-one` | OpenTelemetry compatible |
 
 ## Step 5: Generate Docker Compose Structure
@@ -289,7 +319,7 @@ service-name:
 **For Azure SQL Database:**
 ```yaml
 sqlserver:
-  image: mcr.microsoft.com/mssql/server:2025-RC0
+  image: mcr.microsoft.com/mssql/server:2025-latest
   environment:
     - ACCEPT_EULA=Y
     - MSSQL_PID=Developer

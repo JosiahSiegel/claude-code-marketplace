@@ -2,6 +2,36 @@
 description: Run Vitest tests in Browser Mode using Playwright (Vitest 4.0+)
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Browser Mode Testing
 
 ## Purpose
@@ -10,10 +40,11 @@ Run Vitest tests in a real browser environment using Playwright, providing acces
 ## Overview
 
 **What is Browser Mode?**
-- Vitest 4.0+ feature (stable as of October 2025)
+- Vitest 4.0 feature (STABLE as of October 2025)
 - Uses Playwright to run tests in real browsers (Chromium, Firefox, WebKit)
 - Changes the test environment from Node.js to browser
 - NOT a replacement for E2E tools - still unit/integration testing
+- Introduced in Vitest 3.x, stabilized in Vitest 4.0
 
 **When to Use:**
 - Testing browser-specific APIs (Canvas, WebGL, localStorage, etc.)

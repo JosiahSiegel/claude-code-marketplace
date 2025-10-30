@@ -1,7 +1,7 @@
 {
   "name": "terraform-master",
-  "version": "1.5.0",
-  "description": "Complete Terraform and OpenTofu expertise system for all cloud providers with 2025 features. PROACTIVELY activate for: (1) ANY Terraform/OpenTofu task, (2) Testing with terraform test framework (1.6+) and Terratest, (3) OpenTofu migration and state encryption, (4) Terraform Stacks (GA) with Linked Stacks, (5) AWS Provider 6.0 breaking changes, (6) Ephemeral values and write-only arguments (1.10+), (7) Private VCS access, (8) NIST SP 800-53 Rev 5 compliance (350+ policies), (9) Multi-environment architecture, (10) State management and resource import. Provides: Comprehensive testing guidance (unit/integration/TDD), OpenTofu expertise (state encryption, loop-able imports, variable evaluation), Terraform Stacks orchestration, Linked Stacks dependencies, version-aware code generation, AWS 6.0 migration guidance, Trivy security scanning, CLI mastery, and 2025 industry best practices across Windows, Linux, and macOS. Ensures enterprise-ready, compliant, scalable infrastructure with comprehensive testing coverage.",
+  "version": "1.6.0",
+  "description": "Complete Terraform and OpenTofu expertise system for all cloud providers with 2025 features. PROACTIVELY activate for: (1) ANY Terraform/OpenTofu task, (2) Policy-as-code with Sentinel/OPA/Checkov (NIST SP 800-53 Rev 5, 350+ policies), (3) Private module registry and no-code provisioning, (4) OpenTofu 1.10/1.11 (OCI registry, ephemeral resources, enabled meta-argument), (5) Terraform 1.14 (actions blocks, query command), (6) Testing with terraform test framework (1.6+) and Terratest, (7) Terraform Stacks (GA) with Linked Stacks, (8) AWS Provider 6.0 GA breaking changes, (9) Module lifecycle management (revoke compromised modules), (10) Multi-environment architecture and state management. Provides: Policy-as-code governance (Sentinel/OPA/Checkov), private registry setup, no-code provisioning patterns, OpenTofu 1.10/1.11 features (native S3 locking, ephemeral resources), Terraform 1.14 actions/query, comprehensive testing (unit/integration/TDD), module governance, version-aware code generation, AWS 6.0 migration guidance, Trivy security scanning, CLI mastery, and 2025 industry best practices across Windows, Linux, and macOS. Ensures enterprise-ready, compliant, scalable, governed infrastructure with policy enforcement and self-service capabilities.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
@@ -9,6 +9,7 @@
   "license": "MIT",
   "keywords": [
     "terraform",
+    "opentofu",
     "infrastructure",
     "iac",
     "azure",
@@ -27,6 +28,14 @@
     "import",
     "state-management",
     "cli",
-    "chdir"
+    "chdir",
+    "policy",
+    "sentinel",
+    "opa",
+    "checkov",
+    "registry",
+    "no-code",
+    "governance",
+    "compliance"
   ]
 }

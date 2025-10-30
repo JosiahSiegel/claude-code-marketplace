@@ -5,7 +5,7 @@ description: PowerShell 7.5 new features and cmdlets built on .NET 9
 
 # PowerShell 7.5 New Features
 
-PowerShell 7.5.4 (latest stable, October 2025) built on .NET 9.0.306 with significant performance and memory enhancements.
+PowerShell 7.5 GA (General Availability: January 2025) - Latest stable version 7.5.4 (October 2025) built on .NET 9.0.306 with significant performance and memory enhancements.
 
 ## New Cmdlets
 
@@ -223,6 +223,64 @@ Measure-Command {
 # PowerShell 7.5 uses 15-20% less memory on average
 ```
 
+## PSResourceGet 1.1.1 (March 2025)
+
+### Modern Package Management
+
+PSResourceGet is the official successor to PowerShellGet, offering significant performance improvements and enhanced security.
+
+**Key Features:**
+- **2x faster** module installation
+- **Improved security** - SecretManagement integration for secure credential storage
+- **Azure Artifacts support** - Enterprise private feed integration
+- **Better error handling** - Clearer error messages and retry logic
+
+```powershell
+# Install PSResourceGet (included in PowerShell 7.4+)
+Install-Module -Name Microsoft.PowerShell.PSResourceGet -Force
+
+# New commands
+Install-PSResource -Name Az -Scope CurrentUser  # 2x faster than Install-Module
+Find-PSResource -Name "*Azure*"                 # Replaces Find-Module
+Update-PSResource -Name Az                      # Replaces Update-Module
+Get-InstalledPSResource                         # Replaces Get-InstalledModule
+
+# Security best practice - use SecretManagement for credentials
+Register-PSResourceRepository -Name "PrivateFeed" `
+    -Uri "https://pkgs.dev.azure.com/org/project/_packaging/feed/nuget/v3/index.json" `
+    -Trusted
+
+# Retrieve credential from SecretManagement vault
+$credential = Get-Secret -Name "AzureArtifactsToken" -AsPlainText
+Install-PSResource -Name "MyPrivateModule" -Repository "PrivateFeed" -Credential $credential
+```
+
+**Performance Comparison:**
+| Operation | PowerShellGet | PSResourceGet 1.1.1 | Improvement |
+|-----------|--------------|---------------------|-------------|
+| Install module | 10-15s | 5-7s | 2x faster |
+| Search modules | 3-5s | 1-2s | 2-3x faster |
+| Update module | 12-18s | 6-9s | 2x faster |
+
+**Security Enhancements:**
+- Never use plaintext credentials in scripts
+- Use SecretManagement module for storing repository credentials
+- Support for Azure DevOps Personal Access Tokens (PAT)
+- Integrated authentication with Azure Artifacts
+
+```powershell
+# WRONG - plaintext credential
+$cred = New-Object PSCredential("user", (ConvertTo-SecureString "password" -AsPlainText -Force))
+
+# CORRECT - SecretManagement
+Install-Module Microsoft.PowerShell.SecretManagement
+Register-SecretVault -Name LocalVault -ModuleName Microsoft.PowerShell.SecretStore
+Set-Secret -Name "RepoToken" -Secret "your-token"
+
+$token = Get-Secret -Name "RepoToken" -AsPlainText
+Install-PSResource -Name "Module" -Repository "Feed" -Credential $token
+```
+
 ## Migration from PowerShell 7.4
 
 ### Check Version
@@ -235,6 +293,10 @@ $PSVersionTable.PSVersion
 # .NET version
 [System.Runtime.InteropServices.RuntimeInformation]::FrameworkDescription
 # .NET 9.0.306
+
+# PSResourceGet version
+Get-Module Microsoft.PowerShell.PSResourceGet -ListAvailable
+# Version 1.1.1 (latest as of March 2025)
 ```
 
 ### Update Scripts for 7.5

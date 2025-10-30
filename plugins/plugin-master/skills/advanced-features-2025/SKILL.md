@@ -4,6 +4,36 @@ description: "Complete guide to 2025 Claude Code plugin features: Agent Skills, 
 license: MIT
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Advanced Plugin Features (2025)
 
 Comprehensive guide to cutting-edge Claude Code plugin capabilities introduced in 2025.
@@ -11,14 +41,15 @@ Comprehensive guide to cutting-edge Claude Code plugin capabilities introduced i
 ## Agent Skills
 
 **What are Agent Skills?**
-Skills that Claude autonomously invokes based on task context, enabling dynamic knowledge loading and context-efficient workflows.
+Skills that Claude autonomously invokes based on task context, enabling dynamic knowledge loading and context-efficient workflows through progressive disclosure architecture.
 
-### Key Characteristics
+### Key Characteristics (2025)
 
 - **Automatic Discovery**: Skills are discovered from `skills/` directory upon plugin installation
 - **Context-Driven**: Claude loads Skills only when relevant to the current task
-- **Structured Format**: Each skill is a directory containing `SKILL.md` with metadata
-- **Dynamic Loading**: Reduces context usage by loading knowledge on-demand
+- **Progressive Disclosure**: Three-tier information structure (frontmatter → SKILL.md body → linked files)
+- **Dynamic Loading**: Reduces context usage by loading only necessary components
+- **Unbounded Capacity**: With filesystem access, agents can bundle effectively unlimited content
 
 ### Creating Agent Skills
 
@@ -57,7 +88,23 @@ Concrete usage patterns
 Proven approaches and patterns
 ```
 
-### Agent Skills Best Practices
+### Agent Skills Best Practices (2025)
+
+**Evaluation-Driven Development:**
+- Start by identifying capability gaps through representative tasks
+- Observe where agents struggle, then build skills addressing specific shortcomings
+- Avoid anticipating needs upfront - respond to actual failures
+
+**Structural Scalability:**
+- When SKILL.md becomes unwieldy, split content into separate files and reference them
+- Keep mutually exclusive contexts in distinct paths to reduce token consumption
+- Code should serve dual purposes: executable tools AND documentation
+- Split large skills into focused components as needed
+
+**Iterative Refinement:**
+- Collaborate with Claude during development
+- Ask Claude to capture successful approaches into reusable context
+- Request self-reflection on failure modes to reveal actual information needs
 
 **DO:**
 - Use descriptive, action-oriented names
@@ -65,31 +112,35 @@ Proven approaches and patterns
 - Include concrete examples and code snippets
 - Organize content with clear headers for scanning
 - Keep individual skills focused on single domains
-- Add related resources and documentation links
 
 **DON'T:**
 - Create overly broad skills that cover too many topics
 - Duplicate content across multiple skills
 - Skip the frontmatter metadata
 - Use generic descriptions that don't specify activation scenarios
-- Include outdated or deprecated information
 
-### Context Efficiency Strategy
+### Context Efficiency Strategy (2025)
 
-Agent Skills save context by:
-1. **Lazy Loading**: Only loaded when task matches activation criteria
-2. **Focused Scope**: Each skill covers specific domain/capability
-3. **Structured Content**: Headers enable Claude to scan efficiently
-4. **Dynamic Invocation**: Claude decides when skills are needed
+Agent Skills achieve unbounded capacity through:
+
+1. **Progressive Disclosure**: Three-tier structure (frontmatter loaded at startup → SKILL.md body when determining relevance → additional files only when needed)
+2. **Lazy Loading**: Only loaded when task matches activation criteria
+3. **Filesystem Retrieval**: With code execution capabilities, agents retrieve only necessary components instead of loading entire skills
+4. **Focused Scope**: Each skill covers specific domain/capability
+5. **Structured Content**: Headers enable Claude to scan efficiently
+6. **Optimized Metadata**: Name and description fields directly influence triggering accuracy
 
 **Example Activation Pattern:**
 ```
 User task: "Deploy to production"
-→ Claude identifies deployment context
-→ Auto-loads deployment-workflows skill
-→ Applies knowledge to task
-→ Unloads when not needed
+→ Claude scans skill metadata (frontmatter only)
+→ Identifies deployment-workflows skill as relevant
+→ Loads SKILL.md body to confirm match
+→ Retrieves only needed sections/files
+→ Unloads when task complete
 ```
+
+**Result**: Effectively unlimited bundled content without context window constraints.
 
 ## Hooks
 

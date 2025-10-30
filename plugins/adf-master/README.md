@@ -1,6 +1,6 @@
 # adf-master
 
-Complete Azure Data Factory expertise system for ALL platforms and deployment methods.
+Complete Azure Data Factory expertise system for ALL platforms, deployment methods, and Microsoft Fabric integration (2025).
 
 ## Overview
 
@@ -39,6 +39,8 @@ The **adf-master** plugin provides comprehensive Azure Data Factory expertise, c
 - **Automatic violation detection** - Immediately identifies and rejects invalid configurations
 - **Execute Pipeline workarounds** - Provides valid alternatives for complex nesting scenarios
 - **Popular connector mastery** - Deep knowledge of Azure Blob Storage, SQL Database requirements and pitfalls
+
+- **Microsoft Fabric Integration (2025)**: ADF mounting, cross-workspace orchestration, OneLake connectivity, Variable Libraries
 
 ### 🚀 CI/CD Automation
 - **Modern Automated CI/CD** using `@microsoft/azure-data-factory-utilities` v1.0.3+
@@ -508,6 +510,31 @@ For plugin-specific issues:
   - Your environment (Node.js version, platform, etc.)
 
 ## Version History
+
+### 3.2.0 (January 2025) **[2025 FABRIC INTEGRATION UPDATE]**
+- **🆕 NEW COMMAND: /adf-master:adf-fabric-integration**
+  - ADF mounting in Fabric workspaces (GA June 2025 feature)
+  - Cross-workspace pipeline orchestration (Invoke Pipeline activity)
+  - OneLake connectivity with Lakehouse and Warehouse connectors
+  - Variable Libraries for environment-specific CI/CD
+  - Migration strategies from ADF to Fabric
+- **🚨 CRITICAL: Apache Airflow Deprecation**
+  - Airflow Workflow Orchestration Manager deprecated (existing customers only)
+  - Migration guidance to Fabric Data Factory or standalone Airflow
+  - Action required: Plan migration within 12-18 months
+- **📦 CI/CD UPDATES (2025)**
+  - Node.js 20.x requirement for npm utilities
+  - Updated GitHub Actions and Azure DevOps templates
+  - Enhanced Variable Libraries support for multi-environment deployments
+- **🆕 2025 CONNECTOR UPDATES**
+  - ServiceNow V2 connector (V1 End of Support)
+  - Enhanced PostgreSQL and Snowflake connectors
+  - Native OneLake integration patterns
+- **📚 COMPREHENSIVE DOCUMENTATION**
+  - New fabric-integration command with mounting patterns
+  - Cross-platform Invoke Pipeline examples
+  - Variable Libraries implementation guide
+  - Airflow deprecation and migration paths
 
 ### 3.1.0 (January 2025) **[2025 Updates]**
 - **🆕 NEW COMMAND: /adf-master:adf-validate**

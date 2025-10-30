@@ -3,11 +3,189 @@ name: docker-2025-features
 description: Latest Docker 2025 features including AI Assistant, Enhanced Container Isolation, and Moby 25
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Docker 2025 Features
 
 This skill covers the latest Docker features introduced in 2025, ensuring you leverage cutting-edge capabilities for security, performance, and developer experience.
 
-## Docker Desktop 4.38+ Features
+## Docker Engine 28 Features (2025)
+
+### 1. Image Type Mounts
+
+**What it is:**
+Mount an image directory structure directly inside a container without extracting to a volume.
+
+**Key capabilities:**
+- Mount image layers as read-only filesystems
+- Share common data between containers without duplication
+- Faster startup for data-heavy containers
+- Reduced disk space usage
+
+**How to use:**
+```bash
+# Mount entire image
+docker run --rm \
+  --mount type=image,source=mydata:latest,target=/data \
+  alpine ls -la /data
+
+# Mount specific path from image
+docker run --rm \
+  --mount type=image,source=mydata:latest,image-subpath=/config,target=/app/config \
+  alpine cat /app/config/settings.json
+```
+
+**Use cases:**
+- Read-only configuration distribution
+- Shared ML model weights across containers
+- Static asset serving
+- Immutable data sets for testing
+
+### 2. Versioned Debug Endpoints
+
+**What it is:**
+Debug endpoints now accessible through standard versioned API paths.
+
+**Previously:** Only available at root paths like `/debug/vars`
+**Now:** Also accessible at `/v1.48/debug/vars`, `/v1.48/debug/pprof/*`
+
+**Available endpoints:**
+- `/v1.48/debug/vars` - Runtime variables
+- `/v1.48/debug/pprof/` - Profiling index
+- `/v1.48/debug/pprof/cmdline` - Command line
+- `/v1.48/debug/pprof/profile` - CPU profile
+- `/v1.48/debug/pprof/trace` - Execution trace
+- `/v1.48/debug/pprof/goroutine` - Goroutine stacks
+
+**How to use:**
+```bash
+# Access debug vars through versioned API
+curl --unix-socket /var/run/docker.sock http://localhost/v1.48/debug/vars
+
+# Get CPU profile
+curl --unix-socket /var/run/docker.sock http://localhost/v1.48/debug/pprof/profile?seconds=30 > profile.out
+```
+
+### 3. Component Updates
+
+**Latest versions in Engine 28.3.3:**
+- Buildx v0.26.1 - Enhanced build performance
+- Compose v2.40.3 - Latest compose features
+- BuildKit v0.25.1 - Security improvements
+- Go runtime 1.24.8 - Performance optimizations
+
+### 4. Security Fixes
+
+**CVE-2025-54388:** Fixed firewalld reload issue where published container ports could be accessed from local network even when bound to loopback.
+
+**Impact:** Critical for containers binding to 127.0.0.1 expecting localhost-only access.
+
+### 5. Deprecations
+
+**Raspberry Pi OS 32-bit (armhf):**
+- Docker Engine 28 is the last major version supporting armhf
+- Starting with Engine 29, no new armhf packages
+- Migrate to 64-bit OS or use Engine 28.x LTS
+
+## Docker Desktop 4.47 Features (October 2025)
+
+### 1. MCP Catalog Integration
+
+**What it is:**
+Model Context Protocol (MCP) server catalog with 100+ verified, containerized tools.
+
+**Key capabilities:**
+- Discover and search MCP servers
+- One-click deployment of MCP tools
+- Integration with Docker AI and Model Runner
+- Centralized management of AI agent tools
+
+**How to access:**
+- Docker Hub MCP Catalog
+- Docker Desktop MCP Toolkit
+- Web: https://www.docker.com/mcp-catalog
+
+**Use cases:**
+- AI agent tool discovery
+- Workflow automation
+- Development environment setup
+- CI/CD tool integration
+
+### 2. Model Runner Enhancements
+
+**What's new:**
+- Improved UI for model management
+- Enhanced inference APIs
+- Better inference engine performance
+- Model card inspection in Docker Desktop
+- `docker model requests` command for monitoring
+
+**How to use:**
+```bash
+# List running models
+docker model ls
+
+# View model details (new: model cards)
+docker model inspect llama2-7b
+
+# Monitor requests and responses (NEW)
+docker model requests llama2-7b
+
+# Performance metrics
+docker stats $(docker model ls -q)
+```
+
+### 3. Silent Component Updates
+
+**What it is:**
+Docker Desktop automatically updates internal components without requiring full application restart.
+
+**Benefits:**
+- Faster security patches
+- Less disruption to workflow
+- Automatic Compose, BuildKit, Containerd updates
+- Background update delivery
+
+**Configuration:**
+- Enabled by default
+- Can be disabled in Settings > General
+- Notifications for major updates only
+
+### 4. CVE Fixes
+
+**CVE-2025-10657 (v4.47):** Fixed Enhanced Container Isolation Docker Socket command restrictions not working in 4.46.0.
+
+**CVE-2025-9074 (v4.46):** Fixed malicious container escape allowing Docker Engine access without mounted socket.
+
+## Docker Desktop 4.38-4.45 Features
 
 ### 1. Docker AI Assistant (Project Gordon)
 
@@ -202,7 +380,57 @@ docker buildx bake test
 - Better compatibility
 - Performance optimizations
 
-## Docker Compose v2.40+ Features
+## Docker Compose v2.40.3+ Features (2025)
+
+### Compose Bridge (Convert to Kubernetes)
+
+**What it is:**
+Convert local compose.yaml files to Kubernetes manifests in a single command.
+
+**Key capabilities:**
+- Automatic conversion of Compose services to Kubernetes Deployments
+- Service-to-Service mapping
+- Volume conversion to PersistentVolumeClaims
+- ConfigMap and Secret generation
+- Ingress configuration
+
+**How to use:**
+```bash
+# Convert compose file to Kubernetes manifests
+docker compose convert --format kubernetes > k8s-manifests.yaml
+
+# Or use compose-bridge directly
+docker compose-bridge convert docker-compose.yml
+
+# Apply to Kubernetes cluster
+kubectl apply -f k8s-manifests.yaml
+```
+
+**Example conversion:**
+```yaml
+# docker-compose.yml
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - data:/usr/share/nginx/html
+
+volumes:
+  data:
+
+# Converts to Kubernetes:
+# - Deployment for 'web' service
+# - Service exposing port 80
+# - PersistentVolumeClaim for 'data'
+```
+
+**Use cases:**
+- Local development to Kubernetes migration
+- Testing Kubernetes deployments locally
+- CI/CD pipeline conversion
+- Multi-environment deployment strategies
 
 ### Breaking Changes
 

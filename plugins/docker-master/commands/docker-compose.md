@@ -2,6 +2,36 @@
 description: Manage multi-container applications with Docker Compose using best practices
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Docker Compose Best Practices
 
 ## Purpose
@@ -45,7 +75,13 @@ secrets:
   # Secrets (for Swarm mode)
 ```
 
-**Important (2025 Update):** The `version` field is now obsolete in Docker Compose v2.40+. Modern compose files start directly with `services`.
+**Important (2025 Update):** The `version` field is now obsolete in Docker Compose v2.40.3+. Modern compose files start directly with `services`.
+
+**Compose Bridge (NEW 2025):** Convert compose files to Kubernetes:
+```bash
+docker compose convert --format kubernetes > k8s-manifests.yaml
+kubectl apply -f k8s-manifests.yaml
+```
 
 #### Service Configuration Best Practices
 
@@ -210,7 +246,7 @@ secrets:
 ## Complete Example: Production-Ready Compose File
 
 ```yaml
-# Modern Compose v2.40+ format (no version field)
+# Modern Compose v2.40.3+ format (no version field)
 
 services:
   nginx:

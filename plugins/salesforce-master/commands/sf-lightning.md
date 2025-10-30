@@ -2,6 +2,36 @@
 description: Develop Lightning Web Components (LWC) and Aura components with best practices
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Salesforce Lightning Component Development
 
 ## Purpose
@@ -434,14 +464,27 @@ force-app/main/default/aura/MyAuraComponent/
 })
 ```
 
-### Step 8: Winter '26 Features (2025)
+### Step 8: Winter '26 / Spring '25 Features (2025)
 
 **Lightning/GraphQL Module** (Replaces deprecated lightning/uiGraphQLApi):
-```javascript
-// ✅ NEW (Winter '26)
-import { gql, graphql } from 'lightning/graphql';
 
-export default class MyComponent extends LightningElement {
+The new `lightning/graphql` module provides enhanced GraphQL capabilities with optional fields, dynamic queries, and reactive wire adapters.
+
+**Key Features**:
+- **Optional Fields**: Prevent query failures due to field-level security
+- **Dynamic Queries**: Construct queries at runtime
+- **Reactive Variables**: Auto-refresh when variables change
+- **Type Safety**: Enhanced type checking in API 63.0+
+
+```javascript
+// ✅ NEW (Winter '26 / API 63.0+)
+import { gql, graphql } from 'lightning/graphql';
+import { LightningElement, wire } from 'lwc';
+
+export default class AccountViewer extends LightningElement {
+    accountId = '001...';
+
+    // Basic GraphQL query with wire adapter
     @wire(graphql, {
         query: gql`
             query getAccount($id: ID!) {
@@ -453,6 +496,7 @@ export default class MyComponent extends LightningElement {
                                     Id
                                     Name {value}
                                     Industry {value}
+                                    AnnualRevenue {value}
                                 }
                             }
                         }
@@ -460,10 +504,181 @@ export default class MyComponent extends LightningElement {
                 }
             }
         `,
-        variables: '$variables'
+        variables: '$graphqlVariables'
     })
     results;
+
+    // Reactive variables - query re-executes when changed
+    get graphqlVariables() {
+        return {
+            id: this.accountId
+        };
+    }
+
+    // Optional fields - won't fail if user lacks access
+    @wire(graphql, {
+        query: gql`
+            query getAccountWithOptionalFields($id: ID!) {
+                uiapi {
+                    query {
+                        Account(where: { Id: { eq: $id } }) {
+                            edges {
+                                node {
+                                    Id
+                                    Name {value}
+                                    Revenue__c @optional {value}
+                                    ConfidentialField__c @optional {value}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        variables: '$graphqlVariables'
+    })
+    optionalFieldsResults;
+
+    // Dynamic queries - build at runtime
+    buildDynamicQuery(fields) {
+        const fieldQueries = fields.map(f => `${f} {value}`).join('\n');
+
+        return gql`
+            query getDynamicAccount($id: ID!) {
+                uiapi {
+                    query {
+                        Account(where: { Id: { eq: $id } }) {
+                            edges {
+                                node {
+                                    Id
+                                    ${fieldQueries}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+    }
+
+    // Relationships and nested queries
+    @wire(graphql, {
+        query: gql`
+            query getAccountWithContacts($id: ID!) {
+                uiapi {
+                    query {
+                        Account(where: { Id: { eq: $id } }) {
+                            edges {
+                                node {
+                                    Id
+                                    Name {value}
+                                    Contacts {
+                                        edges {
+                                            node {
+                                                Id
+                                                Name {value}
+                                                Email {value}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        variables: '$graphqlVariables'
+    })
+    accountWithContacts;
+
+    // Imperative GraphQL (non-wire)
+    async loadAccountImperatively() {
+        const query = gql`
+            query getAccount($id: ID!) {
+                uiapi {
+                    query {
+                        Account(where: { Id: { eq: $id } }) {
+                            edges {
+                                node {
+                                    Id
+                                    Name {value}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+
+        try {
+            const result = await graphql(query, {
+                variables: { id: this.accountId }
+            });
+
+            console.log('Account:', result.data);
+        } catch (error) {
+            console.error('GraphQL error:', error);
+        }
+    }
 }
+```
+
+**Migration from lightning/uiGraphQLApi**:
+```javascript
+// ❌ DEPRECATED (pre-Winter '26)
+import { gql } from 'lightning/uiGraphQLApi';
+
+// ✅ NEW (Winter '26+)
+import { gql, graphql } from 'lightning/graphql';
+
+// Use graphql wire adapter instead of uiGraphQLApi adapter
+// Benefits: Better performance, optional fields, reactive variables
+```
+
+**SLDS 2.0 Dark Mode and Custom Themes** (Spring '25):
+
+Salesforce Lightning Design System 2.0 brings enhanced theming capabilities:
+
+```css
+/* Component CSS with SLDS 2.0 tokens */
+.container {
+    /* Automatically adapts to light/dark mode */
+    background-color: var(--slds-g-color-neutral-base-100);
+    color: var(--slds-g-color-neutral-base-10);
+    border: 1px solid var(--slds-g-color-border-base-1);
+}
+
+/* Dark mode specific styling */
+@media (prefers-color-scheme: dark) {
+    .custom-element {
+        /* Optional dark mode overrides */
+        box-shadow: var(--slds-g-shadow-outset-3);
+    }
+}
+```
+
+**Custom Themes** (Eligible orgs from Spring '25):
+```
+Setup → Themes and Branding → Create Custom Theme
+- Primary brand color
+- Secondary colors
+- Logo and favicon
+- Typography settings
+- Component styling overrides
+- Dark mode support
+```
+
+**SLDS Linter with Auto-fix**:
+```bash
+# Install SLDS linter
+npm install @salesforce-ux/slds-linter --save-dev
+
+# Lint LWC components
+slds-linter ./force-app/main/default/lwc
+
+# Auto-fix issues
+slds-linter ./force-app/main/default/lwc --fix
 ```
 
 **Lightning Out 2.0** (Web Components-based, GA):
@@ -473,6 +688,7 @@ export default class MyComponent extends LightningElement {
 <c-my-component record-id="001..."></c-my-component>
 
 <!-- 50-70% smaller bundle size vs Lightning Out 1.0 -->
+<!-- Native web components, no framework required -->
 ```
 
 **Local Development** (Enhanced):
@@ -482,6 +698,7 @@ sf lightning dev component
 
 # Live reload, no deployment needed
 # Platform modules (LDS, navigation) now work in preview
+# Test dark mode locally: Add ?theme=dark to URL
 ```
 
 **LWC for Local Actions in Flows** (Winter '26):
@@ -493,13 +710,15 @@ sf lightning dev component
 ```
 
 ```javascript
-// Component runs client-side in flow
+// Component runs client-side in flow (no server round-trip)
 export default class FlowAction extends LightningElement {
     @api recordId;
 
     @api invoke() {
         // Execute logic in browser
-        // Can access browser APIs
+        // Can access browser APIs (geolocation, camera, etc.)
+        // Much faster than server-side actions
+        return { success: true };
     }
 }
 ```

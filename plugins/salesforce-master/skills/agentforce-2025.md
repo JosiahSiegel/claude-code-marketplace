@@ -3,6 +3,36 @@ name: agentforce-2025
 description: Salesforce Agentforce AI agents and autonomous automation (2025)
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Agentforce: AI Agents for Salesforce (2025)
 
 ## What is Agentforce?
@@ -35,15 +65,27 @@ The Atlas Reasoning Engine is the brain of Agentforce, enabling agents to:
 └─────────────────────────────────────────────────┘
 ```
 
-## Building Agents with Agentforce Builder (November 2025 Beta)
+## Agentforce 2.0 (GA December 2024)
+
+Agentforce 2.0 is the digital labor platform for enterprises, enabling a limitless workforce through AI agents. Key enhancements:
+
+- **Pre-built Skills Library**: Rapid agent customization with out-of-the-box capabilities
+- **Workflow Integrations**: MuleSoft for Flow, MuleSoft API Catalog, Topic Center (Q1 2025)
+- **Slack Deployment**: Native Slack integration for collaboration agents
+- **Enhanced RAG**: Improved retrieval augmented generation for accurate responses
+- **Advanced Reasoning**: More sophisticated Atlas Reasoning Engine capabilities
+- **Pricing**: $2 per conversation (GA October 25, 2024)
+
+## Building Agents with Agentforce Builder (GA December 2024)
 
 ### Step 1: Define Agent Purpose
 
 Identify what the agent should accomplish:
-- **Service Agent**: Handle support cases, answer FAQs, resolve issues
+- **Service Agent**: Handle support cases, answer FAQs, resolve issues (4 new actions in Spring '25)
 - **Sales Development Agent**: Qualify leads, answer product questions, book meetings
 - **Personal Shopper Agent**: Recommend products, handle orders, track shipments
 - **Operations Agent**: Automate approvals, process requests, manage workflows
+- **Slack Agent**: Proactive notifications and collaboration assistance
 
 ### Step 2: Configure Agent Topics
 
@@ -491,33 +533,53 @@ LIMIT 10
 - **User Acceptance Tests**: Validate with real users in sandbox
 - **A/B Testing**: Compare different agent configurations
 
-## Agentforce Pricing and Licensing
+## Agentforce Pricing and Licensing (2025)
 
-- **Agentforce Service Agent**: Part of Service Cloud with AI pricing
-- **Agentforce Sales Development Agent**: Part of Sales Cloud with AI pricing
+- **Agentforce Service Agent**: $2 per conversation (GA October 2024)
+- **Agentforce Sales Development Agent**: $2 per conversation
 - **Custom Agents**: Available with Einstein 1 Edition or add-on
 - **Agent Runs**: 600 free orchestration runs per year (Enterprise+)
-- **Consumption Model**: Pay per agent interaction or conversation
+- **Consumption Model**: Pay-per-use based on conversations
+- **Vision**: One billion agents with Agentforce by end of 2025
+
+## Spring '25 and Summer '25 Updates
+
+### Spring '25 (API 63.0) - Available Q2 2025
+- **Enhanced Service Agent**: 4 new agent actions + 1 new topic
+- **Salesforce LLM Open Connector**: Connect any LLM (OpenAI, Claude, custom models)
+- **Conversation Context Testing**: Specify language, app, page type for precise testing
+- **Einstein Decision Element**: Automate flow paths based on email engagement metrics
+- **Einstein-Powered Flow Creation**: New Einstein Panel in Flow Builder
+
+### Summer '25 (API 64.0) - Available Q3 2025
+- **Hybrid Search**: Combines semantic search with keyword search for accuracy
+- **Multi-language Semantic Search**: Cross-language case similarity (e.g., French → English)
+- **Report Formula Generation**: Plain language descriptions create complex formulas
+- **AI-driven Account Summarization**: Automated insights for service agents
 
 ## Resources
 
 - **Agentforce Platform**: https://www.salesforce.com/agentforce/
-- **Agentforce Builder Documentation**: Available Q4 2025
+- **Agentforce Builder Documentation**: https://help.salesforce.com/s/articleView?id=sf.einstein_studio.htm
 - **Einstein 1 Studio**: https://help.salesforce.com/s/articleView?id=sf.einstein_studio.htm
 - **Atlas Reasoning Engine**: Technical documentation in Winter '26 release notes
 - **Agentforce Trailhead**: Search "Agentforce" on Trailhead for modules
+- **LLM Open Connector**: Spring '25 release notes
 
 ## Migration from Einstein Copilot
+
+**IMPORTANT**: Einstein Copilot was retired in January 2025 and renamed to "Agentforce (Default)". It is now one of the Agentforce agents.
 
 If you have Einstein Copilot (now Agentforce Assistant), migration path:
 
 ```
-Einstein Copilot → Agentforce Assistant
+Einstein Copilot → Agentforce (Default)
+- Automatically migrated in January 2025
 - Conversational UI remains the same
 - Add autonomous triggers and workflows
 - Convert Copilot Actions to Agent Actions
 - Add proactive agent behaviors
-- Enable multi-channel deployment
+- Enable multi-channel deployment (including Slack in 2.0)
 ```
 
 **Action Migration Example**:

@@ -206,12 +206,12 @@ cd azure-export/<resource-group>_*/
 
 | Azure Service | Docker Image | Port | Config File |
 |--------------|--------------|------|-------------|
-| Azure SQL Database | `mcr.microsoft.com/mssql/server:2022-latest` | 1433 | `databases/sql-*` |
-| Azure PostgreSQL | `postgres:15-alpine` | 5432 | `databases/postgres-*` |
-| Azure MySQL | `mysql:8.0` | 3306 | `databases/mysql-*` |
+| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-latest` | 1433 | `databases/sql-*` |
+| Azure PostgreSQL | `postgres:16.6-alpine` | 5432 | `databases/postgres-*` |
+| Azure MySQL | `mysql:9.2` | 3306 | `databases/mysql-*` |
 | Cosmos DB (SQL) | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator` | 8081 | `databases/cosmos-*` |
 | Cosmos DB (MongoDB) | `mongo:6` | 27017 | `databases/cosmos-*` |
-| Azure Redis Cache | `redis:7-alpine` | 6379 | `redis/*` |
+| Azure Redis Cache | `redis:7.4-alpine` | 6379 | `redis/*` |
 | Azure Blob Storage | `mcr.microsoft.com/azure-storage/azurite` | 10000 | `storage/*` |
 | App Service (Node) | `node:18-alpine` | 8080 | `webapps/*` |
 | App Service (Python) | `python:3.11-slim` | 8000 | `webapps/*` |
@@ -349,7 +349,7 @@ cd azure-export/my-rg_*/databases/sql-server/mydb
 docker run -d -p 1433:1433 \
     -e 'ACCEPT_EULA=Y' \
     -e 'SA_PASSWORD=YourStrong@Pass' \
-    mcr.microsoft.com/mssql/server:2022-latest
+    mcr.microsoft.com/mssql/server:2025-latest
 
 # Import
 sqlpackage /Action:Import /SourceFile:mydb.bacpac ...

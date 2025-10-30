@@ -4,7 +4,10 @@ Complete SQL Server Data Tools (SSDT) expertise with **SQL Server 2025 RC** and 
 
 ## Latest 2025 Updates
 
-### SQL Server 2025 RC Features (GA Expected Nov 2025)
+### SQL Server 2025 RC1 Features (GA Predicted Nov 12, 2025)
+- **Optional Parameter Plan Optimization (OPPO)** - Solves parameter sniffing issues for optimal plan selection
+- **Microsoft Entra Managed Identities** - Improved credential management and security compliance
+- **GraphQL Support** - Data API Builder (DAB) for exposing SQL Server data via GraphQL endpoints
 - **Optimized Locking** - TID Locking & Lock After Qualification (LAQ) for enhanced concurrency
 - **Fabric Mirroring** - Zero-ETL near real-time analytics with change feed technology
 - **Native JSON** - New JSON data type with enhanced functions
@@ -23,10 +26,12 @@ Complete SQL Server Data Tools (SSDT) expertise with **SQL Server 2025 RC** and 
 - **Deployment Options** - IgnorePreDeployScript, IgnorePostDeployScript
 - **Fabric Support** - Microsoft Fabric Data Warehouse deployment
 
-### Microsoft.Build.Sql 2.0.0 GA
-- **Production Ready** - No longer preview, recommended for all new projects
+### Microsoft.Build.Sql 2.0.0 GA (October 2025)
+- **Production Ready** - General availability achieved, recommended for all new projects
 - **.NET 8 Required** - Cross-platform support (Windows/Linux/macOS)
 - **Visual Studio 2022 17.12+** - Full SDK-style project support
+- **Automatic Globbing** - Enhanced file management for database objects
+- **Next-Gen SQL Projects** - Future-proof format with improved CI/CD integration
 
 ### CI/CD Best Practices 2025
 - **State-Based Deployment** - Source represents current state (NOT migration scripts)

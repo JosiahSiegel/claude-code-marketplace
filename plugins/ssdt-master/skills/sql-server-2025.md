@@ -3,6 +3,36 @@ name: sql-server-2025
 description: SQL Server 2025 and SqlPackage 170.2.70 (October 2025) - Vector databases, AI integration, and latest features
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # SQL Server 2025 & SqlPackage 170.2.70 Support
 
 ## Overview
@@ -131,9 +161,11 @@ var fragment = parser.Parse(new StringReader(sql), out errors);
 
 ## SQL Server 2025 Release Status
 
-**Current Status**: SQL Server 2025 is in **Release Candidate (RC)** stage. RC0 was released August 2025, with expected GA (General Availability) in November 2025 (likely November 12, 2025, ahead of Microsoft Ignite conference November 18-21, 2025).
+**Current Status**: SQL Server 2025 (17.x) is in **Release Candidate (RC1)** stage as of October 2025. Public preview began May 2025.
 
-**Not Yet Production**: SQL Server 2025 is not yet generally available. Features described are available in preview/RC builds.
+**Predicted GA Date**: November 12, 2025 (based on historical release patterns - SQL Server 2019: Nov 4, SQL Server 2022: Nov 16). Expected announcement at Microsoft Ignite conference (November 18-21, 2025).
+
+**Not Yet Production**: SQL Server 2025 is not yet generally available. All features described are available in RC builds for testing purposes only.
 
 ## SQL Server 2025 New Features
 
@@ -213,6 +245,7 @@ ORDER BY Similarity;
 - LangChain integration
 - Semantic Kernel integration
 - Entity Framework Core support
+- **GraphQL via Data API Builder (DAB)** - Expose SQL Server data through GraphQL endpoints
 
 **External Models (ONNX):**
 ```sql
@@ -404,6 +437,60 @@ SET EnrichedData = (
     FROM OPENROWSET(REST, 'https://api.example.com/customer/' + CustomerId)
 )
 WHERE CustomerId = 12345;
+```
+
+### Optional Parameter Plan Optimization (OPPO)
+
+**Performance Enhancement**: SQL Server 2025 introduces OPPO to enable optimal execution plan selection based on customer-provided runtime parameter values.
+
+**Key Benefits:**
+- Solves parameter sniffing issues
+- Optimizes plans for specific runtime parameters
+- Improves query performance with parameter-sensitive workloads
+- Reduces need for query hints or plan guides
+
+**Enabling OPPO:**
+```sql
+-- Enable at database level
+ALTER DATABASE MyDatabase
+SET PARAMETER_SENSITIVE_PLAN_OPTIMIZATION = ON;
+
+-- Check status
+SELECT name, is_parameter_sensitive_plan_optimization_on
+FROM sys.databases
+WHERE name = 'MyDatabase';
+
+-- Monitor OPPO usage
+SELECT
+    query_plan_hash,
+    parameter_values,
+    execution_count,
+    avg_duration_ms
+FROM sys.dm_exec_query_stats
+WHERE is_parameter_sensitive = 1;
+```
+
+### Microsoft Entra Managed Identities
+
+**Security Enhancement**: SQL Server 2025 adds support for Microsoft Entra managed identities for improved credential management.
+
+**Key Benefits:**
+- Eliminates hardcoded credentials
+- Reduces security vulnerabilities
+- Provides compliance and auditing capabilities
+- Simplifies credential rotation
+
+**Configuration:**
+```sql
+-- Create login with managed identity
+CREATE LOGIN [managed-identity-name] FROM EXTERNAL PROVIDER;
+
+-- Grant permissions
+CREATE USER [managed-identity-name] FOR LOGIN [managed-identity-name];
+GRANT CONTROL ON DATABASE::MyDatabase TO [managed-identity-name];
+
+-- Use in connection strings
+-- Connection string: Server=myserver;Database=mydb;Authentication=Active Directory Managed Identity;
 ```
 
 ### Enhanced Information Protection

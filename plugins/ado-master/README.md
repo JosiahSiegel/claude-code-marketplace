@@ -6,14 +6,20 @@ Master Azure DevOps pipelines with expert knowledge of YAML pipelines, CI/CD bes
 
 The ADO Master plugin equips Claude Code with comprehensive Azure DevOps expertise, enabling you to create, optimize, secure, and debug Azure Pipelines following current Microsoft 2025 best practices. Updated for Sprint 254-262 with Agent v4, Microsoft Security DevOps, template management, and GitHub Copilot integration.
 
-## What's New in v1.3.0
+## What's New in v1.4.0
+
+**NEW Commands:**
+- **`/ado-workload-identity`** - Configure workload identity federation (OIDC) for passwordless Azure authentication
+- **`/ado-pipeline-analytics`** - Analyze pipeline performance, track metrics, and identify optimization opportunities
+- **`/ado-quality-gates`** - Implement quality gates and code quality enforcement with SonarQube integration
 
 **2025 Features:**
+- Workload identity federation (OIDC) setup and migration guidance (2025 security standard)
+- Pipeline performance analytics and cost tracking with Azure DevOps CLI
 - Microsoft Security DevOps (MSDO) extension integration (replaces deprecated CredScan)
 - Pipeline template management and reusability patterns
 - Agent v4 with .NET 8 and ARM64 support
 - Sprint 261-262 features: OAuth migration to Entra ID, GitHub Copilot integration
-- Workload identity federation (OIDC) for passwordless authentication
 - Continuous Access Evaluation (CAE) security features
 - Updated OS images: Ubuntu-24.04, Windows-2025, macOS-15
 
@@ -25,7 +31,10 @@ The ADO Master plugin equips Claude Code with comprehensive Azure DevOps experti
 - **`/ado-pipeline-optimize`** - Optimize pipelines for performance, cost, and efficiency
 - **`/ado-pipeline-security`** - Secure pipelines with Microsoft Security DevOps, Defender for DevOps, and compliance standards
 - **`/ado-pipeline-debug`** - Debug pipeline failures and troubleshoot common issues
-- **`/ado-templates`** - Create and manage reusable YAML templates for consistency and efficiency (NEW in v1.3.0)
+- **`/ado-workload-identity`** - Configure workload identity federation (OIDC) for passwordless Azure authentication (NEW in v1.4.0)
+- **`/ado-pipeline-analytics`** - Analyze pipeline performance, track metrics, and identify optimization opportunities (NEW in v1.4.0)
+- **`/ado-quality-gates`** - Implement quality gates and code quality enforcement with SonarQube integration (NEW in v1.4.0)
+- **`/ado-templates`** - Create and manage reusable YAML templates for consistency and efficiency
 - **`/ado-tasks`** - Help with common Azure DevOps pipeline tasks and their usage
 - **`/ado-cli`** - Manage Azure DevOps using Azure DevOps CLI
 - **`/ado-repo`** - Manage repositories, branches, and Git operations
@@ -96,6 +105,32 @@ Claude will:
 3. Add code scanning (SAST, dependency scanning)
 4. Configure approval gates and policies
 5. Apply compliance standards
+
+### Configuring Workload Identity (OIDC)
+
+```bash
+/ado-workload-identity
+```
+
+Claude will:
+1. Set up workload identity federation for Azure
+2. Migrate from service principals to OIDC
+3. Configure passwordless authentication
+4. Apply 2025 security best practices
+5. Eliminate secret management overhead
+
+### Analyzing Pipeline Performance
+
+```bash
+/ado-pipeline-analytics
+```
+
+Claude will:
+1. Track pipeline performance metrics
+2. Calculate success rates and duration trends
+3. Identify bottlenecks and optimization opportunities
+4. Generate cost efficiency reports
+5. Set up monitoring and alerting
 
 ### Debugging Failures
 

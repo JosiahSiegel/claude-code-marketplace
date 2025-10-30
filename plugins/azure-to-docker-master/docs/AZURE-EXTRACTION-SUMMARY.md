@@ -268,17 +268,17 @@ az keyvault secret show --vault-name <vault> --name <secret> --query value -o ts
 ```yaml
 # SQL Server
 sqlserver:
-  image: mcr.microsoft.com/mssql/server:2022-latest
+  image: mcr.microsoft.com/mssql/server:2025-latest
   ports: ["1433:1433"]
 
 # PostgreSQL
 postgres:
-  image: postgres:15-alpine
+  image: postgres:16.6-alpine
   ports: ["5432:5432"]
 
 # MySQL
 mysql:
-  image: mysql:8.0
+  image: mysql:9.2
   ports: ["3306:3306"]
 
 # MongoDB (for Cosmos DB MongoDB API)
@@ -291,7 +291,7 @@ mongodb:
 ```yaml
 # Redis
 redis:
-  image: redis:7-alpine
+  image: redis:7.4-alpine
   ports: ["6379:6379"]
 
 # Azurite (Azure Storage)
@@ -444,7 +444,7 @@ docker run -d \
     -e 'ACCEPT_EULA=Y' \
     -e 'SA_PASSWORD=YourStrong@Passw0rd' \
     -p 1433:1433 \
-    mcr.microsoft.com/mssql/server:2022-latest
+    mcr.microsoft.com/mssql/server:2025-latest
 
 # 4. Import
 sqlpackage /Action:Import \

@@ -28,14 +28,16 @@ This applies to:
 **Plugin Creation Exception: This plugin's purpose IS to create documentation files.**
 
 When creating plugins (the core purpose of this plugin):
-- ✅ **DO create** all necessary plugin files: README.md, agents/*.md, skills/*.md, commands/*.md
-- ✅ **DO create** complete, comprehensive documentation as part of plugin structure
-- ✅ **DO create** marketplace.json and plugin.json manifest files
+- DO create all necessary plugin files: README.md, agents/*.md, skills/*.md, commands/*.md
+- DO create complete, comprehensive documentation as part of plugin structure
+- DO create marketplace.json and plugin.json manifest files
 
 For other scenarios:
-- ❌ **DON'T create** additional supplementary documentation beyond the plugin structure
-- ❌ **DON'T create** extra guides or tutorials unless explicitly requested
-- ✅ **DO update** existing documentation files when modifications are needed
+- DON'T create additional supplementary documentation beyond the plugin structure
+- DON'T create extra guides or tutorials unless explicitly requested
+- DO update existing documentation files when modifications are needed
+
+
 
 ---
 
@@ -314,7 +316,7 @@ Example of updating marketplace.json with synchronized metadata:
 Also create a standalone marketplace-ready version:
 
 ```bash
-cd /home/claude
+# Create marketplace structure in working directory
 mkdir -p PLUGIN_NAME-marketplace/.claude-plugin
 mkdir -p PLUGIN_NAME-marketplace/plugins
 cp -r PLUGIN_NAME PLUGIN_NAME-marketplace/plugins/
@@ -730,7 +732,7 @@ web_fetch: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
 
 2. **Create the structure in working directory:**
 ```bash
-cd /home/claude
+# Create plugin structure
 mkdir -p deployment-helper/.claude-plugin
 mkdir -p deployment-helper/commands
 mkdir -p deployment-helper/agents
@@ -1017,11 +1019,11 @@ Only `.claude-plugin/plugin.json` is required. Optional components: commands/, a
 
 **Commands**: Custom slash commands in `commands/*.md`
 **Agents**: Specialized subagents in `agents/*.md` with frontmatter
-**Agent Skills**: Dynamic knowledge in `skills/*/SKILL.md` (auto-loaded by context)
-**Hooks**: Automated workflows triggered by events (see advanced-features-2025 skill)
+**Agent Skills**: Dynamic knowledge using progressive disclosure (three-tier: frontmatter → SKILL.md body → linked files). Claude autonomously loads only relevant content when needed.
+**Hooks**: Automated workflows with nine event types (PreToolUse, PostToolUse, SessionStart, SessionEnd, PreCompact, UserPromptSubmit, Notification, Stop, SubagentStop)
 **MCP Servers**: External tool integration via Model Context Protocol
 
-For detailed component guides, see advanced-features-2025 skill.
+Agent Skills use context-efficient loading patterns, retrieving only necessary components instead of entire skill content. For detailed patterns, see advanced-features-2025 skill.
 
 ### Plugin vs Marketplace: What's the Difference?
 
@@ -1072,6 +1074,8 @@ This is the only required file. It tells Claude Code about your plugin:
 - `skills/` → Agent Skills for dynamic knowledge loading
 - `hooks/` → Automated workflows (see advanced-features-2025 skill)
 - `scripts/`, `bin/` → Helper utilities
+
+**Portability:** Use `${CLAUDE_PLUGIN_ROOT}` for all internal paths in hooks and MCP servers. This environment variable resolves to the plugin's absolute installation path, ensuring cross-platform compatibility.
 
 ## Publishing Your Plugin to a Marketplace
 

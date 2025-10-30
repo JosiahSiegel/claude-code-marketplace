@@ -1,6 +1,6 @@
 # test-master
 
-Complete management plugin for **Vitest 3.x + Playwright 1.50+ + MSW 2.x** testing infrastructure (2025). This production-ready plugin provides comprehensive test automation, debugging, mutation testing, test annotation, and infrastructure management for modern JavaScript projects.
+Complete management plugin for **Vitest 4.0 + Playwright 1.55 + MSW 2.11+** testing infrastructure (2025). This production-ready plugin provides comprehensive test automation, AI-powered test generation, visual regression testing, debugging, mutation testing, test annotation, and infrastructure management for modern JavaScript projects.
 
 ## 🚀 Features
 
@@ -64,24 +64,31 @@ unzip test-master.zip -d ~/.local/share/claude/plugins/
 
 ## 🎯 Technology Stack (2025)
 
-- **Vitest 3.x** (Latest: 3.2 - June 2025) - Unit, integration, and browser testing
+- **Vitest 4.0** (Latest: October 2025) - Unit, integration, and browser testing
+  - **Browser Mode (Stable)** - Run tests in real browsers using Playwright
+  - **Visual Regression Testing** - Screenshot comparison with `toMatchSnapshot`
+  - **Type-Aware Hooks** - Better TypeScript support in lifecycle hooks
   - **Annotation API (3.2+)** - Add metadata and attachments to tests
   - **Line Number Filtering (3.0+)** - Run tests by line number from IDE
   - **Improved Watch Mode** - Smarter change detection, faster rebuilds
   - **Enhanced Reporting** - Reduced flicker, clearer output
   - **Workspace Projects** - Multi-project support in single config
-  - **Browser Mode** - Run tests in real browsers using Playwright
-  - **Visual Regression Testing** - Screenshot comparison
-- **Playwright 1.50+** (February 2025) - E2E browser testing
+- **Playwright 1.55** (August 2025) - E2E browser testing
+  - **AI Test Agents** - Planner, Generator, and Healer agents for LLM-powered test automation
+  - **testStepInfo.titlePath** - Full test hierarchy for better debugging
+  - **Debian 13 Support** - Modern CI/CD environment compatibility
+  - **Chromium 140+, Firefox 141, WebKit 26** - Latest browser support
   - **Flaky Test Detection** - `--fail-on-flaky-tests` CLI flag
   - **Enhanced File Downloads** - Simplified download handling
   - **Custom Reporters** - Integration with third-party tools
   - **Role-Based Locators** - `getByRole()` for accessible testing
   - **Auto-Waiting** - Intelligent wait mechanisms
-- **MSW (Mock Service Worker) 2.x** - API mocking following 2025 patterns
+- **MSW (Mock Service Worker) 2.11+** (Latest: 2025) - API mocking following 2025 patterns
+  - **Fetch API Primitives** - Full Fetch API support (ReadableStream, ESM-compatible)
   - **Happy-Path-First** - Success scenarios as baseline
   - **Domain-Based Organization** - Structured handler grouping by feature
   - **Runtime Overrides** - Flexible test-specific mocking with `server.use()`
+  - **Node.js 18+ Required** - Modern runtime support
 - **Stryker Mutator** - Mutation testing for test quality verification
 - **happy-dom** - Fast DOM simulation for Vitest unit tests
 - **@vitest/coverage-v8** - Code coverage analysis
@@ -101,6 +108,7 @@ unzip test-master.zip -d ~/.local/share/claude/plugins/
 | `/test-master:debug` | Debug failing tests interactively |
 | `/test-master:annotate` | Add metadata/attachments to tests (Vitest 3.2+) |
 | `/test-master:mutation-test` | Run mutation testing for quality verification |
+| `/test-master:ai-generate` | Generate tests using Playwright AI agents (Playwright 1.55+) |
 
 ### Test File Management
 
@@ -330,6 +338,18 @@ vitest run src/auth.test.js:42
 npm run test:mutation
 
 # Measure how many code mutations tests catch
+```
+
+### AI-Powered Test Generation (Playwright 1.55+)
+
+```bash
+# Use Playwright Test Agents for LLM-powered test creation
+/test-master:ai-generate
+
+# Three agents available:
+# - Planner: Explore app and create test plan
+# - Generator: Convert plan to Playwright code
+# - Healer: Automatically fix failing tests
 ```
 
 ### Playwright Role-Based Locators (2025 Best Practice)

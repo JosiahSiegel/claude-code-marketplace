@@ -10,14 +10,16 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 
 ### Commands
 
-- **`/docker-ai`** - Use Docker AI Assistant (Project Gordon) for intelligent container development (Docker Desktop 4.38+)
+- **`/docker-ai`** - Use Docker AI Assistant (Project Gordon) for intelligent container development (Docker Desktop 4.47+)
 - **`/docker-build`** - Build Docker images following current best practices and industry standards
 - **`/docker-run`** - Run Docker containers with proper configuration and best practices
-- **`/docker-compose`** - Manage multi-container applications with Docker Compose v2.40+ using best practices
+- **`/docker-compose`** - Manage multi-container applications with Docker Compose v2.40.3+ using best practices
 - **`/docker-optimize`** - Optimize Docker images for size, build time, and runtime performance
 - **`/docker-security`** - Scan and harden Docker containers following security best practices
 - **`/docker-debug`** - Debug Docker containers and troubleshoot common issues across all platforms
 - **`/docker-cleanup`** - Clean up Docker resources safely and efficiently across all platforms
+- **`/docker-registry`** - Manage container registry operations (Docker Hub, GitHub, AWS ECR, Azure ACR, Google Artifact Registry)
+- **`/docker-network`** - Master Docker networking including bridge, host, overlay networks, and advanced configurations
 
 ### Agents
 
@@ -200,14 +202,30 @@ The Docker Expert agent can help with:
 - Windows containers support
 - Cross-platform compatibility
 
-## What's New in 2025
+## What's New in 2025 (v1.4.0)
 
 This plugin includes the latest Docker 2025 features:
 
+### Docker Engine 28
+- **Image Type Mounts** - Mount images directly as read-only filesystems without extraction
+- **Versioned Debug Endpoints** - Access profiling and debug data through standard API paths
+- **Component Updates** - Buildx v0.26.1, Compose v2.40.3, BuildKit v0.25.1
+- **Security Fixes** - CVE-2025-54388 firewalld port binding fix
+
+### Docker Desktop 4.47
+- **MCP Catalog** - 100+ verified Model Context Protocol servers for AI workflows
+- **Model Runner Enhancements** - Improved UI, `docker model requests` monitoring, model cards
+- **Silent Component Updates** - Automatic background updates without full restart
+- **Security Fixes** - CVE-2025-10657 (ECI), CVE-2025-9074 (container escape)
+
+### Docker Compose v2.40.3
+- **Compose Bridge** - Convert compose.yaml to Kubernetes manifests
+- **No Version Field** - Modern format removes version requirement
+- **Watch Enhancements** - `initial_sync`, `--prune`, `--quiet` options
+
+### Previous 2025 Features
 - **Docker AI (Project Gordon)** - AI-powered assistant for intelligent Docker development
-- **Enhanced Container Isolation (ECI)** - New security layer for Docker Desktop 4.38+
-- **Moby 25 Engine** - 20-30% faster container startup and improved resource management
-- **Compose v2.40+** - Modern format (no version field), new watch features
+- **Enhanced Container Isolation (ECI)** - Advanced security layer for Docker Desktop
 - **Model Runner** - Run AI models locally without cloud APIs
 - **Multi-Node Kubernetes** - Test realistic cluster scenarios in Docker Desktop
 
@@ -305,9 +323,9 @@ This plugin ensures Claude always:
 
 ## Requirements
 
-- Docker Engine 25+ (Moby 25 for latest features)
-- Docker Compose v2.40+ (for modern compose format)
-- Docker Desktop 4.38+ (for AI Assistant, ECI, and 2025 features)
+- Docker Engine 28+ (latest features and security fixes)
+- Docker Compose v2.40.3+ (for modern compose format and Compose Bridge)
+- Docker Desktop 4.47+ (for AI Assistant, MCP Catalog, Model Runner, ECI, and 2025 features)
 - Platform-specific:
   - **Linux:** Docker CE/EE installed
   - **macOS:** Docker Desktop for Mac (Intel or Apple Silicon)

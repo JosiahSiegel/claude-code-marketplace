@@ -1,3 +1,32 @@
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+---
+
+
 # Azure Service Emulators for Local Development (2025)
 
 ## Overview
@@ -46,6 +75,14 @@ DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02x
 - Compatible with Azure Storage Explorer
 - `--loose` flag for relaxed validation (useful for local development)
 
+
+**2025 API Version Support:**
+- Latest release (v3.35.0) targets 2025-11-05 API version
+- Blob service: 2025-11-05
+- Queue service: 2025-11-05
+- Table service: 2025-11-05 (preview)
+- RA-GRS support for geo-redundant replication testing
+
 **CLI Usage:**
 ```bash
 # Install via npm (alternative to Docker)
@@ -76,7 +113,7 @@ var blobServiceClient = new BlobServiceClient(connectionString);
 
 **Latest SQL Server with AI features**
 
-**Image:** `mcr.microsoft.com/mssql/server:2025-RC0`
+**Image:** `mcr.microsoft.com/mssql/server:2025-latest`
 
 **2025 Features:**
 - Built-in Vector Search for AI similarity queries
@@ -90,7 +127,7 @@ var blobServiceClient = new BlobServiceClient(connectionString);
 ```yaml
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2025-RC0
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
@@ -158,17 +195,28 @@ FROM Documents
 ORDER BY VECTOR_DISTANCE(ContentVector, @queryVector);
 ```
 
+**2025 vnext-preview Features:**
+- Entirely Linux-based emulator (cross-platform: x64, ARM64, Apple Silicon)
+- No virtual machines required on Apple Silicon or Microsoft ARM
+- Changefeed support (April 2025+)
+- Document TTL (Time-to-Live) support
+- OpenTelemetry V2 support
+- API for NoSQL in gateway mode
+- Currently in preview (active development)
+
+**Image:** `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview`
+
 ### 3. Cosmos DB Emulator
 
 **NoSQL database emulator**
 
-**Image:** `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest`
+**Image:** `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview`
 
 **Configuration:**
 ```yaml
 services:
   cosmosdb:
-    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
     container_name: cosmosdb
     environment:
       - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
@@ -229,6 +277,21 @@ var client = new CosmosClient(endpoint, key);
 - Limited to single partition for local development
 - Certificate trust required (self-signed)
 
+**2025 Official Azure Service Bus Emulator:**
+- Released as official Docker container
+- Linux-based emulator with cross-platform support
+- Requires SQL Server Linux as dependency
+- Supports AMQP protocol (port 5672)
+- Connection string format with UseDevelopmentEmulator=true
+- Current limitations: No JMS protocol, no partitioned entities, no AMQP Web Sockets
+
+**Official Emulator Image:** `mcr.microsoft.com/azure-messaging/servicebus-emulator:latest`
+
+**Connection String:**
+```
+Endpoint=sb://host.docker.internal;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;
+```
+
 ### 4. Azure Service Bus Emulator
 
 **Message queue emulator**
@@ -239,7 +302,7 @@ var client = new CosmosClient(endpoint, key);
 ```yaml
 services:
   servicebus-sql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=ServiceBus123!
@@ -247,7 +310,7 @@ services:
       - servicebus-sql-data:/var/opt/mssql
 
   servicebus:
-    image: mcr.microsoft.com/azure-service-bus-emulator:latest
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
     depends_on:
       - servicebus-sql
     environment:
@@ -264,7 +327,7 @@ services:
 ```yaml
 services:
   rabbitmq:
-    image: rabbitmq:3.13-alpine
+    image: rabbitmq:3.14-alpine
     container_name: rabbitmq
     ports:
       - "5672:5672"   # AMQP
@@ -286,13 +349,13 @@ services:
 
 ### 5. PostgreSQL (Azure Database for PostgreSQL)
 
-**Image:** `postgres:16-alpine`
+**Image:** `postgres:16.6-alpine`
 
 **Configuration:**
 ```yaml
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16.6-alpine
     container_name: postgres
     environment:
       - POSTGRES_USER=postgres
@@ -332,13 +395,13 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 ### 6. MySQL (Azure Database for MySQL)
 
-**Image:** `mysql:8.4`
+**Image:** `mysql:9.2`
 
 **Configuration:**
 ```yaml
 services:
   mysql:
-    image: mysql:8.4
+    image: mysql:9.2
     container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root_password
@@ -468,7 +531,7 @@ services:
 
   # Databases
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2025-RC0
+    image: mcr.microsoft.com/mssql/server:2025-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Developer
@@ -481,7 +544,7 @@ services:
       interval: 10s
 
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16.6-alpine
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports: ["5432:5432"]
@@ -509,7 +572,7 @@ services:
 
   # NoSQL
   cosmosdb:
-    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
     ports: ["8081:8081"]
     volumes: [cosmos-data:/data/db]
     networks: [backend]

@@ -9,7 +9,13 @@
       "Skill(plugin-master:plugin-master)",
       "mcp__context7-mcp__resolve-library-id",
       "mcp__context7-mcp__get-library-docs",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "mcp__context7__resolve-library-id",
+      "WebFetch(domain:www.anthropic.com)",
+      "Bash(grep:*)",
+      "Bash(jq:*)"
     ],
     "deny": [],
     "ask": []

@@ -3,6 +3,36 @@ name: security-first-2025
 description: Security-first bash scripting patterns for 2025 (mandatory validation, zero-trust)
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Security-First Bash Scripting (2025)
 
 ## Overview
@@ -243,7 +273,7 @@ clean_environment() {
     unset CDPATH
     unset GLOBIGNORE
 
-    # Set safe PATH
+    # Set safe PATH (absolute paths only)
     export PATH="/usr/local/bin:/usr/bin:/bin"
 
     # Set safe IFS
@@ -262,6 +292,59 @@ exec_clean() {
 # Usage
 clean_environment
 exec_clean /usr/local/bin/myapp
+```
+
+### 8. Absolute Path Usage (2025 Best Practice)
+
+**Always use absolute paths to prevent PATH hijacking:**
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ❌ DANGEROUS - Vulnerable to PATH manipulation
+curl https://example.com/data
+jq '.items[]' data.json
+
+# ✅ SAFE - Absolute paths
+/usr/bin/curl https://example.com/data
+/usr/bin/jq '.items[]' data.json
+
+# ✅ SAFE - Verify command location
+CURL=$(command -v curl) || { echo "curl not found" >&2; exit 1; }
+"$CURL" https://example.com/data
+```
+
+**Why This Matters:**
+- Prevents malicious binaries in user PATH
+- Standard practice in enterprise environments
+- Required for security-sensitive scripts
+
+### 9. History File Protection (2025 Security)
+
+**Disable history for credential operations:**
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Disable history for this session
+HISTFILE=/dev/null
+export HISTFILE
+
+# Or disable specific commands
+HISTIGNORE="*password*:*secret*:*token*"
+export HISTIGNORE
+
+# Handle sensitive operations
+read -rsp "Enter database password: " db_password
+echo
+
+# Use password (not logged to history)
+/usr/bin/mysql -p"$db_password" -e "SELECT 1"
+
+# Clear variable
+unset db_password
 ```
 
 ## Security Checklist (2025)

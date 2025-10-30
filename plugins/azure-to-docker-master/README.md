@@ -12,7 +12,7 @@ The **azure-to-docker-master** plugin provides autonomous expertise for migratin
 - **2025 Azure Emulators**: Latest emulators (Azurite, SQL Server 2025, Cosmos DB, Service Bus)
 - **Production-Ready Compose**: Generate secure, optimized docker-compose.yml with health checks
 - **Complete Database Export**: Export and import Azure SQL/PostgreSQL/MySQL to Docker
-- **Modern Best Practices**: No version field (Compose v2.40+), security hardening, resource limits
+- **Modern Best Practices**: No version field (Compose v2.42+), security hardening, resource limits
 - **Development-Production Parity**: Mirror Azure infrastructure locally for efficient development
 
 ## Key Features
@@ -24,34 +24,36 @@ Maps all Azure services to their Docker equivalents:
 | Azure Service | Docker Image | Purpose |
 |---------------|-------------|---------|
 | App Service | Custom build | Application containers |
-| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-RC0` | SQL Server with AI features |
-| PostgreSQL | `postgres:16-alpine` | PostgreSQL database |
-| MySQL | `mysql:8.4` | MySQL database |
+| Azure SQL Database | `mcr.microsoft.com/mssql/server:2025-latest` | SQL Server with AI features |
+| PostgreSQL | `postgres:16.6-alpine` | PostgreSQL database |
+| MySQL | `mysql:9.2` | MySQL database |
 | Redis Cache | `redis:7.4-alpine` | Redis cache |
 | Storage Account | `mcr.microsoft.com/azure-storage/azurite` | Blob/Queue/Table storage |
-| Cosmos DB | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator` | NoSQL database |
-| Service Bus | `rabbitmq:3.13-alpine` | Message queue |
+| Cosmos DB | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview` | NoSQL database |
+| Service Bus | `mcr.microsoft.com/azure-messaging/servicebus-emulator` or `rabbitmq:3.14-alpine` | Message queue |
 | App Insights | `jaegertracing/all-in-one` | Observability |
 
 ### 2025 Features
 
 **Azure Emulators:**
-- Azurite: Complete Azure Storage emulator (Blob, Queue, Table)
-- SQL Server 2025: AI features (Vector Search, Semantic Queries)
-- Cosmos DB Emulator: NoSQL local development
-- Service Bus Emulator: Message queue testing
+- Azurite: Azure Storage emulator (v3.35.0, API 2025-11-05)
+- SQL Server 2025: Latest with Vector Search and AI features
+- Cosmos DB Emulator: vnext-preview (Linux-based, ARM64 support)
+- Service Bus Emulator: Official Docker container (mcr.microsoft.com/azure-messaging/servicebus-emulator)
 
-**Docker Compose v2.40+:**
+**Docker Compose v2.42+:**
 - No `version` field (obsolete in 2025)
 - Health check conditions for dependencies
 - Multi-environment configuration (dev/prod)
 - YAML anchors for reusable config
+- Docker Compose Watch mode (GA) for hot reload
 
 **Security Hardening:**
 - Non-root users in all containers
 - Read-only filesystems with tmpfs
 - Capability drops (ALL) and selective adds
 - `no-new-privileges` security option
+- Runtime-only secrets (mounted in /run/secrets, never persisted)
 - Secrets management (Docker secrets)
 
 **Production Patterns:**
@@ -287,7 +289,7 @@ services:
         condition: service_healthy
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2025-RC0
+    image: mcr.microsoft.com/mssql/server:2025-latest
     healthcheck: ...
 ```
 
@@ -312,7 +314,7 @@ services:
     networks: [frontend, backend]
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2025-RC0
+    image: mcr.microsoft.com/mssql/server:2025-latest
     networks: [backend]
 
   redis:
@@ -491,7 +493,7 @@ az account show
 ## Requirements
 
 **Host System:**
-- Docker Desktop 4.38+ with Compose v2.40+
+- Docker Desktop 4.40+ with Compose v2.42+
 - Minimum 8GB RAM (16GB recommended for full stack)
 - Minimum 50GB disk space
 - Azure CLI installed and configured

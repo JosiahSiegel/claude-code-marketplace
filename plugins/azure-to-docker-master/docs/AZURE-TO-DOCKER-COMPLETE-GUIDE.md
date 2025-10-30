@@ -253,7 +253,7 @@ docker run -d \
     -e 'ACCEPT_EULA=Y' \
     -e 'SA_PASSWORD=YourStrong@Passw0rd' \
     -p 1433:1433 \
-    mcr.microsoft.com/mssql/server:2022-latest
+    mcr.microsoft.com/mssql/server:2025-latest
 
 # Wait for SQL Server to start
 sleep 30
@@ -302,7 +302,7 @@ docker run -d \
     -e POSTGRES_PASSWORD=localpassword \
     -e POSTGRES_DB=mydb \
     -p 5432:5432 \
-    postgres:15-alpine
+    postgres:16.6-alpine
 
 # Wait for startup
 sleep 10
@@ -346,7 +346,7 @@ docker run -d \
     -e MYSQL_ROOT_PASSWORD=rootpassword \
     -e MYSQL_DATABASE=mydb \
     -p 3306:3306 \
-    mysql:8.0
+    mysql:9.2
 
 # Wait for startup
 sleep 30
@@ -497,7 +497,7 @@ version: '3.8'
 services:
   # SQL Server Database
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: local-sqlserver
     environment:
       ACCEPT_EULA: "Y"
@@ -519,7 +519,7 @@ services:
 
   # Redis Cache
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: local-redis
     command: redis-server --requirepass localredispass
     ports:
@@ -674,12 +674,12 @@ docker compose logs -f webapp
 
 | Azure Service | Docker Image | Port | Notes |
 |--------------|--------------|------|-------|
-| **Azure SQL Database** | `mcr.microsoft.com/mssql/server:2022-latest` | 1433 | Use Developer edition for local |
-| **Azure PostgreSQL** | `postgres:15-alpine` | 5432 | Match major version |
-| **Azure MySQL** | `mysql:8.0` | 3306 | Match major version |
+| **Azure SQL Database** | `mcr.microsoft.com/mssql/server:2025-latest` | 1433 | Use Developer edition for local |
+| **Azure PostgreSQL** | `postgres:16.6-alpine` | 5432 | Match major version |
+| **Azure MySQL** | `mysql:9.2` | 3306 | Match major version |
 | **Cosmos DB (SQL API)** | `mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator` | 8081 | Linux emulator available |
 | **Cosmos DB (MongoDB API)** | `mongo:6` | 27017 | Use MongoDB |
-| **Azure Redis Cache** | `redis:7-alpine` | 6379 | Match major version |
+| **Azure Redis Cache** | `redis:7.4-alpine` | 6379 | Match major version |
 | **Azure Blob Storage** | `mcr.microsoft.com/azure-storage/azurite` | 10000-10002 | Official emulator |
 | **App Service (Node.js)** | `node:18-alpine` | 8080 | Match Node version |
 | **App Service (Python)** | `python:3.11-slim` | 8000 | Match Python version |

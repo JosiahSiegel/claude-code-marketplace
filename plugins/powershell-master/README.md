@@ -107,6 +107,14 @@ Automate Azure resources using the Az PowerShell module.
 /pwsh-azure to deploy virtual machines
 ```
 
+### `/pwsh-performance` (NEW in v1.4.0)
+Optimize PowerShell scripts for performance with parallel processing, efficient filtering, and .NET 9 enhancements.
+
+**Example:**
+```
+/pwsh-performance to speed up file processing script
+```
+
 ## 🤖 PowerShell Expert Agent
 
 The plugin includes a specialized **powershell-expert** agent with comprehensive PowerShell knowledge.
@@ -221,8 +229,9 @@ The plugin includes comprehensive 2025 documentation on:
 - **PowerShell 7.5.4 / 7.6 features** - ConvertTo/From-CliXml, Test-Path time filtering, .NET 9 performance
 - **2025 Breaking Changes** - MSOnline/AzureAD retirement (March-May 2025), PowerShell 2.0 removal, WMIC replacement
 - **Migration Paths** - Detailed guides for deprecated modules to current standards
-- **Modern Security** - JEA, WDAC, Constrained Language Mode, Script Block Logging
-- **PSResourceGet** - Modern package management (2x faster), Azure Artifacts integration
+- **Modern Security** - SecretManagement, JEA, WDAC, Constrained Language Mode, Script Block Logging
+- **PSResourceGet 1.1.1** - Modern package management (2x faster), Azure Artifacts integration, SecretManagement
+- **Performance Optimization** - ForEach-Object -Parallel, efficient filtering, .NET 9 enhancements
 - **Latest Modules** - Az 14.5.0 (zone redundancy, symbolic links), Microsoft.Graph 2.32.0
 - **CI/CD Patterns** - GitHub Actions, Azure DevOps, Bitbucket with latest practices
 - **Cross-Platform** - Windows 11 24H2, Server 2025, Linux, macOS compatibility
@@ -262,14 +271,14 @@ The plugin will automatically activate and provide expert guidance with working 
 ## 🔍 Technical Details
 
 **Plugin Name:** powershell-master
-**Version:** 1.3.0
+**Version:** 1.4.0
 **Author:** Josiah Siegel
 **License:** MIT
 **Last Updated:** October 2025
 
 **Components:**
-- 3 comprehensive skills (powershell-master, powershell-7.5-features, powershell-2025-changes)
-- 4 specialized commands
+- 4 comprehensive skills (powershell-master, powershell-7.5-features, powershell-2025-changes, powershell-security)
+- 5 specialized commands
 - 1 expert agent
 
 **Supported PowerShell Versions:**

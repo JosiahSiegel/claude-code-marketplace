@@ -3,6 +3,36 @@ name: azure-well-architected-framework
 description: "Comprehensive Azure Well-Architected Framework knowledge covering the five pillars: Reliability, Security, Cost Optimization, Operational Excellence, and Performance Efficiency. Provides design principles, best practices, and implementation guidance for building robust Azure solutions."
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Azure Well-Architected Framework
 
 The Azure Well-Architected Framework is a set of guiding tenets for building high-quality cloud solutions. It consists of five pillars of architectural excellence.

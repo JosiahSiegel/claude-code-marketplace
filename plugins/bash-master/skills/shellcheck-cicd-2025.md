@@ -3,11 +3,50 @@ name: shellcheck-cicd-2025
 description: ShellCheck validation as non-negotiable 2025 workflow practice
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # ShellCheck CI/CD Integration (2025)
 
 ## ShellCheck: Non-Negotiable in 2025
 
 ShellCheck is now considered **mandatory** in modern bash workflows (2025 best practices):
+
+### Latest Version: v0.11.0 (August 2025)
+
+**What's New:**
+- Full Bash 5.3 support (`${| cmd; }` and `source -p`)
+- **New warnings**: SC2327/SC2328 (capture group issues)
+- **POSIX.1-2024 compliance**: SC3013 removed (-ot/-nt/-ef now POSIX standard)
+- Enhanced static analysis capabilities
+- Improved performance and accuracy
 
 ### Why Mandatory?
 
@@ -16,6 +55,7 @@ ShellCheck is now considered **mandatory** in modern bash workflows (2025 best p
 - Enforces consistent code quality
 - Required by most DevOps teams
 - Standard in enterprise environments
+- Supports latest POSIX.1-2024 standard
 
 ## Installation
 
@@ -156,7 +196,7 @@ chmod +x .git/hooks/pre-commit
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.9.0.6
+  rev: v0.11.0.0
   hooks:
   - id: shellcheck
     args: ['--severity=warning']
@@ -206,6 +246,40 @@ ENTRYPOINT ["/scripts/entrypoint.sh"]
 ```
 
 ## Common ShellCheck Rules (2025)
+
+### New in v0.11.0: SC2327/SC2328 - Capture Groups
+
+```bash
+# ❌ Bad - Capture groups may not work as expected
+if [[ "$string" =~ ([0-9]+)\.([0-9]+) ]]; then
+  echo "$1"  # Wrong: $1 is script arg, not capture group
+fi
+
+# ✅ Good - Use BASH_REMATCH array
+if [[ "$string" =~ ([0-9]+)\.([0-9]+) ]]; then
+  echo "${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"
+fi
+```
+
+### SC2294: eval Negates Array Benefits (New)
+
+```bash
+# ❌ Bad - eval defeats array safety
+eval "command ${array[@]}"
+
+# ✅ Good - Direct array usage
+command "${array[@]}"
+```
+
+### SC2295: Quote Expansions Inside ${}
+
+```bash
+# ❌ Bad
+echo "${var-$default}"  # $default not quoted
+
+# ✅ Good
+echo "${var-"$default"}"
+```
 
 ### SC2086: Quote Variables
 

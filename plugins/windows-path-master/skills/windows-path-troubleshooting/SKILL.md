@@ -3,6 +3,36 @@ name: windows-path-troubleshooting
 description: "Complete Windows file path troubleshooting knowledge for Claude Code on Git Bash and Windows environments. PROACTIVELY activate for: (1) File path errors on Windows, (2) Backslash vs forward slash issues, (3) Edit/Write/Read tool failures, (4) MINGW path resolution, (5) Cross-platform path conversion."
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Windows Path Troubleshooting for Claude Code
 
 ## 🚨 CRITICAL: Always Use Backslashes on Windows for File Paths

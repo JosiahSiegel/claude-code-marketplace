@@ -24,11 +24,14 @@ This applies to:
 
 ### Documentation Guidelines
 
-**Never CREATE additional documentation unless explicitly requested by the user.**
+**NEVER create new documentation files unless explicitly requested by the user.**
 
-- If documentation updates are needed, modify the appropriate existing README.md file
-- Do not proactively create new .md files for documentation
-- Only create documentation files when the user specifically requests it
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
 
 ---
 

@@ -320,7 +320,7 @@ version: '3.8'
 services:
   # SQL Server Database
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: ecommerce-sqlserver
     environment:
       ACCEPT_EULA: "Y"
@@ -342,7 +342,7 @@ services:
 
   # Redis Cache
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: ecommerce-redis
     command: redis-server --requirepass "localRedisPass123"
     ports:

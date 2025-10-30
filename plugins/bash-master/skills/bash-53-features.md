@@ -3,6 +3,36 @@ name: bash-53-features
 description: Bash 5.3 new features and modern patterns (2025)
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Bash 5.3 Features (2025)
 
 ## Overview
@@ -13,7 +43,7 @@ Bash 5.3 (released July 2025) introduces significant new features that improve p
 
 ### 1. In-Shell Command Substitution
 
-**New: ${ command; } syntax** - Executes without forking a subshell:
+**New: ${ command; } syntax** - Executes without forking a subshell (runs in current shell context):
 
 ```bash
 # OLD way (Bash < 5.3) - Creates subshell
@@ -155,7 +185,33 @@ echo *.txt
 - `mtime` - By modification time
 - `-mtime` - Reverse modification time
 
-### 7. Floating-Point Arithmetic
+### 7. BASH_TRAPSIG Variable
+
+**New: Signal number variable in traps**:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# BASH_TRAPSIG contains the signal number being handled
+handle_signal() {
+    echo "Caught signal: $BASH_TRAPSIG" >&2
+    case "$BASH_TRAPSIG" in
+        15) echo "SIGTERM (15) received, shutting down gracefully" ;;
+        2)  echo "SIGINT (2) received, cleaning up" ;;
+        *)  echo "Signal $BASH_TRAPSIG received" ;;
+    esac
+}
+
+trap handle_signal SIGTERM SIGINT SIGHUP
+```
+
+**Benefits:**
+- Reusable signal handlers
+- Dynamic signal-specific behavior
+- Better logging and debugging
+
+### 8. Floating-Point Arithmetic
 
 **New: `fltexpr` loadable builtin**:
 
@@ -308,10 +364,16 @@ fi
 
 ### Bash 5.3 Availability (2025)
 
+**Note:** Bash 5.3 (released July 2025) is the latest stable version. There is no Bash 5.4 as of October 2025.
+
 - **Linux**: Ubuntu 24.04+, Fedora 40+, Arch (current)
 - **macOS**: Homebrew (`brew install bash`)
 - **Windows**: WSL2 with Ubuntu 24.04+
 - **Containers**: `bash:5.3` official image
+
+### C23 Conformance
+
+Bash 5.3 updated to C23 language standard. **Note:** K&R style C compilers are no longer supported.
 
 ### Fallback Pattern
 

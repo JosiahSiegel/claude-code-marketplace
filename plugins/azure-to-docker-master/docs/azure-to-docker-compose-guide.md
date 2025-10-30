@@ -413,7 +413,7 @@ version: '3.8'
 services:
   # SQL Server (replacing Azure SQL Database)
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: local-sqlserver
     environment:
       - ACCEPT_EULA=Y
@@ -466,7 +466,7 @@ services:
 
   # Redis (replacing Azure Redis Cache)
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: local-redis
     ports:
       - "6379:6379"
@@ -570,7 +570,7 @@ services:
 
   # SQL Server
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong@Passw0rd
@@ -603,7 +603,7 @@ services:
 
   # Redis
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     ports:
       - "6379:6379"
     volumes:
@@ -1104,7 +1104,7 @@ version: '3.8'
 
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: local-sqlserver
     hostname: sqlserver
     environment:
@@ -1128,7 +1128,7 @@ services:
     restart: unless-stopped
 
   db-init:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -1195,7 +1195,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     container_name: local-redis
     ports:
       - "${REDIS_PORT:-6379}:6379"
@@ -1365,7 +1365,7 @@ version: '3.8'
 
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=YourStrong@Passw0rd
@@ -1379,7 +1379,7 @@ services:
       - app-network
 
   redis:
-    image: redis:7-alpine
+    image: redis:7.4-alpine
     ports:
       - "6379:6379"
     volumes:

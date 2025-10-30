@@ -2,6 +2,36 @@
 description: Develop, debug, and optimize Apex code (classes, triggers, batch, scheduled, queueable)
 ---
 
+## 🚨 CRITICAL GUIDELINES
+
+### Windows File Path Requirements
+
+**MANDATORY: Always Use Backslashes on Windows for File Paths**
+
+When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
+
+**Examples:**
+- ❌ WRONG: `D:/repos/project/file.tsx`
+- ✅ CORRECT: `D:\repos\project\file.tsx`
+
+This applies to:
+- Edit tool file_path parameter
+- Write tool file_path parameter
+- All file operations on Windows systems
+
+
+### Documentation Guidelines
+
+**NEVER create new documentation files unless explicitly requested by the user.**
+
+- **Priority**: Update existing README.md files rather than creating new documentation
+- **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
+- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
+- **User preference**: Only create additional .md files when user specifically asks for documentation
+
+
+---
+
 # Salesforce Apex Development
 
 ## Purpose
@@ -221,6 +251,162 @@ private class TestClassName {
   System.debug('SOQL Queries: ' + Limits.getQueries() + '/' + Limits.getLimitQueries());
   System.debug('DML Statements: ' + Limits.getDmlStatements() + '/' + Limits.getLimitDmlStatements());
   ```
+
+## New Apex Features (Spring '25 / API 63.0+)
+
+### Compression Namespace (GA Spring '25)
+
+Compress and extract ZIP files natively in Apex:
+
+```apex
+// Create ZIP file from multiple attachments
+public class ZipCreationService {
+    public static Blob createZipFromAttachments(List<Id> attachmentIds) {
+        List<Attachment> attachments = [SELECT Id, Name, Body
+                                        FROM Attachment
+                                        WHERE Id IN :attachmentIds];
+
+        // Create Gzip instance
+        Compression.Gzip gzip = new Compression.Gzip();
+
+        // Add files to archive
+        Map<String, Blob> files = new Map<String, Blob>();
+        for (Attachment att : attachments) {
+            files.put(att.Name, att.Body);
+        }
+
+        // Compress to ZIP
+        Blob zipBlob = Compression.ZipUtil.createZip(files);
+
+        return zipBlob;
+    }
+
+    // Extract files from ZIP
+    public static Map<String, Blob> extractZip(Blob zipBlob) {
+        // Extract all files
+        Map<String, Blob> extractedFiles = Compression.ZipUtil.extractZip(zipBlob);
+
+        return extractedFiles;
+    }
+
+    // Extract specific file without uncompressing entire archive
+    public static Blob extractSingleFile(Blob zipBlob, String fileName) {
+        Blob fileContent = Compression.ZipUtil.extractFile(zipBlob, fileName);
+
+        return fileContent;
+    }
+}
+
+// Set compression level
+Compression.Gzip gzip = new Compression.Gzip();
+gzip.setLevel(Compression.CompressionLevel.BEST_COMPRESSION);  // Max compression
+gzip.setLevel(Compression.CompressionLevel.BEST_SPEED);        // Fast compression
+gzip.setLevel(Compression.CompressionLevel.DEFAULT_COMPRESSION); // Balanced
+```
+
+**IMPORTANT**: Consider Apex heap size limits (6 MB sync / 12 MB async). Maximum file size depends on compression method and ratio.
+
+**Use Cases**:
+- Batch export of records as CSV archives
+- Document bundling for customers
+- Log file compression and archiving
+- Attachment consolidation
+
+### FormulaEval Namespace (GA Spring '25)
+
+Build and evaluate dynamic formulas in Apex:
+
+```apex
+// Evaluate dynamic formula
+public class DynamicFormulaService {
+    public static Decimal calculateDiscount(Opportunity opp) {
+        // Define formula as string
+        String formula = 'IF(Amount > 100000, Amount * 0.15, Amount * 0.10)';
+
+        // Evaluate formula
+        FormulaEval.FormulaInstance instance = FormulaEval.create(formula);
+
+        // Set context record
+        instance.setSObjectContext(opp);
+
+        // Evaluate and return result
+        Object result = instance.evaluate();
+
+        return (Decimal)result;
+    }
+
+    // Access polymorphic relationship fields
+    public static String getTaskOwnerName(Task task) {
+        String formula = 'Owner.Name';
+
+        FormulaEval.FormulaInstance instance = FormulaEval.create(formula);
+        instance.setSObjectContext(task);
+
+        return (String)instance.evaluate();
+    }
+
+    // Reference custom lookups in formula
+    public static Decimal calculateCommission(Opportunity opp) {
+        String formula = 'Amount * Account.CommissionRate__c';
+
+        FormulaEval.FormulaInstance instance = FormulaEval.create(formula);
+        instance.setSObjectContext(opp);
+
+        return (Decimal)instance.evaluate();
+    }
+
+    // Dynamic pricing engine
+    public static Decimal calculateDynamicPrice(Product2 product, Map<String, Object> variables) {
+        // Formula stored in custom field
+        String formula = product.PricingFormula__c;
+        // Example: "BasePrice__c * (1 + (Quantity__c * DiscountRate__c))"
+
+        FormulaEval.FormulaInstance instance = FormulaEval.create(formula);
+        instance.setSObjectContext(product);
+
+        // Set additional variables
+        for (String key : variables.keySet()) {
+            instance.setVariable(key, variables.get(key));
+        }
+
+        return (Decimal)instance.evaluate();
+    }
+}
+
+// Custom formula editor for admins
+public class FormulaEditorController {
+    @AuraEnabled
+    public static Boolean validateFormula(String formula, String objectType) {
+        try {
+            FormulaEval.FormulaInstance instance = FormulaEval.create(formula);
+
+            // Validate against object schema
+            Schema.SObjectType sObjType = Schema.getGlobalDescribe().get(objectType);
+            SObject testRecord = sObjType.newSObject();
+
+            instance.setSObjectContext(testRecord);
+            instance.validate();
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}
+```
+
+**Benefits**:
+- No hardcoded formula fields required
+- Evaluate formulas dynamically based on business rules
+- Build custom formula editors for admins
+- Performance gains over formula field evaluations
+- Access polymorphic relationships and lookups
+
+**Use Cases**:
+- Dynamic pricing engines
+- Configurable business rules
+- A/B testing different calculation methods
+- Multi-tenant formula customization
 
 ## Best Practices
 

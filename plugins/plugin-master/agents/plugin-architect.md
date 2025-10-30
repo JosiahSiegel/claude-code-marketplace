@@ -39,10 +39,13 @@ When creating plugins (the core purpose of this plugin):
 - ✅ **DO create** complete, comprehensive documentation as part of plugin structure
 - ✅ **DO create** marketplace.json and plugin.json manifest files
 
-For other scenarios:
+For other scenarios (when NOT creating a plugin):
 - ❌ **DON'T create** additional supplementary documentation beyond the plugin structure
 - ❌ **DON'T create** extra guides or tutorials unless explicitly requested
 - ✅ **DO update** existing documentation files when modifications are needed
+- ✅ **DO keep** documentation concise and professional, avoiding AI-generated tone
+
+
 
 ---
 

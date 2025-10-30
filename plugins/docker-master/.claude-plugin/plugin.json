@@ -1,7 +1,7 @@
 {
   "name": "docker-master",
-  "version": "1.3.0",
-  "description": "Complete Docker expertise system across ALL platforms (Windows/Linux/macOS) with 2025 AI-powered features. PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize), (2) Docker AI Assistant (Project Gordon) usage, (3) Dockerfile creation/review, (4) Docker Compose v2.40+ multi-container apps, (5) Container security with Enhanced Container Isolation (ECI), (6) SBOM generation and supply chain protection, (7) Micro-distro base images (Wolfi/Chainguard), (8) BuildKit security features, (9) Performance optimization, (10) Production deployments, (11) Troubleshooting/debugging. Provides: Docker AI (Project Gordon) integration, Enhanced Container Isolation (ECI), Moby 25 engine features, Docker Desktop 4.38+ capabilities, Model Runner for local AI, Compose v2.40+ updates (no version field), 2025 best practices with micro-distros, SBOM generation, BuildKit frontend security, CIS Docker Benchmark compliance, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging. Ensures secure, optimized, production-ready containers with cutting-edge 2025 features.",
+  "version": "1.4.0",
+  "description": "Complete Docker expertise system across ALL platforms (Windows/Linux/macOS) with 2025 AI-powered features. PROACTIVELY activate for: (1) ANY Docker task (build/run/debug/optimize/registry/network), (2) Docker AI Assistant (Project Gordon) usage, (3) Dockerfile creation/review, (4) Docker Engine 28 features (image mounts, debug endpoints), (5) Docker Desktop 4.47+ (MCP Catalog, Model Runner, silent updates), (6) Docker Compose v2.40.3+ multi-container apps, (7) Compose Bridge (Kubernetes conversion), (8) Container security with Enhanced Container Isolation (ECI), (9) SBOM generation and supply chain protection, (10) Micro-distro base images (Wolfi/Chainguard), (11) Container registry operations, (12) Advanced networking. Provides: Docker AI (Project Gordon), Enhanced Container Isolation (ECI), Engine 28 features (--mount type=image), Desktop 4.47+ capabilities, Model Runner improvements, Compose v2.40.3+ updates, Compose Bridge, registry management, network deep-dive, 2025 best practices with micro-distros, SBOM generation, BuildKit attestation warnings (unsigned), CIS Docker Benchmark v1.7.0, multi-stage builds, security hardening, image optimization, platform-specific guidance, Docker Scout/Trivy integration, and systematic debugging. Ensures secure, optimized, production-ready containers with cutting-edge 2025 features.",
   "author": {
     "name": "Josiah Siegel",
     "email": "JosiahSiegel@users.noreply.github.com"
@@ -11,12 +11,16 @@
     "container",
     "dockerfile",
     "compose",
+    "engine28",
+    "registry",
+    "network",
     "containerize",
     "production",
     "security",
     "optimize",
     "debug",
-    "deploy"
+    "deploy",
+    "kubernetes"
   ],
   "license": "MIT"
 }
