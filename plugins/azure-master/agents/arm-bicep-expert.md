@@ -361,6 +361,132 @@ az deployment tenant create \
   --template-file main.bicep
 ```
 
+### 9a. **Git Bash / Windows Path Handling**
+
+**CRITICAL for Git Bash on Windows:**
+
+Git Bash automatically converts Unix-style paths, which can break ARM/Bicep deployments. Always disable path conversion:
+
+```bash
+# Detect Git Bash and disable path conversion
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+    echo "Git Bash detected - path conversion disabled for ARM/Bicep deployments"
+fi
+
+# Deploy template (now safe from path conversion)
+az deployment group create \
+  --resource-group MyRG \
+  --template-file ./templates/main.bicep \
+  --parameters @parameters.json
+```
+
+**Windows Path Conversion Examples:**
+
+```bash
+# Using cygpath for explicit conversion
+bicepFile=$(cygpath -w "./main.bicep")
+paramsFile=$(cygpath -w "./params.json")
+
+az deployment group create \
+  --resource-group MyRG \
+  --template-file "$bicepFile" \
+  --parameters "@$paramsFile"
+
+# Handling spaces in paths (common on Windows)
+templatePath="C:\Program Files\Templates\main.bicep"
+az deployment group create \
+  --resource-group MyRG \
+  --template-file "$templatePath"  # Quote to preserve spaces
+
+# PowerShell-compatible multi-line (backslash won't work)
+# In Git Bash, use backslash; in PowerShell, use backtick
+az deployment group create \
+  --resource-group MyRG \
+  --template-file main.bicep \
+  --parameters environment=production location=eastus
+```
+
+**Cross-Platform Deployment Script:**
+
+```bash
+#!/usr/bin/env bash
+
+# Detect shell environment
+if [[ -n "$MSYSTEM" ]]; then
+    # Git Bash on Windows
+    export MSYS_NO_PATHCONV=1
+    echo "Running in Git Bash - path conversion disabled"
+elif [[ "$OSTYPE" == "msys" ]]; then
+    # MSYS environment
+    export MSYS_NO_PATHCONV=1
+    echo "Running in MSYS - path conversion disabled"
+fi
+
+# Template and parameter files
+TEMPLATE_FILE="./main.bicep"
+PARAMS_FILE="./parameters.json"
+RESOURCE_GROUP="MyRG"
+
+# Validate template
+echo "Validating template..."
+az deployment group validate \
+  --resource-group "$RESOURCE_GROUP" \
+  --template-file "$TEMPLATE_FILE" \
+  --parameters "@$PARAMS_FILE"
+
+if [ $? -ne 0 ]; then
+    echo "Template validation failed"
+    exit 1
+fi
+
+# What-if analysis
+echo "Running what-if analysis..."
+az deployment group what-if \
+  --resource-group "$RESOURCE_GROUP" \
+  --template-file "$TEMPLATE_FILE" \
+  --parameters "@$PARAMS_FILE"
+
+# Deploy
+echo "Deploying template..."
+az deployment group create \
+  --resource-group "$RESOURCE_GROUP" \
+  --template-file "$TEMPLATE_FILE" \
+  --parameters "@$PARAMS_FILE" \
+  --mode Incremental
+
+echo "Deployment complete!"
+```
+
+**Common Git Bash Issues:**
+
+❌ **Problem:** Resource IDs starting with `/` get converted
+```bash
+# This fails in Git Bash without MSYS_NO_PATHCONV
+az deployment group create --template-file /subscriptions/xxx/...
+# Converted to: C:/Program Files/Git/subscriptions/xxx/...
+```
+
+✅ **Solution:**
+```bash
+export MSYS_NO_PATHCONV=1
+az deployment group create --template-file /subscriptions/xxx/...
+```
+
+❌ **Problem:** Parameter files with `@` prefix fail
+```bash
+# May fail in Git Bash
+az deployment group create --parameters @params.json
+```
+
+✅ **Solution:**
+```bash
+export MSYS_NO_PATHCONV=1
+az deployment group create --parameters @params.json
+# Or use full path
+az deployment group create --parameters "@./params.json"
+```
+
 ### 10. **CI/CD Integration**
 
 **GitHub Actions:**

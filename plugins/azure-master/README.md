@@ -389,6 +389,86 @@ az version
 az upgrade
 ```
 
+## Git Bash / Windows Compatibility
+
+**Critical for Windows developers using Git Bash:**
+
+Azure CLI development is common on Windows with Git Bash, but automatic path conversion can break commands. This plugin includes comprehensive Git Bash compatibility guidance.
+
+### Quick Fix for Git Bash
+
+```bash
+# Add to your .bashrc or script start
+export MSYS_NO_PATHCONV=1
+
+# Or detect Git Bash automatically
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+fi
+```
+
+### Common Issues
+
+**Problem:** Resource IDs get converted incorrectly
+```bash
+# Fails: /subscriptions/... becomes C:/Program Files/Git/subscriptions/...
+az vm start --ids /subscriptions/xxx/resourceGroups/xxx/...
+```
+
+**Solution:**
+```bash
+export MSYS_NO_PATHCONV=1
+az vm start --ids /subscriptions/xxx/resourceGroups/xxx/...
+```
+
+**Problem:** ARM/Bicep template deployments fail
+```bash
+# May fail with path conversion issues
+az deployment group create --template-file main.bicep --parameters @params.json
+```
+
+**Solution:**
+```bash
+export MSYS_NO_PATHCONV=1
+az deployment group create --template-file main.bicep --parameters @params.json
+```
+
+### Shell Detection
+
+The plugin agents include automatic shell detection patterns:
+
+```bash
+# Detect Git Bash using MSYSTEM variable (most reliable)
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+    echo "Git Bash detected"
+fi
+
+# Detect using OSTYPE
+case "$OSTYPE" in
+    msys*)    export MSYS_NO_PATHCONV=1 ;;
+    cygwin*)  export MSYS_NO_PATHCONV=1 ;;
+esac
+```
+
+### Path Conversion Tools
+
+```bash
+# Convert Unix to Windows path
+cygpath -w "/c/Projects/template.bicep"
+# Output: C:\Projects\template.bicep
+
+# Convert Windows to Unix path
+cygpath -u "C:\Projects\template.bicep"
+# Output: /c/Projects/template.bicep
+
+# Use in deployments
+templatePath=$(cygpath -w "./main.bicep")
+az deployment group create --template-file "$templatePath"
+```
+
+All Azure Master agents (`az-cli-expert`, `arm-bicep-expert`) include Windows/Git Bash compatibility guidance and examples.
+
 ## Troubleshooting
 
 ### Check Azure CLI Version
@@ -454,7 +534,15 @@ Josiah Siegel (JosiahSiegel@users.noreply.github.com)
 
 ## Version
 
-1.0.0 (January 2025)
+1.1.0 (January 2025)
+
+### What's New in 1.1.0
+
+- **Git Bash / Windows Compatibility**: Comprehensive path conversion guidance for Windows developers
+- **Shell Detection**: Automatic Git Bash/MINGW detection with MSYS_NO_PATHCONV configuration
+- **ARM/Bicep Windows Support**: Path handling examples for template deployments on Windows
+- **Cross-Platform Scripts**: Production-ready scripts that work across Git Bash, PowerShell, and Unix shells
+- **Path Conversion Tools**: cygpath usage examples for Windows/Unix path conversion
 
 ---
 

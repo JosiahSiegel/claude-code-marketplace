@@ -238,4 +238,177 @@ Common errors and solutions:
 - **macOS**: .NET global tool
 - **Containers**: Available in mssql-tools or as .NET tool
 
+## Git Bash / MINGW / MSYS2 on Windows
+
+**CRITICAL**: Git Bash automatically converts paths starting with `/` which breaks SqlPackage parameters like `/Action:Publish`.
+
+### Problem
+
+```bash
+# This FAILS in Git Bash (path conversion mangles /Action)
+sqlpackage /Action:Publish /SourceFile:MyDB.dacpac /TargetServerName:localhost
+# Git Bash converts: /Action → C:/Program Files/Git/usr/Action
+```
+
+### Solutions (Choose One)
+
+**Method 1: MSYS_NO_PATHCONV (Recommended)**
+
+```bash
+# Disable path conversion for SqlPackage commands
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDatabase.dacpac" \
+  /TargetServerName:"localhost" \
+  /TargetDatabaseName:"MyDB" \
+  /p:BlockOnPossibleDataLoss=True
+```
+
+**Method 2: Double Slash // (Shell-Agnostic)**
+
+```bash
+# Use // instead of / (works in all shells)
+sqlpackage //Action:Publish \
+  //SourceFile:MyDatabase.dacpac \
+  //TargetServerName:localhost \
+  //TargetDatabaseName:MyDB \
+  //p:BlockOnPossibleDataLoss=True
+```
+
+**Method 3: Use PowerShell (Recommended for Windows)**
+
+```powershell
+# PowerShell - no path conversion issues
+sqlpackage /Action:Publish `
+  /SourceFile:"MyDatabase.dacpac" `
+  /TargetServerName:"localhost" `
+  /TargetDatabaseName:"MyDB" `
+  /p:BlockOnPossibleDataLoss=True
+```
+
+### Complete Git Bash Publish Example
+
+```bash
+#!/bin/bash
+# publish-database.sh - Git Bash compatible deployment script
+
+set -e
+
+# Detect Git Bash and disable path conversion
+if [ -n "$MSYSTEM" ]; then
+  echo "Git Bash detected - disabling path conversion"
+  export MSYS_NO_PATHCONV=1
+fi
+
+# Variables
+DACPAC="bin/Release/MyDatabase.dacpac"
+SERVER="${SQL_SERVER:-localhost}"
+DATABASE="${SQL_DATABASE:-MyDB}"
+ENV="${DEPLOY_ENV:-dev}"
+
+# Verify DACPAC exists
+if [ ! -f "$DACPAC" ]; then
+  echo "ERROR: DACPAC not found: $DACPAC"
+  exit 1
+fi
+
+echo "Deploying $DACPAC to $SERVER/$DATABASE (Environment: $ENV)"
+
+# Generate deployment report first (SAFETY CHECK)
+echo "Generating deployment preview..."
+sqlpackage /Action:DeployReport \
+  /SourceFile:"$DACPAC" \
+  /TargetServerName:"$SERVER" \
+  /TargetDatabaseName:"$DATABASE" \
+  /OutputPath:"deploy-report.xml"
+
+# Parse report and show summary (simplified)
+if grep -q "Drop" "deploy-report.xml"; then
+  echo "WARNING: Deployment will DROP objects!"
+  echo "Review deploy-report.xml before continuing"
+  read -p "Continue? (yes/no): " CONFIRM
+  if [ "$CONFIRM" != "yes" ]; then
+    echo "Deployment cancelled"
+    exit 0
+  fi
+fi
+
+# Deploy based on environment
+if [ "$ENV" = "prod" ]; then
+  echo "PRODUCTION deployment - using strict safety checks"
+  sqlpackage /Action:Publish \
+    /SourceFile:"$DACPAC" \
+    /TargetServerName:"$SERVER" \
+    /TargetDatabaseName:"$DATABASE" \
+    /p:BlockOnPossibleDataLoss=True \
+    /p:BackupDatabaseBeforeChanges=True \
+    /p:DropObjectsNotInSource=False
+else
+  echo "Development deployment"
+  sqlpackage /Action:Publish \
+    /SourceFile:"$DACPAC" \
+    /TargetServerName:"$SERVER" \
+    /TargetDatabaseName:"$DATABASE" \
+    /p:BlockOnPossibleDataLoss=False
+fi
+
+echo "Deployment complete!"
+```
+
+### GitHub Actions with Git Bash
+
+```yaml
+jobs:
+  deploy:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash  # Git Bash
+
+    steps:
+      - name: Deploy Database (Git Bash compatible)
+        env:
+          MSYS_NO_PATHCONV: 1  # Critical for SqlPackage
+        run: |
+          sqlpackage /Action:Publish \
+            /SourceFile:"bin/Release/MyDatabase.dacpac" \
+            /TargetConnectionString:"${{ secrets.SQL_CONN }}" \
+            /p:BlockOnPossibleDataLoss=True
+
+      # OR use double-slash method (no env var needed)
+      - name: Deploy Database (Double Slash)
+        run: |
+          sqlpackage //Action:Publish \
+            //SourceFile:bin/Release/MyDatabase.dacpac \
+            //TargetConnectionString:"${{ secrets.SQL_CONN }}"
+```
+
+### Common Path Issues in Git Bash
+
+**DACPAC with spaces:**
+```bash
+# WRONG - unquoted path with spaces
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish /SourceFile:D:/Program Files/MyDB.dacpac
+
+# CORRECT - quoted path
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish /SourceFile:"D:/Program Files/MyDB.dacpac"
+```
+
+**Publish profile paths:**
+```bash
+# CORRECT - quote profile path
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /Profile:"./Profiles/Production.publish.xml"
+```
+
+**Connection strings with file paths:**
+```bash
+# CORRECT - escape backslashes in connection strings
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetConnectionString:"Server=localhost;Database=MyDB;AttachDbFilename=D:\\Data\\MyDB.mdf;Integrated Security=True;"
+```
+
 IMPORTANT: Always research latest SqlPackage documentation when encountering deployment issues. Use `/p:?` to see all available deployment options.
+
+**For comprehensive Git Bash path handling**, see the `windows-git-bash-paths` skill documentation.

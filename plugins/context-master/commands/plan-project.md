@@ -2,7 +2,7 @@
 description: Plan optimal file creation order for multi-file projects before implementation
 ---
 
-## 🚨 CRITICAL GUIDELINES
+## CRITICAL GUIDELINES
 
 ### Windows File Path Requirements
 
@@ -11,14 +11,20 @@ description: Plan optimal file creation order for multi-file projects before imp
 When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
 
 **Examples:**
-- ❌ WRONG: `D:/repos/project/file.tsx`
-- ✅ CORRECT: `D:\repos\project\file.tsx`
+- WRONG: `D:/repos/project/file.tsx`
+- CORRECT: `D:epos\projectile.tsx`
 
 This applies to:
 - Edit tool file_path parameter
 - Write tool file_path parameter
 - All file operations on Windows systems
 
+### Windows/Git Bash Path Conversion
+
+When using Git Bash on Windows, automatic path conversion may occur:
+- Unix paths (`/foo`) convert to Windows paths automatically
+- This usually works transparently
+- See WINDOWS_GIT_BASH_GUIDE.md for advanced scenarios and troubleshooting
 
 ### Documentation Guidelines
 
@@ -26,9 +32,8 @@ This applies to:
 
 - **Priority**: Update existing README.md files rather than creating new documentation
 - **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
-- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
-- **User preference**: Only create additional .md files when user specifically asks for documentation
-
+- **Style**: Documentation should be concise, direct, and professional
+- **User preference**: Only create additional .md files when user specifically asks
 
 ---
 
@@ -65,22 +70,22 @@ Based on the thinking, create a plan following this template:
 ```
 ARCHITECTURE PLAN:
 
-□ FILES NEEDED:
+FILES NEEDED:
   - [filename]: [purpose]
   - [filename]: [purpose]
 
-□ SHARED DEPENDENCIES (must be created first):
+SHARED DEPENDENCIES (must be created first):
   - [dependency]: [what files need this]
 
-□ CREATION ORDER (numbered with reasoning):
+CREATION ORDER (numbered with reasoning):
   1. [file] - Reason: [why this first]
   2. [file] - Reason: [why this second]
   3. [file] - Reason: [why this third]
 
-□ CROSS-FILE REFERENCES:
+CROSS-FILE REFERENCES:
   - [file A] references [file B] via [method]
 
-□ POTENTIAL ISSUES TO AVOID:
+POTENTIAL ISSUES TO AVOID:
   - [what could go wrong]
   - [common mistake]
 ```
@@ -146,3 +151,11 @@ After creating all files, verify:
 4. Verify all HTML files reference styles.css correctly
 
 **Result:** Efficient, no refactoring needed!
+
+## Windows/Git Bash Notes
+
+On Windows with Git Bash:
+- Path planning uses forward slashes (Unix format)
+- Actual file creation uses backslashes (Windows format)
+- Verification handles both formats automatically
+- See WINDOWS_GIT_BASH_GUIDE.md for detailed guidance

@@ -37,10 +37,11 @@ Complete Terraform expertise system for Claude Code. Provides comprehensive infr
 - Migration assistance
 
 ### Platform Support
-- **Windows**: PowerShell-native, path handling, credential management
+- **Windows**: PowerShell-native, **Git Bash/MINGW compatibility**, path handling, credential management
 - **Linux**: Package managers, permissions, environment configuration
 - **macOS**: Homebrew integration, BSD utilities
 - **CI/CD**: Azure DevOps, GitHub Actions, GitLab CI, Jenkins
+- **Cross-Platform Scripts**: Shell detection and path conversion handling
 
 ### Security & Compliance (2025)
 - **Trivy integration** (tfsec functionality merged into Trivy in 2025)
@@ -384,6 +385,49 @@ Steps:
 Part of the Claude Code Marketplace.
 
 ## Changelog
+
+### Version 1.7.0 (2025)
+
+**Git Bash Windows Compatibility:**
+- **Git Bash/MINGW Path Conversion Expertise**: Complete guidance for Windows developers using Git Bash
+  - Terraform-specific path issues (-chdir, -var-file, backend paths, module sources)
+  - MSYS_NO_PATHCONV usage and workarounds
+  - Shell detection patterns for cross-platform scripts
+  - cygpath integration for path conversion
+  - Best practices for Git Bash + Terraform workflows
+- **Cross-Platform Script Patterns**: Shell detection and adaptive path handling
+  - Detect Git Bash vs PowerShell vs Unix shells
+  - Platform-specific path variable configuration
+  - OSTYPE and MSYSTEM detection examples
+  - Universal Terraform script templates
+
+**Agent Enhancements:**
+- Added comprehensive Git Bash/MINGW path conversion section (Section 6.5)
+- Documented Terraform-specific path conversion issues
+- Added shell detection for Terraform workflows
+- Cross-platform script patterns with $OSTYPE and $MSYSTEM
+- Best practices for Git Bash + Terraform compatibility
+- Troubleshooting Git Bash path conversion failures
+- Updated proactive behavior with 2 new activation scenarios
+
+**Command Updates:**
+- `/tf-debug`: Added Git Bash path troubleshooting section
+  - -chdir path conversion issues
+  - Backend state file path problems
+  - Module source path issues
+  - Variable file path failures
+  - 5 solution patterns for each scenario
+- `/tf-cli`: Added dedicated Git Bash on Windows section
+  - Path conversion examples (bad vs good)
+  - Cross-platform script pattern with shell detection
+  - 5 Git Bash best practices
+  - cygpath usage examples
+
+**Documentation Updates:**
+- README: Added Git Bash/MINGW compatibility to Platform Support
+- README: Added cross-platform scripts feature
+- Agent: Comprehensive Git Bash section with Terraform-specific examples
+- Commands: Platform-specific Git Bash troubleshooting
 
 ### Version 1.6.0 (2025)
 

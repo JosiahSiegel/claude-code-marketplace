@@ -169,7 +169,48 @@ $env:PATH    # Correct on Linux/macOS
 $env:Path    # May not work on Linux/macOS
 ```
 
-### 6. Line Endings
+### 6. Shell Detection (Windows: PowerShell vs Git Bash)
+
+**CRITICAL:** On Windows, distinguish between PowerShell and Git Bash/MSYS2 environments:
+
+```powershell
+# PowerShell detection (most reliable)
+if ($env:PSModulePath -and ($env:PSModulePath -split ';').Count -ge 3) {
+    Write-Host "Running in PowerShell"
+}
+
+# Platform-specific automatic variables (PowerShell 7+)
+if ($IsWindows) {
+    # Windows-specific code
+}
+elseif ($IsLinux) {
+    # Linux-specific code
+}
+elseif ($IsMacOS) {
+    # macOS-specific code
+}
+```
+
+**Git Bash/MSYS2 Detection:**
+```bash
+# Bash detection - check MSYSTEM environment variable
+if [ -n "$MSYSTEM" ]; then
+    echo "Running in Git Bash/MSYS2: $MSYSTEM"
+    # MSYSTEM values: MINGW64, MINGW32, MSYS
+fi
+```
+
+**When to Use Each Shell:**
+- **PowerShell:** Windows automation, Azure/M365, PSGallery modules, object pipelines
+- **Git Bash:** Git operations, Unix tools (sed/awk/grep), POSIX scripts, text processing
+
+**Path Handling Differences:**
+- **PowerShell:** `C:\Users\John` or `C:/Users/John` (both work in PS 7+)
+- **Git Bash:** `/c/Users/John` (Unix-style, auto-converts to Windows when calling Windows tools)
+
+See `powershell-shell-detection` skill for comprehensive cross-shell guidance.
+
+### 7. Line Endings
 
 ```powershell
 # PowerShell handles line endings automatically

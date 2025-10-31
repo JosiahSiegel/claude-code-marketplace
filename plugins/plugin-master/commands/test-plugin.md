@@ -12,7 +12,33 @@ Validate plugin structure, manifests, components, and cross-platform compatibili
 
 ## Testing Workflow
 
-### 1. Structural Validation
+### 1. Shell Environment Detection
+
+Detect shell environment for platform-specific testing:
+
+```bash
+# Detect shell environment (important for Git Bash/MinGW)
+if [[ -n "$MSYSTEM" ]]; then
+    echo "ℹ️  Detected Git Bash/MinGW environment: $MSYSTEM"
+    echo "   Path conversion may affect testing - consider GitHub marketplace method"
+    IS_GIT_BASH=true
+else
+    IS_GIT_BASH=false
+fi
+
+# Detect OS type
+case "$(uname -s)" in
+    Darwin*)     OS_TYPE="macOS" ;;
+    Linux*)      OS_TYPE="Linux" ;;
+    MINGW64*|MINGW32*|MSYS*) OS_TYPE="Git Bash" ;;
+    CYGWIN*)     OS_TYPE="Cygwin" ;;
+    *)           OS_TYPE="Unknown" ;;
+esac
+
+echo "ℹ️  Operating System: $OS_TYPE"
+```
+
+### 2. Structural Validation
 
 Check plugin directory structure and required files:
 
@@ -31,7 +57,7 @@ fi
 echo "✓ Plugin structure valid"
 ```
 
-### 2. Manifest Validation
+### 3. Manifest Validation
 
 Validate plugin.json schema and required fields:
 
@@ -73,7 +99,7 @@ fi
 echo "✓ Manifest validation passed"
 ```
 
-### 3. Component Validation
+### 4. Component Validation
 
 Check commands, agents, and skills structure:
 
@@ -127,7 +153,7 @@ if [[ -d skills ]]; then
 fi
 ```
 
-### 4. Portability Check
+### 5. Portability Check
 
 Ensure no hardcoded paths or user-specific information:
 
@@ -158,7 +184,7 @@ fi
 echo "✓ Portability check passed"
 ```
 
-### 5. Documentation Check
+### 6. Documentation Check
 
 Verify README and documentation completeness:
 
@@ -185,7 +211,7 @@ if [[ ! -f LICENSE ]] && [[ ! -f LICENSE.md ]]; then
 fi
 ```
 
-### 6. Marketplace Compatibility
+### 7. Marketplace Compatibility
 
 If in marketplace repository, validate marketplace.json entry:
 
@@ -270,7 +296,31 @@ claude
 /help
 ```
 
-### Windows (via GitHub)
+### Git Bash/MinGW (Windows)
+```bash
+# Detect shell environment
+if [[ -n "$MSYSTEM" ]]; then
+    echo "Git Bash detected: $MSYSTEM"
+    echo "Local plugin paths may have path conversion issues"
+    echo "Recommendation: Use GitHub marketplace method for testing"
+fi
+
+# If you want to try local installation anyway:
+# Check if path looks correct
+echo ~/.local/share/claude/plugins
+
+# Copy plugin (may not work due to path conversion)
+cp -r . ~/.local/share/claude/plugins/$(basename $PWD)
+
+# RECOMMENDED: Use GitHub marketplace method instead
+# Create test repository, upload plugin files, make public
+# Then:
+/plugin marketplace add YOUR_USERNAME/YOUR_TEST_REPO
+/plugin install your-plugin@YOUR_USERNAME
+/help
+```
+
+### Windows (via GitHub - Recommended)
 ```bash
 # Create test repository
 # Upload plugin files

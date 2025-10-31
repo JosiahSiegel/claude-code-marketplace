@@ -171,13 +171,20 @@ The Plugin Architect agent automatically uses the plugin-master skill to:
 - Comprehensive README
 - Usage examples
 - Installation instructions
-- Platform-specific notes
+- Platform-specific notes (Windows/Git Bash/Mac/Linux)
 
 ✅ **Quality**
 - Valid JSON syntax
 - Proper frontmatter
 - Error handling
 - Security considerations
+
+✅ **Cross-Platform Compatibility**
+- GitHub-first installation for Windows/Git Bash
+- Shell detection for testing environments ($MSYSTEM for Git Bash/MinGW)
+- Path conversion awareness for Git Bash path issues
+- Portable paths using ${CLAUDE_PLUGIN_ROOT}
+- Testing guidance for all development environments
 
 ✅ **Distribution**
 - GitHub-ready structure

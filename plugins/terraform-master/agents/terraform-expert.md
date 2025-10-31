@@ -137,6 +137,7 @@ Always consider Terraform and provider versions:
 **Windows**:
 - PowerShell execution context and escaping
 - Path handling (backslashes vs forward slashes)
+- **Git Bash/MINGW path conversion** (critical for Windows developers)
 - Line ending issues (CRLF vs LF)
 - Environment variable syntax
 - Windows Subsystem for Linux (WSL) considerations
@@ -158,6 +159,132 @@ Always consider Terraform and provider versions:
 - Plugin cache configuration for performance
 - Credential management (env vars, CLI tools, credential helpers)
 - CI/CD agent-specific configurations
+
+### 6.5. Git Bash/MINGW Path Conversion (Windows)
+
+**Critical Understanding**: Git Bash automatically converts Unix-style paths to Windows paths, which can break Terraform commands.
+
+**What Triggers Conversion**:
+- Arguments starting with `/` (e.g., `/c/Users` → `C:\Users`)
+- Colon-separated path lists (e.g., `/foo:/bar`)
+- Arguments after `-` with path components
+
+**What's Exempt**:
+- Arguments containing `=` (e.g., `-chdir=C:\path`)
+- Drive specifiers already in Windows format (`C:`)
+- Arguments with `;` (Windows path separator)
+
+**Terraform-Specific Path Issues**:
+
+*Problem: -chdir with Unix paths*
+```bash
+# Git Bash converts this incorrectly
+terraform -chdir=/c/terraform/prod plan
+# May become: terraform -chdir=C:/c/terraform/prod plan (wrong!)
+
+# Solutions:
+# 1. Use Windows-style paths with -chdir
+terraform -chdir=C:/terraform/prod plan
+terraform -chdir="C:\terraform\prod" plan
+
+# 2. Disable conversion for this command
+MSYS_NO_PATHCONV=1 terraform -chdir=/c/terraform/prod plan
+
+# 3. Use relative paths
+terraform -chdir=../prod plan
+```
+
+*Problem: Backend state file paths*
+```hcl
+# In backend.tf - use Windows paths or relative paths
+terraform {
+  backend "local" {
+    path = "C:/terraform/state/terraform.tfstate"  # Good
+    # path = "/c/terraform/state/terraform.tfstate"  # Bad in Git Bash
+  }
+}
+```
+
+*Problem: Variable file paths*
+```bash
+# May fail in Git Bash
+terraform plan -var-file=/c/terraform/prod.tfvars
+
+# Solutions:
+terraform plan -var-file=C:/terraform/prod.tfvars
+terraform plan -var-file="C:\terraform\prod.tfvars"
+MSYS_NO_PATHCONV=1 terraform plan -var-file=/c/terraform/prod.tfvars
+```
+
+*Problem: Module source paths*
+```hcl
+# In module blocks - prefer relative or Windows paths
+module "networking" {
+  source = "../modules/networking"           # Good - relative
+  source = "C:/terraform/modules/networking" # Good - Windows
+  # source = "/c/terraform/modules/networking" # Bad - Git Bash conversion
+}
+```
+
+**Shell Detection for Terraform Workflows**:
+
+*Detect Git Bash in scripts*
+```bash
+#!/bin/bash
+# Detect shell environment
+if [ -n "$MSYSTEM" ]; then
+  echo "Running in Git Bash/MINGW"
+  # Use Windows-style paths or set MSYS_NO_PATHCONV
+  export MSYS_NO_PATHCONV=1
+fi
+
+# Now safe to use Unix-style paths
+terraform -chdir=/c/terraform/prod plan
+```
+
+*Cross-platform script pattern*
+```bash
+#!/bin/bash
+# Universal path handling
+case "$OSTYPE" in
+  msys*|mingw*)
+    # Git Bash on Windows
+    TF_DIR="C:/terraform/prod"
+    export MSYS_NO_PATHCONV=1
+    ;;
+  linux-gnu*|darwin*)
+    # Linux or macOS
+    TF_DIR="/home/user/terraform/prod"
+    ;;
+esac
+
+terraform -chdir="$TF_DIR" plan
+```
+
+**Best Practices for Git Bash + Terraform**:
+1. **Use -chdir with Windows paths**: `terraform -chdir=C:/path/to/config`
+2. **Set MSYS_NO_PATHCONV=1** for scripts with many path operations
+3. **Use relative paths** when possible: `terraform -chdir=../prod`
+4. **Avoid Unix-style absolute paths** in Git Bash: `/c/Users/...`
+5. **Test scripts in both PowerShell and Git Bash** on Windows
+6. **Use forward slashes in Windows paths**: `C:/terraform` works in both shells
+
+**Troubleshooting Path Issues**:
+```bash
+# Symptom: "No such file or directory" in Git Bash
+# Check if path was converted:
+echo /c/terraform/prod  # Shows actual path Git Bash will use
+
+# Verify Terraform sees correct path:
+TF_LOG=DEBUG terraform -chdir=/c/terraform/prod init 2>&1 | grep chdir
+
+# Disable conversion globally (Git Bash session):
+export MSYS_NO_PATHCONV=1
+
+# Test path conversion:
+cygpath -w "/c/terraform/prod"  # → C:\terraform\prod
+cygpath -u "C:\terraform\prod"  # → /c/terraform/prod
+```
 
 ### 7. CI/CD Integration Excellence
 
@@ -265,6 +392,7 @@ Always consider Terraform and provider versions:
 - Execution policy restrictions
 - Credential provider issues
 - Line ending conversions breaking provisioners
+- **Git Bash path conversion breaking Terraform commands**
 
 *Linux/macOS*:
 - Permission denied errors
@@ -1528,6 +1656,8 @@ ALWAYS activate for these scenarios:
 28. **OpenTofu 1.10/1.11 features** (OCI registry, ephemeral resources, enabled meta-argument) (2025)
 29. **Terraform 1.14 actions blocks and query command** (2025)
 30. **Module lifecycle management and governance** (2025)
+31. **Git Bash/MINGW path conversion issues on Windows** (2025)
+32. **Cross-platform Terraform scripts with shell detection** (2025)
 
 ## Critical Reminders
 

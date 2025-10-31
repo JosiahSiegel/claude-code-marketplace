@@ -6,14 +6,23 @@ Master Azure DevOps pipelines with expert knowledge of YAML pipelines, CI/CD bes
 
 The ADO Master plugin equips Claude Code with comprehensive Azure DevOps expertise, enabling you to create, optimize, secure, and debug Azure Pipelines following current Microsoft 2025 best practices. Updated for Sprint 254-262 with Agent v4, Microsoft Security DevOps, template management, and GitHub Copilot integration.
 
-## What's New in v1.4.0
+## What's New in v1.5.0
 
-**NEW Commands:**
-- **`/ado-workload-identity`** - Configure workload identity federation (OIDC) for passwordless Azure authentication
-- **`/ado-pipeline-analytics`** - Analyze pipeline performance, track metrics, and identify optimization opportunities
-- **`/ado-quality-gates`** - Implement quality gates and code quality enforcement with SonarQube integration
+**NEW Skills:**
+- **`ado-windows-git-bash-compatibility`** - Comprehensive Windows/Git Bash path handling for Azure Pipelines
+  - MINGW/MSYS path conversion mastery
+  - Shell detection patterns for cross-platform scripts
+  - Windows agent troubleshooting and diagnostics
+  - Azure DevOps CLI path handling on Windows
 
-**2025 Features:**
+**Windows Compatibility Enhancements:**
+- Complete Git Bash path conversion guidance (`MSYS_NO_PATHCONV`)
+- Cross-platform script patterns for Windows/Linux/macOS agents
+- Platform detection using `$(Agent.OS)` and `uname`
+- Windows-specific pipeline examples in all commands
+- Troubleshooting guides for common Windows agent failures
+
+**Previous Features (v1.4.0):**
 - Workload identity federation (OIDC) setup and migration guidance (2025 security standard)
 - Pipeline performance analytics and cost tracking with Azure DevOps CLI
 - Microsoft Security DevOps (MSDO) extension integration (replaces deprecated CredScan)
@@ -54,7 +63,8 @@ The ADO Master plugin equips Claude Code with comprehensive Azure DevOps experti
 
 - **ado-pipeline-best-practices** - Best practices for Azure Pipelines structure, triggers, variables, and more
 - **sprint-254-features** - Azure DevOps Sprint 254-262 latest features including Agent v4, ARM64 support, GitHub Copilot integration
-- **defender-for-devops** - Microsoft Defender for DevOps integration with comprehensive security scanning (NEW in v1.3.0)
+- **defender-for-devops** - Microsoft Defender for DevOps integration with comprehensive security scanning
+- **ado-windows-git-bash-compatibility** - Windows/Git Bash path handling and cross-platform compatibility (NEW in v1.5.0)
 
 ## Installation
 
@@ -193,6 +203,7 @@ This plugin ensures Claude always:
 4. **Comprehensive Examples** - Provides complete, working YAML
 5. **Current Task Versions** - Uses latest stable task versions
 6. **Explains Rationale** - Teaches why, not just what
+7. **Cross-Platform Compatibility** - Ensures pipelines work on Windows, Linux, and macOS agents
 
 ## Best Practices Applied
 

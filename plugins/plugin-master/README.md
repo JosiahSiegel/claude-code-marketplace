@@ -206,8 +206,14 @@ When you ask Claude to create a plugin, it follows this process:
 ## 🌐 Platform Notes
 
 - ✅ **Windows:** Marketplace installation recommended (local paths may have issues)
+- ✅ **Git Bash/MinGW:** Use marketplace installation method; includes shell detection and path conversion guidance
 - ✅ **macOS:** All installation methods work
 - ✅ **Linux:** All installation methods work
+
+**For Plugin Developers on Git Bash:**
+- Shell detection with $MSYSTEM environment variable
+- Path conversion awareness for testing
+- GitHub marketplace method recommended for reliability
 
 ## 📚 Documentation
 
@@ -223,7 +229,7 @@ This plugin includes comprehensive documentation:
 ## 🔍 Technical Details
 
 **Plugin Name:** plugin-master
-**Version:** 2.1.0
+**Version:** 2.2.0
 **Author:** Josiah Siegel
 **License:** MIT
 **Repository:** https://github.com/JosiahSiegel/claude-code-marketplace
@@ -233,7 +239,14 @@ This plugin includes comprehensive documentation:
 - 1 specialized agent (plugin-architect)
 - 2 comprehensive skills (plugin-master + advanced-features-2025)
 
-**New in 2.1.0:**
+**New in 2.2.0:**
+- Git Bash/MinGW compatibility guidance for plugin development
+- Shell environment detection ($MSYSTEM) for testing workflows
+- Path conversion troubleshooting for Windows development environments
+- Enhanced cross-platform testing instructions
+- Plugin installation path guidance for Git Bash users
+
+**Features from 2.1.0:**
 - Plugin testing command with automated validation
 - Progressive disclosure patterns for Agent Skills
 - Unbounded capacity context strategies

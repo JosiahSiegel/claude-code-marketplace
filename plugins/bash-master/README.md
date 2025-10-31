@@ -6,7 +6,11 @@ Empower Claude with comprehensive bash scripting expertise across all platforms 
 
 When installed, Claude becomes an expert in:
 
-### 2025 New Features (v1.4.0)
+### 2025 New Features (v1.5.0)
+- **Windows Git Bash / MINGW Path Conversion** - Comprehensive path conversion guide (automatic conversion, MSYS_NO_PATHCONV, MSYS2_ARG_CONV_EXCL, cygpath usage)
+- **Shell Detection Methods** - Complete guide to detecting Git Bash/MINGW environments ($OSTYPE, uname -s, $MSYSTEM)
+- **Claude Code Issue #2602** - Solutions for snapshot path conversion failures on Windows
+- **Cross-Platform Path Handling** - Patterns and functions for seamless Windows/Linux/macOS path handling
 - **Bash 5.3 Complete** - In-shell command substitution (${ }), REPLY variable syntax (${| }), BASH_TRAPSIG for signal handlers, C23 conformance, GLOBSORT variable
 - **ShellCheck v0.11.0** - Latest rules (SC2327/SC2328/SC2294/SC2295), POSIX.1-2024 compliance, Bash 5.3 support
 - **Security-First 2025** - Mandatory input validation (60%+ exploits from poor validation), HISTFILE protection, absolute path usage, injection prevention
@@ -234,6 +238,7 @@ Claude will analyze using knowledge of:
 
 The plugin includes comprehensive reference documentation:
 
+- **windows-git-bash-paths.md** - Complete Windows Git Bash path conversion and shell detection guide
 - **bash-53-features.md** - Complete Bash 5.3 feature guide (BASH_TRAPSIG, C23, all features)
 - **security-first-2025.md** - Security-first patterns (HISTFILE, absolute paths, validation)
 - **modern-automation-patterns.md** - Container, cloud, and CI/CD patterns
@@ -263,7 +268,7 @@ Every script Claude creates with this plugin will:
 
 - **Linux** - Full support, all features (Bash 5.3 on Ubuntu 24.04+)
 - **macOS** - Full support with BSD compatibility notes (Bash 5.3 via Homebrew)
-- **Windows (Git Bash)** - Comprehensive support with known limitations documented
+- **Windows (Git Bash)** - Comprehensive support with path conversion guide (windows-git-bash-paths.md)
 - **Windows (WSL)** - Full Linux support with WSL-specific guidance
 - **Containers** - Docker and Kubernetes-aware scripting (Alpine/Debian/Ubuntu)
 

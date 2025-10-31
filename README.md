@@ -20,38 +20,38 @@
 
 ### Core Development Tools
 
-- **[plugin-master](./plugins/plugin-master)** `v2.1.0` ([Docs](./plugins/plugin-master/README.md)) - Complete plugin development with Agent Skills, hooks, MCP integration, and testing (`/test-plugin`)
-- **[context-master](./plugins/context-master)** `v2.1.0` ([Docs](./plugins/context-master/README.md)) - Universal context management with 23x efficiency through thinking delegation (~62% savings)
+- **[plugin-master](./plugins/plugin-master)** `v2.2.0` ([Docs](./plugins/plugin-master/README.md)) - Complete plugin development with Agent Skills, hooks, MCP integration, testing, and Git Bash/Windows compatibility
+- **[context-master](./plugins/context-master)** `v2.2.0` ([Docs](./plugins/context-master/README.md)) - Universal context management with Windows/Git Bash support and cross-platform file operation guidance
 
 ### Cloud & Infrastructure
 
-- **[azure-master](./plugins/azure-master)** `v1.0.0` ([Docs](./plugins/azure-master/README.md)) - Azure cloud with 2025 features (AKS Automatic, Container Apps GPU, Deployment Stacks, OpenAI)
-- **[azure-to-docker-master](./plugins/azure-to-docker-master)** `v1.1.0` ([Docs](./plugins/azure-to-docker-master/README.md)) - Azure-to-Docker migration with 2025 emulators and Compose Watch hot reload
-- **[terraform-master](./plugins/terraform-master)** `v1.6.0` ([Docs](./plugins/terraform-master/README.md)) - Terraform 1.14 + OpenTofu 1.11 with policy-as-code, private registries, and no-code provisioning
+- **[azure-master](./plugins/azure-master)** `v1.1.0` ([Docs](./plugins/azure-master/README.md)) - Azure cloud with 2025 features, Git Bash/Windows CLI compatibility, and ARM/Bicep cross-platform deployments
+- **[azure-to-docker-master](./plugins/azure-to-docker-master)** `v1.2.0` ([Docs](./plugins/azure-to-docker-master/README.md)) - Azure-to-Docker migration with Git Bash volume mount fixes and cross-platform Docker Compose
+- **[terraform-master](./plugins/terraform-master)** `v1.7.0` ([Docs](./plugins/terraform-master/README.md)) - Terraform with Git Bash path handling, shell detection, and cross-platform state operations
 
 ### DevOps & CI/CD
 
-- **[docker-master](./plugins/docker-master)** `v1.4.0` ([Docs](./plugins/docker-master/README.md)) - Docker Engine 28 + Desktop 4.47 with AI Assistant, MCP Catalog, registry & network operations
-- **[ado-master](./plugins/ado-master)** `v1.4.0` ([Docs](./plugins/ado-master/README.md)) - Azure DevOps with workload identity (OIDC), pipeline analytics, and quality gates
-- **[git-master](./plugins/git-master)** `v1.4.0` ([Docs](./plugins/git-master/README.md)) - Git 2.49 with git-backfill, GitHub Copilot CLI, and zero-trust security
+- **[docker-master](./plugins/docker-master)** `v1.5.0` ([Docs](./plugins/docker-master/README.md)) - Docker with Git Bash volume mount fixes, MINGW path conversion solutions, and Windows compatibility
+- **[ado-master](./plugins/ado-master)** `v1.5.0` ([Docs](./plugins/ado-master/README.md)) - Azure DevOps with Git Bash agent compatibility, Windows pipeline patterns, and shell detection
+- **[git-master](./plugins/git-master)** `v1.5.0` ([Docs](./plugins/git-master/README.md)) - Git 2.51 with Git Bash path conversion, stash import/export, and shell detection patterns
 
 ### Scripting & Automation
 
-- **[bash-master](./plugins/bash-master)** `v1.4.0` ([Docs](./plugins/bash-master/README.md)) - Bash 5.3 with BASH_TRAPSIG, ShellCheck v0.11.0, debugging/troubleshooting, POSIX.1-2024
-- **[powershell-master](./plugins/powershell-master)** `v1.4.0` ([Docs](./plugins/powershell-master/README.md)) - PowerShell 7.5 with PSResourceGet 1.1.1, SecretManagement, performance optimization
+- **[bash-master](./plugins/bash-master)** `v1.5.0` ([Docs](./plugins/bash-master/README.md)) - Bash 5.3 with comprehensive Git Bash/MINGW path conversion, shell detection, and Claude Code issue #2602 solutions
+- **[powershell-master](./plugins/powershell-master)** `v1.5.0` ([Docs](./plugins/powershell-master/README.md)) - PowerShell with comprehensive shell detection (PowerShell vs Git Bash), cross-shell compatibility, and Windows environment expertise
 
 ### Testing & Quality
 
-- **[test-master](./plugins/test-master)** `v1.5.0` ([Docs](./plugins/test-master/README.md)) - Vitest 4.0 stable + Playwright 1.55 AI agents + MSW 2.11 with visual regression & advanced snapshots
+- **[test-master](./plugins/test-master)** `v1.6.0` ([Docs](./plugins/test-master/README.md)) - Vitest 4.0 + Playwright 1.56 AI agents with Windows/Git Bash test execution compatibility and cross-platform testing
 
 ### Database & Data
 
-- **[ssdt-master](./plugins/ssdt-master)** `v1.5.0` ([Docs](./plugins/ssdt-master/README.md)) - SQL Server 2025 RC1 with OPPO, Entra Managed Identities, GraphQL (Data API Builder)
-- **[adf-master](./plugins/adf-master)** `v3.2.0` ([Docs](./plugins/adf-master/README.md)) - Azure Data Factory with Microsoft Fabric integration, Variable Libraries, Node.js 20.x CI/CD
+- **[ssdt-master](./plugins/ssdt-master)** `v1.6.0` ([Docs](./plugins/ssdt-master/README.md)) - SQL Server with Git Bash SqlPackage compatibility, path conversion for database deployments, and Windows shell detection
+- **[adf-master](./plugins/adf-master)** `v3.3.0` ([Docs](./plugins/adf-master/README.md)) - Azure Data Factory with Git Bash npm build fixes, Windows CI/CD compatibility, and cross-platform deployment scripts
 
 ### Platform-Specific
 
-- **[salesforce-master](./plugins/salesforce-master)** `v2.1.0` ([Docs](./plugins/salesforce-master/README.md)) - Salesforce Spring '25 with Agentforce 2.0, Data Cloud Vector DB, Compression/FormulaEval (API 63.0/64.0)
+- **[salesforce-master](./plugins/salesforce-master)** `v2.2.0` ([Docs](./plugins/salesforce-master/README.md)) - Salesforce with Git Bash SF CLI compatibility, Windows deployment scripts, and cross-platform integration patterns
 - **[windows-path-master](./plugins/windows-path-master)** `v1.0.0` ([Docs](./plugins/windows-path-master/README.md)) - Windows path resolution and Git Bash MINGW compatibility for Claude Code
 
 ## 🤝 Contributing

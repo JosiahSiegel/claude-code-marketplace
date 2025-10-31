@@ -48,11 +48,14 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
 2. **Install Dependencies**
 
    ```bash
-   # Install Vitest 3.x and related packages (latest stable as of 2025)
-   npm install -D vitest@^3.2.0 @vitest/ui@^3.2.0 @vitest/coverage-v8@^3.2.0 happy-dom
+   # Install Vitest 4.0 and related packages (released October 22, 2025)
+   npm install -D vitest@^4.0.0 @vitest/ui@^4.0.0 @vitest/coverage-v8@^4.0.0 happy-dom
 
-   # Install Playwright 1.50+ (latest as of 2025)
-   npm install -D @playwright/test@^1.50.0
+   # Optional: Install Vitest browser mode provider (for browser testing)
+   npm install -D @vitest/browser-playwright@^4.0.0
+
+   # Install Playwright 1.56+ (released October 2025)
+   npm install -D @playwright/test@^1.56.0
 
    # Install Playwright browsers
    npx playwright install
@@ -79,7 +82,7 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
 
 4. **Generate Configuration Files**
 
-   **vitest.config.js (Vitest 3.x - 2025):**
+   **vitest.config.js (Vitest 4.0 - Released October 2025):**
    ```javascript
    import { defineConfig } from 'vitest/config';
 
@@ -113,12 +116,14 @@ Set up a complete, production-ready testing infrastructure with Vitest, Playwrig
          }
        },
 
-       // Optional: Browser Mode configuration (Vitest 4.0)
+       // Optional: Browser Mode configuration (Vitest 4.0 - Stable)
+       // Requires: npm install -D @vitest/browser-playwright
        // browser: {
        //   enabled: true,
        //   name: 'chromium',
-       //   provider: { name: 'playwright' }, // Vitest 4.0 syntax
-       //   trace: 'on-first-retry'
+       //   provider: 'playwright', // Vitest 4.0 syntax (uses @vitest/browser-playwright)
+       //   headless: true,
+       //   trace: 'on-first-retry' // Playwright trace integration
        // },
 
        // Multi-project setup
@@ -553,9 +558,111 @@ Provide clear summary:
 4. See tests/README.md for more info
 ```
 
+## Windows and Git Bash Considerations
+
+### Path Configuration for Cross-Platform Support
+
+When initializing test infrastructure on Windows, especially with Git Bash:
+
+**✅ Best Practices:**
+```javascript
+// vitest.config.js - Use relative paths
+export default defineConfig({
+  test: {
+    // ✅ Good - Relative paths work everywhere
+    include: ['tests/unit/**/*.test.js'],
+    setupFiles: ['./tests/setup.js'],
+
+    // ❌ Bad - Absolute paths cause issues in Git Bash
+    // include: ['/c/project/tests/unit/**/*.test.js']
+  }
+});
+```
+
+**✅ NPM Scripts for Reliable Execution:**
+```json
+{
+  "scripts": {
+    "test": "vitest run",              // Works in all shells
+    "test:watch": "vitest watch",
+    "test:e2e": "playwright test"      // Handles paths automatically
+  }
+}
+```
+
+### Running Tests in Git Bash
+
+**Recommended execution methods:**
+```bash
+# ✅ Best - Use npm scripts (handles path conversion)
+npm test
+npm run test:e2e
+
+# ✅ Good - Disable path conversion if needed
+MSYS_NO_PATHCONV=1 vitest run
+
+# ⚠️ May have issues in Git Bash
+vitest run  # Can encounter path conversion issues
+```
+
+### Common Git Bash Issues During Setup
+
+**Issue 1: Module installation paths**
+```bash
+# If npm install has path issues in Git Bash
+MSYS_NO_PATHCONV=1 npm install -D vitest @playwright/test msw
+
+# Or use npm normally (usually handles this)
+npm install -D vitest @playwright/test msw
+```
+
+**Issue 2: Playwright browser installation**
+```bash
+# Use npx for correct path handling
+npx playwright install
+
+# If issues persist, run from Windows Command Prompt once:
+# cmd.exe /c "npx playwright install"
+# Then return to Git Bash for test execution
+```
+
+**Issue 3: Directory creation in Git Bash**
+```bash
+# Use mkdir -p (works in Git Bash)
+mkdir -p tests/{unit,integration,e2e,helpers,fixtures,mocks}
+
+# Or create directories individually
+mkdir -p tests/unit
+mkdir -p tests/integration
+mkdir -p tests/e2e
+```
+
+### Shell Detection in Setup
+
+Add shell detection to setup files if needed:
+
+```javascript
+// tests/setup.js - Detect Git Bash environment
+function isGitBash() {
+  return !!(process.env.MSYSTEM); // MINGW64, MINGW32, MSYS
+}
+
+if (isGitBash()) {
+  console.log('Running in Git Bash/MINGW environment');
+  // Apply any Git Bash-specific configuration
+}
+
+// Continue with standard setup...
+```
+
+For comprehensive Windows/Git Bash testing guidance, see the `windows-git-bash-testing.md` skill.
+
 ## Troubleshooting
 
 - **If Playwright browsers fail:** Run `npx playwright install`
 - **If MSW errors:** Ensure using MSW 2.x compatible syntax
 - **If tests timeout:** Increase timeout in configs
 - **If coverage fails:** Check include/exclude patterns in vitest.config.js
+- **If "No such file" errors in Git Bash:** Use npm scripts or set MSYS_NO_PATHCONV=1
+- **If module imports fail:** Use relative paths, avoid absolute paths starting with /c/ or C:\
+- **If Playwright fails in Git Bash:** Clear DISPLAY variable: `unset DISPLAY && npx playwright test`

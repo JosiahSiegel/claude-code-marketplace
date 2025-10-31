@@ -50,6 +50,8 @@ This plugin includes expert knowledge of:
    - Platform detection
    - Text encoding (UTF-8)
    - Case sensitivity awareness
+   - **NEW: Shell detection (PowerShell vs Git Bash/MSYS2)**
+   - **NEW: Cross-shell compatibility guidance**
 
 3. **Module Ecosystem**
    - **Azure (Az):** Complete Azure resource management
@@ -236,6 +238,8 @@ The plugin includes comprehensive 2025 documentation on:
 - **CI/CD Patterns** - GitHub Actions, Azure DevOps, Bitbucket with latest practices
 - **Cross-Platform** - Windows 11 24H2, Server 2025, Linux, macOS compatibility
 - **Testing & Quality** - Pester, PSScriptAnalyzer with 2025 rules
+- **NEW: Shell Detection** - PowerShell vs Git Bash/MSYS2 differentiation on Windows
+- **NEW: Cross-Shell Compatibility** - Path handling, environment variables, command differences
 
 ## 🎓 Learning Resources
 
@@ -271,13 +275,13 @@ The plugin will automatically activate and provide expert guidance with working 
 ## 🔍 Technical Details
 
 **Plugin Name:** powershell-master
-**Version:** 1.4.0
+**Version:** 1.5.0
 **Author:** Josiah Siegel
 **License:** MIT
 **Last Updated:** October 2025
 
 **Components:**
-- 4 comprehensive skills (powershell-master, powershell-7.5-features, powershell-2025-changes, powershell-security)
+- 5 comprehensive skills (powershell-master, powershell-7.5-features, powershell-2025-changes, powershell-security, powershell-shell-detection)
 - 5 specialized commands
 - 1 expert agent
 

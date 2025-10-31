@@ -146,6 +146,31 @@ Suggest next steps:
 - Leverage externalInput() function (v0.37+)
 - Implement what-if analysis before deployment
 
+## Git Bash / Windows Compatibility
+
+**CRITICAL for Git Bash on Windows:**
+
+When running Azure CLI in Git Bash, path conversion can cause issues:
+
+```bash
+# Always set this at the start of your script
+export MSYS_NO_PATHCONV=1
+
+# Or inline for single commands
+MSYS_NO_PATHCONV=1 az deployment group create --template-file main.bicep
+
+# Detect Git Bash and configure automatically
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+    echo "Git Bash detected - path conversion disabled for Azure CLI"
+fi
+```
+
+**Common Git Bash Issues:**
+- Resource IDs starting with `/` get incorrectly converted
+- Template file paths need careful handling
+- Use `cygpath -w` to convert paths when needed
+
 ## Common Patterns
 
 **Resource Group Creation**

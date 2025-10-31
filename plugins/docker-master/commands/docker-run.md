@@ -112,6 +112,28 @@ docker run -v my-data-volume:/data IMAGE_NAME
 docker run -v /host/path:/container/path:ro IMAGE_NAME
 ```
 
+**CRITICAL: Git Bash/MINGW on Windows Path Conversion:**
+
+When using bind mounts in Git Bash on Windows, paths are automatically converted incorrectly. **Always use MSYS_NO_PATHCONV:**
+
+```bash
+# CORRECT: With MSYS_NO_PATHCONV
+MSYS_NO_PATHCONV=1 docker run -v $(pwd):/app IMAGE_NAME
+
+# CORRECT: With double slash workaround
+docker run -v //c/Users/project:/app IMAGE_NAME
+
+# WRONG: Without fix (path gets mangled)
+docker run -v $(pwd):/app IMAGE_NAME  # FAILS in Git Bash
+
+# Best practice: Add to ~/.bashrc
+export MSYS_NO_PATHCONV=1
+```
+
+**Why this matters:** Git Bash converts `/c/Users/project` to `C:\Program Files\Git\c\Users\project`, breaking volume mounts.
+
+See the `docker-git-bash-guide` skill for comprehensive path conversion guidance.
+
 ### 6. Environment & Secrets
 
 **NEVER put secrets in environment variables visible in `docker inspect`**

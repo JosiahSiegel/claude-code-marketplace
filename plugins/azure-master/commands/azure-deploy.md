@@ -373,6 +373,23 @@ az stack group create \
 
 ### 5. TRADITIONAL BICEP DEPLOYMENT
 
+**Git Bash on Windows - IMPORTANT:**
+
+If running in Git Bash, disable path conversion first:
+
+```bash
+# Set at start of script
+export MSYS_NO_PATHCONV=1
+
+# Or detect and configure automatically
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+    echo "Git Bash detected - path conversion disabled"
+fi
+```
+
+**Standard Deployment:**
+
 ```bash
 # Validate template
 az deployment group validate \
@@ -404,6 +421,24 @@ az deployment group show \
   --resource-group MyRG \
   --name MyDeployment-20250127-143000 \
   --output json
+```
+
+**Windows Path Handling:**
+
+```bash
+# If template path has spaces or needs Windows format
+templatePath="C:\Projects\Azure\main.bicep"
+
+# In Git Bash, quote properly
+az deployment group create \
+  --resource-group MyRG \
+  --template-file "$templatePath"
+
+# Or use cygpath to convert
+templatePath=$(cygpath -w "./main.bicep")
+az deployment group create \
+  --resource-group MyRG \
+  --template-file "$templatePath"
 ```
 
 ### 6. BICEP BUILD AND DECOMPILE

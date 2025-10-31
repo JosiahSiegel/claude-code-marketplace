@@ -689,6 +689,74 @@ terraform -chdir="environments/$ENVIRONMENT" plan -var-file="$ENVIRONMENT.tfvars
 terraform -chdir="environments/$ENVIRONMENT" apply tfplan
 ```
 
+### Git Bash on Windows
+
+**Important**: Git Bash automatically converts Unix-style paths, which can break Terraform commands.
+
+```bash
+# ❌ BAD - Path conversion breaks this
+terraform -chdir=/c/terraform/prod plan
+
+# ✅ GOOD - Use Windows-style paths (forward slashes work)
+terraform -chdir=C:/terraform/prod plan
+
+# ✅ GOOD - Use Windows-style paths (backslashes, quoted)
+terraform -chdir="C:\terraform\prod" plan
+
+# ✅ GOOD - Disable MSYS path conversion
+export MSYS_NO_PATHCONV=1
+terraform -chdir=/c/terraform/prod plan
+
+# ✅ GOOD - Use relative paths
+cd /c/terraform
+terraform -chdir=prod plan
+```
+
+**Cross-Platform Script Pattern**:
+```bash
+#!/bin/bash
+set -euo pipefail
+
+# Detect shell environment and adjust paths
+if [ -n "$MSYSTEM" ]; then
+  # Git Bash on Windows - use Windows paths
+  BASE_DIR="C:/terraform"
+  export MSYS_NO_PATHCONV=1
+else
+  # Linux/macOS - use Unix paths
+  BASE_DIR="/home/user/terraform"
+fi
+
+ENVIRONMENT=${1:-dev}
+
+terraform -chdir="$BASE_DIR/environments/$ENVIRONMENT" init
+terraform -chdir="$BASE_DIR/environments/$ENVIRONMENT" plan \
+  -var-file="$ENVIRONMENT.tfvars" \
+  -out=tfplan
+terraform -chdir="$BASE_DIR/environments/$ENVIRONMENT" apply tfplan
+```
+
+**Git Bash Best Practices**:
+```bash
+# 1. Always use Windows-style paths with -chdir
+terraform -chdir=C:/terraform/prod plan  # ✅ Works everywhere
+
+# 2. Set MSYS_NO_PATHCONV for scripts with many paths
+export MSYS_NO_PATHCONV=1
+terraform -chdir=/c/terraform/prod plan
+terraform plan -var-file=/c/terraform/prod.tfvars
+
+# 3. Use relative paths when possible
+terraform -chdir=../prod plan  # ✅ No conversion issues
+
+# 4. Test path conversion with echo
+echo /c/terraform  # Shows what Git Bash will convert to
+
+# 5. Use cygpath for path conversion
+WIN_PATH=$(cygpath -w "/c/terraform/prod")  # → C:\terraform\prod
+terraform -chdir="$WIN_PATH" plan
+```
+
 ## Exit Codes
 
 Terraform uses standard exit codes:

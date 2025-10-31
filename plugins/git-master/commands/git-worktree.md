@@ -367,6 +367,39 @@ idea ../myproject-feature
 1. Verify worktree list: `git worktree list`
 2. Clean up stale references: `git worktree prune`
 
+# Windows / Git Bash Path Handling
+
+**IMPORTANT: Path handling in Git Bash on Windows**
+
+When creating worktrees on Windows with Git Bash, be aware of path conversion:
+
+```bash
+# Git Bash/MINGW path conventions
+git worktree add ../myproject-feature feature-branch
+
+# Works on all platforms (forward slashes)
+git worktree add ~/worktrees/myproject/feature-a feature-a
+
+# Windows absolute paths (use forward slashes or quote backslashes)
+git worktree add /c/worktrees/myproject/feature-a feature-a
+git worktree add "C:\worktrees\myproject\feature-a" feature-a
+
+# Spaces in paths - MUST quote
+git worktree add "/c/Program Files/worktrees/myproject" feature-a
+
+# Relative paths (safest, works everywhere)
+git worktree add ../myproject-feature feature-branch
+
+# Avoid path conversion issues
+MSYS_NO_PATHCONV=1 git worktree add /absolute/path feature-branch
+```
+
+**Best practices for cross-platform worktrees:**
+- Use relative paths (`../project-worktree`) when possible
+- Always quote paths with spaces
+- Use forward slashes for absolute paths
+- Test worktree paths with `git worktree list` after creation
+
 # Resources
 
 - [Git Worktree Documentation](https://git-scm.com/docs/git-worktree)

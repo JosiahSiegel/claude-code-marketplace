@@ -520,6 +520,91 @@ az repos pr list --status active \
   -o table
 ```
 
+## Windows Agent Path Handling
+
+**CRITICAL: Azure DevOps CLI on Windows with Git Bash**
+
+When running Azure DevOps CLI commands in Bash tasks on Windows agents, path conversion can cause failures:
+
+### Common Issues and Solutions
+
+**Issue: Path Arguments in CLI Commands**
+```bash
+# ❌ FAILS - MINGW converts path arguments
+az pipelines run --id 123 --variables buildPath=$(Build.SourcesDirectory)
+```
+
+**Solution: Disable Path Conversion**
+```bash
+# ✅ CORRECT - Disable MINGW path conversion
+export MSYS_NO_PATHCONV=1
+az pipelines run --id 123 --variables buildPath="$(Build.SourcesDirectory)"
+```
+
+### Cross-Platform CLI Script Pattern
+
+```yaml
+- bash: |
+    # Configure for Windows Git Bash if needed
+    if [ "$(Agent.OS)" = "Windows_NT" ]; then
+      export MSYS_NO_PATHCONV=1
+    fi
+
+    # Authenticate
+    echo "$AZURE_DEVOPS_PAT" | az devops login --organization https://dev.azure.com/myorg
+
+    # Run CLI commands with proper path handling
+    az pipelines run \
+      --name "My Pipeline" \
+      --branch main \
+      --variables sourceDir="$(Build.SourcesDirectory)"
+  env:
+    AZURE_DEVOPS_PAT: $(System.AccessToken)
+  displayName: 'Trigger pipeline with ADO CLI'
+```
+
+### Repository Operations with Paths
+
+```yaml
+- bash: |
+    export MSYS_NO_PATHCONV=1  # Critical for Windows agents
+
+    # Repository operations work correctly with this set
+    az repos pr create \
+      --repository myrepo \
+      --source-branch feature/new-feature \
+      --target-branch main \
+      --title "New Feature" \
+      --description "Description here"
+  displayName: 'Create PR with Azure DevOps CLI'
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
+```
+
+### File Path Parameters
+
+```yaml
+- bash: |
+    # For commands that take file paths as parameters
+    export MSYS_NO_PATHCONV=1
+
+    # Import work items from file
+    az boards work-item import \
+      --file "$(Build.SourcesDirectory)/work-items.json" \
+      --format json
+  displayName: 'Import work items'
+```
+
+### Quick Reference for Windows
+
+| Scenario | Solution |
+|----------|----------|
+| Path in CLI argument | `export MSYS_NO_PATHCONV=1` before command |
+| File path parameter | Quote the path: `--file "$(path)"` |
+| Multiple CLI commands | Set once at start of script block |
+| Detect Windows agent | `if [ "$(Agent.OS)" = "Windows_NT" ]` |
+
+**Always use `MSYS_NO_PATHCONV=1` when running Azure DevOps CLI in Bash tasks on Windows agents.**
+
 ## Output
 
 When providing CLI help, include:
@@ -531,3 +616,4 @@ When providing CLI help, include:
 6. Related commands to consider
 7. Script examples for automation
 8. Links to official CLI documentation
+9. Windows/Git Bash compatibility notes when using paths

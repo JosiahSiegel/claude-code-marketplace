@@ -57,6 +57,124 @@ Guide Salesforce deployments including change sets, metadata API, SFDX CLI, CI/C
 - Authenticate org: `sf org login web --alias myOrg`
 - Create SFDX project: `sf project generate --name myProject`
 
+**Windows/Git Bash Path Compatibility**:
+
+When using Salesforce CLI on Windows with Git Bash/MINGW, be aware of automatic path conversion behavior:
+
+**Shell Detection**:
+```bash
+# Detect if running in Git Bash/MINGW
+if [ -n "$MSYSTEM" ]; then
+    echo "Running in Git Bash/MINGW: $MSYSTEM"
+    # Use Windows-style paths or disable path conversion
+fi
+
+# Check shell type
+case "$(uname -s)" in
+    MINGW64*|MINGW32*) echo "Git Bash 64/32-bit" ;;
+    MSYS*) echo "MSYS" ;;
+    Darwin*) echo "macOS" ;;
+    Linux*) echo "Linux" ;;
+esac
+```
+
+**Path Conversion Issues & Solutions**:
+
+1. **Disable Path Conversion** (when SF CLI expects exact paths):
+   ```bash
+   # Disable all path conversion for this command
+   MSYS_NO_PATHCONV=1 sf project deploy start --source-dir force-app
+
+   # Disable for entire script
+   export MSYS_NO_PATHCONV=1
+   sf project deploy start --source-dir force-app
+   ```
+
+2. **Use Relative Paths** (Git Bash handles these correctly):
+   ```bash
+   # Relative paths work reliably
+   sf project deploy start --source-dir ./force-app
+   sf project retrieve start --manifest ./manifest/package.xml
+   ```
+
+3. **Backslashes in Scripts** (Windows native paths):
+   ```bash
+   # Use backslashes for Windows paths in Git Bash
+   sf project deploy start --source-dir "C:\projects\mysfproject\force-app"
+
+   # Or convert using cygpath
+   WIN_PATH="C:\projects\mysfproject\force-app"
+   UNIX_PATH=$(cygpath -u "$WIN_PATH")
+   sf project deploy start --source-dir "$UNIX_PATH"
+   ```
+
+4. **Manifest Files** (package.xml paths):
+   ```bash
+   # Always use forward slashes in package.xml (Salesforce standard)
+   # Git Bash converts file paths correctly
+   sf project deploy start --manifest manifest/package.xml
+
+   # Avoid: --manifest C:\path\package.xml (may cause issues)
+   # Use: --manifest C:/path/package.xml or relative paths
+   ```
+
+**Cross-Platform Deployment Script Pattern**:
+```bash
+#!/bin/bash
+
+# Detect operating system and shell
+detect_environment() {
+    case "$(uname -s)" in
+        MINGW*|MSYS*)
+            export IS_WINDOWS=1
+            export IS_GIT_BASH=1
+            echo "Detected: Windows Git Bash"
+            ;;
+        Linux*)
+            export IS_LINUX=1
+            echo "Detected: Linux"
+            ;;
+        Darwin*)
+            export IS_MACOS=1
+            echo "Detected: macOS"
+            ;;
+    esac
+}
+
+# Convert paths if needed
+normalize_path() {
+    local path=$1
+    if [ -n "$IS_GIT_BASH" ]; then
+        # Use relative paths or cygpath for Windows
+        echo "$path" | sed 's|\\|/|g'
+    else
+        echo "$path"
+    fi
+}
+
+# Deploy with proper path handling
+deploy_to_salesforce() {
+    local source_dir=$(normalize_path "$1")
+    local target_org="$2"
+
+    echo "Deploying from: $source_dir"
+
+    # Disable path conversion for Git Bash
+    if [ -n "$IS_GIT_BASH" ]; then
+        export MSYS_NO_PATHCONV=1
+    fi
+
+    sf project deploy start \
+        --source-dir "$source_dir" \
+        --target-org "$target_org" \
+        --test-level RunLocalTests
+}
+
+# Main
+detect_environment
+deploy_to_salesforce "./force-app" "my-org-alias"
+```
+
 **SFDX Project Structure**:
 ```
 myProject/
@@ -215,7 +333,7 @@ sf project deploy cancel --job-id <deploy-id>
 
 ### Step 6: CI/CD Pipeline Implementation
 
-**GitHub Actions Example**:
+**GitHub Actions Example** (Cross-Platform):
 ```yaml
 name: Salesforce CI/CD
 
@@ -227,6 +345,7 @@ on:
 
 jobs:
   validate:
+    # Ubuntu recommended (no path conversion issues)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -245,6 +364,28 @@ jobs:
       - name: Deploy to Salesforce
         if: github.event_name == 'push'
         run: sf project deploy start --source-dir force-app --test-level RunLocalTests
+
+  # Windows runner example (if needed)
+  validate-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+        shell: pwsh
+
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SFDX_AUTH_URL }}" > authfile
+          sf org login sfdx-url --sfdx-url-file authfile --alias target-org
+        shell: pwsh
+
+      - name: Deploy to Salesforce (Windows PowerShell)
+        if: github.event_name == 'push'
+        run: sf project deploy start --source-dir force-app --test-level RunLocalTests
+        shell: pwsh
+        # Note: Use PowerShell (pwsh) or cmd on Windows, NOT Git Bash in CI/CD
 ```
 
 **Azure DevOps Pipeline Example**:

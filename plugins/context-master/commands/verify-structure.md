@@ -2,7 +2,7 @@
 description: Verify multi-file project structure and cross-file references after creation
 ---
 
-## 🚨 CRITICAL GUIDELINES
+## CRITICAL GUIDELINES
 
 ### Windows File Path Requirements
 
@@ -11,14 +11,21 @@ description: Verify multi-file project structure and cross-file references after
 When using Edit or Write tools on Windows, you MUST use backslashes (`\`) in file paths, NOT forward slashes (`/`).
 
 **Examples:**
-- ❌ WRONG: `D:/repos/project/file.tsx`
-- ✅ CORRECT: `D:\repos\project\file.tsx`
+- WRONG: `D:/repos/project/file.tsx`
+- CORRECT: `D:\repos\project\file.tsx`
 
 This applies to:
 - Edit tool file_path parameter
 - Write tool file_path parameter
 - All file operations on Windows systems
 
+### Windows/Git Bash Path Conversion
+
+This verification command auto-detects your platform and normalizes paths for comparison:
+- Works transparently on Windows with Git Bash
+- Converts both Unix and Windows path formats for verification
+- Reports issues using your native path format
+- See WINDOWS_GIT_BASH_GUIDE.md for advanced scenarios
 
 ### Documentation Guidelines
 
@@ -26,9 +33,8 @@ This applies to:
 
 - **Priority**: Update existing README.md files rather than creating new documentation
 - **Repository cleanliness**: Keep repository root clean - only README.md unless user requests otherwise
-- **Style**: Documentation should be concise, direct, and professional - avoid AI-generated tone
-- **User preference**: Only create additional .md files when user specifically asks for documentation
-
+- **Style**: Documentation should be concise, direct, and professional
+- **User preference**: Only create additional .md files when user specifically asks
 
 ---
 
@@ -49,45 +55,45 @@ After creating files in a multi-file project, verify that all file paths, refere
 
 Perform these verification checks systematically:
 
-#### ✓ File Path Verification
+#### File Path Verification
 ```
-□ Check all file paths are correct
+Check all file paths are correct
   - CSS links: <link href="styles.css">
   - JS scripts: <script src="script.js">
   - Images: <img src="image.png">
   - Relative paths match actual file structure
 ```
 
-#### ✓ Reference Loading Verification
+#### Reference Loading Verification
 ```
-□ Ensure CSS/JS references load properly
+Ensure CSS/JS references load properly
   - HTML files can find the CSS file
   - JavaScript imports resolve correctly
   - No 404 errors for missing files
   - Correct syntax in link/script tags
 ```
 
-#### ✓ Navigation Verification (for websites)
+#### Navigation Verification (for websites)
 ```
-□ Test navigation between pages
+Test navigation between pages
   - All navigation links point to correct files
   - Links use correct relative paths
   - No broken navigation (links to non-existent pages)
   - Back/forward navigation works logically
 ```
 
-#### ✓ Cross-File Reference Verification
+#### Cross-File Reference Verification
 ```
-□ Validate cross-file dependencies work
+Validate cross-file dependencies work
   - Components import correctly
   - Modules can access exported functions
   - Shared utilities are accessible
   - API calls reference correct endpoints
 ```
 
-#### ✓ Consistency Verification
+#### Consistency Verification
 ```
-□ Check consistency across files
+Check consistency across files
   - Naming conventions are consistent
   - Styling is uniform (if using shared CSS)
   - Code structure follows same patterns
@@ -99,14 +105,14 @@ Perform these verification checks systematically:
 For a portfolio website with styles.css, index.html, about.html, projects.html, contact.html:
 
 ```
-✓ Verification checklist:
-  [✓] All HTML files have <link rel="stylesheet" href="styles.css">
-  [✓] styles.css exists and has content
-  [✓] Navigation links:
-      - index.html links to about.html, projects.html, contact.html ✓
-      - All other pages link back to index.html ✓
-  [✓] All pages use consistent styling from styles.css ✓
-  [✓] No broken links or missing file references ✓
+Verification checklist:
+  [OK] All HTML files have <link rel="stylesheet" href="styles.css">
+  [OK] styles.css exists and has content
+  [OK] Navigation links:
+      - index.html links to about.html, projects.html, contact.html
+      - All other pages link back to index.html
+  [OK] All pages use consistent styling from styles.css
+  [OK] No broken links or missing file references
 
 Result: Project structure verified, ready to use!
 ```
@@ -130,7 +136,7 @@ Result: Project structure verified, ready to use!
 Provide clear verification results to the user:
 
 ```
-✅ Project Structure Verified
+SUCCESS: Project Structure Verified
 
 All checks passed:
 - File paths correct
@@ -145,7 +151,7 @@ Project ready to use!
 Or if issues found:
 
 ```
-⚠️ Verification Issues Found
+WARNING: Verification Issues Found
 
 Issues detected:
 1. about.html links to "style.css" but file is named "styles.css"
@@ -153,6 +159,27 @@ Issues detected:
 
 Fixing issues now...
 ```
+
+## Windows/Git Bash Notes
+
+Verification works transparently on Windows with Git Bash:
+- Auto-detects platform (Windows vs Unix)
+- Normalizes paths internally for comparison
+- Reports issues using your native path format
+
+**Example verification output on Windows:**
+```
+SUCCESS: Project Structure Verified
+
+Verified paths:
+  D:\project\styles.css (OK)
+  D:\project\index.html -> references D:\project\styles.css (OK)
+  D:\project\about.html -> references D:\project\styles.css (OK)
+
+All checks passed!
+```
+
+See WINDOWS_GIT_BASH_GUIDE.md for advanced troubleshooting.
 
 ## Benefits
 - Catch errors before they become problems

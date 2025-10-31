@@ -443,13 +443,29 @@ public class IntegrationLogger {
 
 **OAuth 2.0 JWT Bearer Flow** (Server-to-Server):
 ```javascript
-// Node.js implementation
+// Node.js implementation (cross-platform)
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
+
+// Cross-platform path handling
+function getPrivateKeyPath() {
+    // Use path.resolve for cross-platform compatibility
+    const keyPath = path.resolve(__dirname, 'private.key');
+
+    // For Windows Git Bash: Convert if needed
+    if (process.env.MSYSTEM && process.platform === 'win32') {
+        // Running in Git Bash on Windows
+        console.log('Git Bash detected, path:', keyPath);
+    }
+
+    return keyPath;
+}
 
 async function getAccessToken() {
-    const privateKey = fs.readFileSync('private.key', 'utf8');
+    const keyPath = getPrivateKeyPath();
+    const privateKey = fs.readFileSync(keyPath, 'utf8');
 
     const jwtToken = jwt.sign({
         iss: process.env.CONSUMER_KEY,
@@ -466,6 +482,17 @@ async function getAccessToken() {
     });
 
     return response.data.access_token;
+}
+
+// Shell detection helper for integration scripts
+function detectShellEnvironment() {
+    return {
+        isGitBash: !!process.env.MSYSTEM,
+        isWSL: !!process.env.WSL_DISTRO_NAME,
+        isPowerShell: process.env.PSModulePath?.split(';').length >= 3,
+        platform: process.platform,
+        msystem: process.env.MSYSTEM // MINGW64, MINGW32, MSYS
+    };
 }
 ```
 

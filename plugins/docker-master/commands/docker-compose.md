@@ -399,10 +399,47 @@ secrets:
 ## Platform-Specific Considerations
 
 ### Windows
+
+**General Windows Considerations:**
 - Use forward slashes in paths or escape backslashes
 - Check line endings (LF vs CRLF)
 - Volume paths must be under shared drives in Docker Desktop
 - May need to adjust file permissions
+
+**CRITICAL: Git Bash/MINGW Path Conversion on Windows:**
+
+Docker Compose YAML files work correctly with relative paths in Git Bash, but **command-line volume overrides** need special handling:
+
+```bash
+# Compose files work normally (relative paths recommended)
+docker compose up -d
+
+# Command-line volume overrides need MSYS_NO_PATHCONV
+MSYS_NO_PATHCONV=1 docker compose run -v $(pwd)/scripts:/scripts app bash
+
+# Best practice: Add to ~/.bashrc to fix all Docker commands
+export MSYS_NO_PATHCONV=1
+```
+
+**Why relative paths in compose files work:**
+```yaml
+# These work perfectly in Git Bash (NO modification needed)
+volumes:
+  - ./src:/app/src           # Relative path
+  - ./data:/app/data         # Relative path
+  - C:/Users/project:/app    # Windows absolute with forward slashes
+  - my-volume:/data          # Named volume
+```
+
+**Shell detection for cross-platform scripts:**
+```bash
+# Detect Git Bash and configure automatically
+if [ -n "$MSYSTEM" ] || [[ "$(uname -s)" == MINGW* ]]; then
+  export MSYS_NO_PATHCONV=1
+fi
+```
+
+See the `docker-git-bash-guide` skill for comprehensive guidance on Windows Git Bash path conversion issues.
 
 ### macOS
 - Configure file sharing in Docker Desktop preferences

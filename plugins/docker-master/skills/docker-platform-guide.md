@@ -448,6 +448,81 @@ volumes:
   - ./src:/app/src
 ```
 
+### Git Bash / MINGW Path Conversion Issues
+
+**CRITICAL ISSUE:** When using Docker in Git Bash (MINGW) on Windows, automatic path conversion breaks volume mounts.
+
+**The Problem:**
+```bash
+# What you type in Git Bash:
+docker run -v $(pwd):/app myimage
+
+# What Git Bash converts it to (BROKEN):
+docker run -v C:\Program Files\Git\d\repos\project:/app myimage
+```
+
+**Solutions:**
+
+**1. MSYS_NO_PATHCONV (Recommended):**
+```bash
+# Per-command fix
+MSYS_NO_PATHCONV=1 docker run -v $(pwd):/app myimage
+
+# Session-wide fix (add to ~/.bashrc)
+export MSYS_NO_PATHCONV=1
+
+# Function wrapper (automatic for all Docker commands)
+docker() {
+  (export MSYS_NO_PATHCONV=1; command docker.exe "$@")
+}
+export -f docker
+```
+
+**2. Double Slash Workaround:**
+```bash
+# Use double leading slash to prevent conversion
+docker run -v //c/Users/project:/app myimage
+
+# Works with $(pwd) too
+docker run -v //$(pwd):/app myimage
+```
+
+**3. Named Volumes (No Path Issues):**
+```bash
+# Named volumes work without any fixes
+docker run -v my-data:/data myimage
+```
+
+**What Works Without Modification:**
+- Docker Compose YAML files with relative paths
+- Named volumes
+- Network and image commands
+- Container commands without volumes
+
+**What Needs MSYS_NO_PATHCONV:**
+- Bind mounts with `$(pwd)`
+- Bind mounts with absolute Unix-style paths
+- Volume mounts specified on command line
+
+**Shell Detection:**
+```bash
+# Detect Git Bash/MINGW and auto-configure
+if [ -n "$MSYSTEM" ] || [[ "$(uname -s)" == MINGW* ]]; then
+  export MSYS_NO_PATHCONV=1
+  echo "Git Bash detected - Docker path conversion fix enabled"
+fi
+```
+
+**Recommended ~/.bashrc Configuration:**
+```bash
+# Docker on Git Bash fix
+if [ -n "$MSYSTEM" ]; then
+  export MSYS_NO_PATHCONV=1
+fi
+```
+
+See the `docker-git-bash-guide` skill for comprehensive path conversion documentation, troubleshooting, and examples.
+
 ### Windows File Sharing
 
 **Configure Shared Drives:**

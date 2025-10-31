@@ -1,0 +1,130 @@
+### Git Bash / MINGW Path Conversion (CRITICAL for Windows Developers)
+
+**ADF Development on Windows with Git Bash:**
+
+Azure Data Factory development commonly occurs on Windows using Git Bash (MINGW64). Be aware of automatic path conversion behavior that can affect CI/CD scripts.
+
+**Key Path Conversion Issues:**
+- Unix-style paths (`/foo`) auto-convert to Windows paths
+- Can cause issues with npm commands, PowerShell scripts, and ARM template paths
+- Affects CI/CD pipelines running in Git Bash environments
+
+**Disable Path Conversion When Needed:**
+```bash
+# Disable ALL path conversion for specific command
+export MSYS_NO_PATHCONV=1
+npm run build validate ./adf-resources /subscriptions/...
+
+# Or wrap the command
+MSYS_NO_PATHCONV=1 npm run build export ./adf-resources /subscriptions/...
+```
+
+**Shell Detection in CI/CD:**
+```bash
+# Detect Git Bash/MinGW in scripts
+if [ -n "$MSYSTEM" ]; then
+  echo "Running in Git Bash/MinGW64 ($MSYSTEM)"
+  export MSYS_NO_PATHCONV=1
+fi
+```
+
+## Cross-Platform CI/CD Considerations
+
+### Shell Detection for Multi-Platform Teams
+
+When teams use different shells (PowerShell, Git Bash, WSL, native Linux/macOS), add shell detection to CI/CD scripts:
+
+**Bash Script Shell Detection:**
+```bash
+#!/usr/bin/env bash
+
+# Detect shell environment
+detect_shell() {
+  if [ -n "$MSYSTEM" ]; then
+    echo "git-bash"  # Git Bash/MinGW
+  elif [ -n "$WSL_DISTRO_NAME" ]; then
+    echo "wsl"  # Windows Subsystem for Linux
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "macos"  # macOS
+  else
+    echo "linux"  # Native Linux
+  fi
+}
+
+SHELL_TYPE=$(detect_shell)
+
+# Handle path conversion for Git Bash
+if [ "$SHELL_TYPE" = "git-bash" ]; then
+  export MSYS_NO_PATHCONV=1
+  echo "Git Bash detected - path conversion disabled"
+fi
+
+# Run ADF validation
+npm run build validate ./adf-resources /subscriptions/$AZURE_SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DataFactory/factories/$FACTORY_NAME
+```
+
+**Node.js Shell Detection:**
+```javascript
+// detect-shell.js - Helper for npm scripts
+function detectShell() {
+  // Git Bash/MinGW (most reliable)
+  if (process.env.MSYSTEM) {
+    return { type: 'mingw', subsystem: process.env.MSYSTEM };
+  }
+
+  // WSL
+  if (process.env.WSL_DISTRO_NAME) {
+    return { type: 'wsl', distro: process.env.WSL_DISTRO_NAME };
+  }
+
+  // PowerShell (3+ paths in PSModulePath)
+  if (process.env.PSModulePath?.split(';').length >= 3) {
+    return { type: 'powershell' };
+  }
+
+  return { type: 'unknown', platform: process.platform };
+}
+
+const shell = detectShell();
+console.log(`Detected shell: ${shell.type}`);
+
+// Disable path conversion for Git Bash
+if (shell.type === 'mingw') {
+  process.env.MSYS_NO_PATHCONV = '1';
+  console.log('Path conversion disabled for Git Bash');
+}
+```
+
+**PowerShell Scripts for Windows:**
+```powershell
+# Detect PowerShell edition
+$PSEdition = $PSVersionTable.PSEdition
+
+if ($PSEdition -eq 'Core') {
+  Write-Host "PowerShell Core detected - cross-platform compatible"
+} else {
+  Write-Host "Windows PowerShell detected - Windows only"
+}
+
+# Use forward slashes in paths (works in both editions)
+$TemplatePath = "./ARMTemplate/ARMTemplateForFactory.json"
+
+# Or use Join-Path for cross-platform compatibility
+$TemplatePath = Join-Path $PSScriptRoot "ARMTemplate" "ARMTemplateForFactory.json"
+```
+
+### Windows Git Bash Troubleshooting
+
+**Symptom**: npm build commands fail with path errors on Windows Git Bash
+
+**Solution**:
+```bash
+# Add to .bashrc or run before npm commands
+export MSYS_NO_PATHCONV=1
+
+# Or create a helper script
+# scripts/build-adf.sh
+#!/bin/bash
+export MSYS_NO_PATHCONV=1
+npm run build "$@"
+```

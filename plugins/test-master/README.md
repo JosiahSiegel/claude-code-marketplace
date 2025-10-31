@@ -64,18 +64,21 @@ unzip test-master.zip -d ~/.local/share/claude/plugins/
 
 ## 🎯 Technology Stack (2025)
 
-- **Vitest 4.0** (Latest: October 2025) - Unit, integration, and browser testing
-  - **Browser Mode (Stable)** - Run tests in real browsers using Playwright
-  - **Visual Regression Testing** - Screenshot comparison with `toMatchSnapshot`
+- **Vitest 4.0** (Released: October 22, 2025) - Unit, integration, and browser testing
+  - **Browser Mode (Stable)** - Production-ready browser testing with Chromium, Firefox, WebKit
+  - **Visual Regression Testing** - Screenshot comparison with `toMatchScreenshot()` matcher
+  - **Playwright Trace Integration** - Generate Playwright traces for browser tests
   - **Type-Aware Hooks** - Better TypeScript support in lifecycle hooks
   - **Annotation API (3.2+)** - Add metadata and attachments to tests
   - **Line Number Filtering (3.0+)** - Run tests by line number from IDE
   - **Improved Watch Mode** - Smarter change detection, faster rebuilds
   - **Enhanced Reporting** - Reduced flicker, clearer output
   - **Workspace Projects** - Multi-project support in single config
-- **Playwright 1.55** (August 2025) - E2E browser testing
+  - **toBeInViewport Matcher** - Check element visibility with IntersectionObserver API
+- **Playwright 1.56** (October 2025) - E2E browser testing
   - **AI Test Agents** - Planner, Generator, and Healer agents for LLM-powered test automation
   - **testStepInfo.titlePath** - Full test hierarchy for better debugging
+  - **VS Code 1.105+ Integration** - Seamless agentic experience in VS Code
   - **Debian 13 Support** - Modern CI/CD environment compatibility
   - **Chromium 140+, Firefox 141, WebKit 26** - Latest browser support
   - **Flaky Test Detection** - `--fail-on-flaky-tests` CLI flag
@@ -340,17 +343,26 @@ npm run test:mutation
 # Measure how many code mutations tests catch
 ```
 
-### AI-Powered Test Generation (Playwright 1.55+)
+### AI-Powered Test Generation (Playwright 1.56+)
 
 ```bash
 # Use Playwright Test Agents for LLM-powered test creation
 /test-master:ai-generate
 
-# Three agents available:
-# - Planner: Explore app and create test plan
-# - Generator: Convert plan to Playwright code
-# - Healer: Automatically fix failing tests
+# Three specialized agents available:
+# - Planner: Explore app and create comprehensive test plan
+# - Generator: Convert plan to runnable Playwright code with working selectors
+# - Healer: Watch for broken tests and fix them automatically
+
+# Setup (requires VS Code 1.105+)
+npx playwright init-agents --loop=vscode|claude|opencode
 ```
+
+**Key Benefits:**
+- Generates test cases you might not think of (security, accessibility, performance)
+- Creates working code with real selectors, not brittle hardcoded ones
+- Self-healing tests that automatically fix when they break
+- Analyzes console logs, network, and page snapshots to identify root causes
 
 ### Playwright Role-Based Locators (2025 Best Practice)
 
@@ -436,9 +448,70 @@ Works seamlessly with:
 ## 🌐 Cross-Platform Support
 
 - **Windows** - Full support (use GitHub marketplace installation)
+  - **Command Prompt** - Full support
+  - **PowerShell** - Full support
+  - **Git Bash/MINGW** - Full support with path conversion awareness
 - **macOS** - Full support
 - **Linux** - Full support
 - **CI environments** - Optimized configurations for GitHub Actions, GitLab CI
+
+### Windows and Git Bash Best Practices
+
+When running tests on Windows, especially in Git Bash/MINGW environments:
+
+**✅ Recommended Execution (All Shells):**
+```bash
+# Always use npm scripts - handles path conversion automatically
+npm test
+npm run test:unit
+npm run test:e2e
+npm run test:coverage
+```
+
+**✅ Path Configuration Best Practices:**
+```javascript
+// vitest.config.js - Use relative paths
+export default defineConfig({
+  test: {
+    include: ['tests/unit/**/*.test.js'],    // ✅ Good
+    setupFiles: ['./tests/setup.js'],         // ✅ Good
+    // Avoid: '/c/project/tests/**/*.test.js' // ❌ Bad in Git Bash
+  }
+});
+```
+
+**Common Git Bash Issues and Solutions:**
+
+Issue: "No such file or directory" errors
+```bash
+# Solution: Use npm scripts (recommended)
+npm test
+
+# Or disable path conversion
+MSYS_NO_PATHCONV=1 vitest run
+```
+
+Issue: Test files not found
+- Use relative paths in configuration
+- Avoid absolute paths starting with /c/ or C:\
+- Use forward slashes in glob patterns
+
+Issue: Playwright browser launch failures
+```bash
+# Clear interfering environment variables
+unset DISPLAY
+npm run test:e2e
+```
+
+**Shell Detection (if needed):**
+```javascript
+// Detect Git Bash environment
+function isGitBash() {
+  return !!(process.env.MSYSTEM); // MINGW64, MINGW32, MSYS
+}
+```
+
+For comprehensive Windows/Git Bash testing guidance, see the included `windows-git-bash-testing.md` skill file.
 
 ## 📚 Documentation
 
@@ -460,6 +533,48 @@ This plugin follows Claude Code plugin best practices:
 - Cross-platform compatibility
 - Production-ready defaults
 - Extensive documentation
+
+## 📝 Changelog
+
+### Version 1.6.0 (2025)
+
+**New Features:**
+- Added comprehensive Windows/Git Bash compatibility support
+- New skill: `windows-git-bash-testing.md` - Complete guide for cross-platform testing
+- Shell detection methods for Git Bash/MINGW environments
+- Path conversion helpers and troubleshooting guidance
+- Updated to Vitest 4.0 (stable browser mode released October 22, 2025)
+- Updated to Playwright 1.56 (AI Test Agents - Planner/Generator/Healer)
+- Visual regression testing with `toMatchScreenshot()` matcher
+- Playwright Trace integration for Vitest browser mode
+- New `toBeInViewport()` matcher for visibility testing
+
+**Enhancements:**
+- Enhanced agent with Windows/Git Bash awareness
+- Updated all commands with cross-platform execution guidance
+- Added npm scripts recommendations for reliable test execution
+- Improved path configuration best practices
+- Added shell-specific troubleshooting sections
+- Updated technology stack with 2025 release dates
+- Enhanced AI Test Agents documentation with setup instructions
+
+**Documentation:**
+- Comprehensive Windows/Git Bash compatibility guide
+- Path conversion issue resolution
+- Shell detection patterns
+- Cross-platform best practices
+- Updated Vitest 4.0 browser mode syntax
+- Updated Playwright 1.56 AI agents information
+
+**Bug Fixes:**
+- Corrected Vitest 4.0 browser mode provider syntax
+- Updated package versions to October 2025 releases
+
+### Version 1.5.0 (Previous)
+- Initial comprehensive testing system
+- Vitest 3.x support
+- Playwright 1.50+ support
+- MSW 2.x integration
 
 ## 📝 License
 

@@ -647,6 +647,159 @@ sqlpackage /Action:Script ... /OutputPath:review.sql
 # For Azure SQL, add firewall rule for your IP
 ```
 
+## Git Bash / MINGW / MSYS2 Path Conversion Issues
+
+**CRITICAL for Windows Git Bash Users**: SqlPackage parameters starting with `/` trigger automatic path conversion in Git Bash/MINGW, causing commands to fail.
+
+### The Problem
+
+```bash
+# FAILS in Git Bash - /Action gets converted to file path
+sqlpackage /Action:Publish /SourceFile:MyDB.dacpac /TargetServerName:localhost
+# Error: Invalid parameter (Git Bash converted /Action to C:/Program Files/Git/usr/Action)
+```
+
+### Solutions
+
+**Method 1: MSYS_NO_PATHCONV=1 (Recommended)**
+
+```bash
+# Disable path conversion for SqlPackage
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Extract \
+  /SourceServerName:"localhost" \
+  /SourceDatabaseName:"MyDB" \
+  /TargetFile:"MyDB.dacpac"
+
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetServerName:"localhost" \
+  /TargetDatabaseName:"MyDB" \
+  /p:BlockOnPossibleDataLoss=True
+```
+
+**Method 2: Double Slash // (Shell-Agnostic)**
+
+```bash
+# Works in all shells without environment variables
+sqlpackage //Action:Extract \
+  //SourceServerName:localhost \
+  //SourceDatabaseName:MyDB \
+  //TargetFile:MyDB.dacpac
+
+sqlpackage //Action:Publish \
+  //SourceFile:MyDB.dacpac \
+  //TargetServerName:localhost \
+  //TargetDatabaseName:MyDB \
+  //p:BlockOnPossibleDataLoss=True
+```
+
+**Method 3: Use PowerShell (Recommended for Windows)**
+
+```powershell
+# PowerShell - native Windows shell, no path issues
+sqlpackage /Action:Publish `
+  /SourceFile:"MyDB.dacpac" `
+  /TargetServerName:"localhost" `
+  /TargetDatabaseName:"MyDB" `
+  /p:BlockOnPossibleDataLoss=True
+```
+
+### All Actions with Git Bash Workarounds
+
+```bash
+# Extract - Method 1 (MSYS_NO_PATHCONV)
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Extract \
+  /SourceServerName:"localhost" /SourceDatabaseName:"MyDB" \
+  /TargetFile:"MyDB.dacpac"
+
+# Publish - Method 2 (Double Slash)
+sqlpackage //Action:Publish \
+  //SourceFile:MyDB.dacpac \
+  //TargetServerName:localhost //TargetDatabaseName:MyDB
+
+# Export
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Export \
+  /SourceServerName:"localhost" /SourceDatabaseName:"MyDB" \
+  /TargetFile:"MyDB.bacpac"
+
+# Import
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Import \
+  /SourceFile:"MyDB.bacpac" \
+  /TargetServerName:"localhost" /TargetDatabaseName:"MyDB_Restored"
+
+# DeployReport
+MSYS_NO_PATHCONV=1 sqlpackage /Action:DeployReport \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetServerName:"localhost" /TargetDatabaseName:"MyDB" \
+  /OutputPath:"deploy-report.xml"
+
+# Script
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Script \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetServerName:"localhost" /TargetDatabaseName:"MyDB" \
+  /OutputPath:"deploy.sql"
+
+# DriftReport
+MSYS_NO_PATHCONV=1 sqlpackage /Action:DriftReport \
+  /TargetServerName:"localhost" /TargetDatabaseName:"MyDB" \
+  /OutputPath:"drift-report.xml"
+```
+
+### Shell Detection Script
+
+```bash
+#!/bin/bash
+# Detect Git Bash and set path conversion flag
+
+if [ -n "$MSYSTEM" ]; then
+  echo "Git Bash/MSYS2 detected - disabling path conversion"
+  export MSYS_NO_PATHCONV=1
+fi
+
+# Now all SqlPackage commands will work correctly
+sqlpackage /Action:Extract \
+  /SourceServerName:"localhost" \
+  /SourceDatabaseName:"MyDB" \
+  /TargetFile:"MyDB.dacpac"
+```
+
+### Common Path Issues
+
+**Spaces in paths:**
+```bash
+# WRONG - unquoted
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish /SourceFile:D:/Program Files/MyDB.dacpac
+
+# CORRECT - quoted
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish /SourceFile:"D:/Program Files/MyDB.dacpac"
+```
+
+**Connection strings:**
+```bash
+# Quote entire connection string
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetConnectionString:"Server=localhost;Database=MyDB;Integrated Security=True;"
+```
+
+**Publish profiles:**
+```bash
+# Quote profile paths
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /Profile:"./Profiles/Production.publish.xml"
+```
+
+### Recommended Approach
+
+For Windows SSDT development:
+1. **Use PowerShell** - Native Windows shell, no path issues
+2. **Use CMD** - Also no path conversion problems
+3. **Use Git Bash with MSYS_NO_PATHCONV=1** - If Git Bash preferred
+4. **Use double-slash //Action** - Most portable across shells
+
+**For comprehensive Git Bash path handling**, see the `windows-git-bash-paths` skill documentation.
+
 ## Next Steps
 
 After SqlPackage operations:

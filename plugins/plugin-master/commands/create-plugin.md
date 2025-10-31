@@ -73,7 +73,9 @@ Guides Claude through the complete plugin creation workflow: fetching latest doc
 - Include .claude/settings.json template for team distribution
 - Leverage Agent Skills for dynamic, context-efficient knowledge delivery
 - Configure MCP servers inline in plugin.json for simpler distribution
-- Emphasize GitHub marketplace installation for cross-platform reliability
+- Emphasize GitHub marketplace installation for cross-platform reliability (especially Windows/Git Bash)
+- Document shell detection for plugin testing ($MSYSTEM for Git Bash/MinGW)
+- Include path conversion guidance for Git Bash users developing plugins
 - Support repository-level automatic installation for team standardization
 
 ## Example Usage

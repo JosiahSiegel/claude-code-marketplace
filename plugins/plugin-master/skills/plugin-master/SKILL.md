@@ -901,6 +901,13 @@ mv deployment-helper-marketplace.zip /mnt/user-data/outputs/
 - ✅ GitHub marketplace installation works reliably
 - ✅ Always use the marketplace method for best results
 
+**Git Bash/MinGW Users (Windows):**
+- ⚠️ Path conversion may affect plugin installation paths
+- ✅ Detect shell with: `echo $MSYSTEM` (MINGW64/MINGW32 indicates Git Bash)
+- ✅ Use `cygpath` for path conversion if needed: `cygpath -w "/c/path"` → `C:\path`
+- ✅ GitHub marketplace method bypasses local path issues
+- 💡 Shell detection: Check `$MSYSTEM` environment variable (MINGW64, MINGW32, MSYS)
+
 **Mac/Linux Users:**
 - ✅ Both local and GitHub installation methods work
 - 💡 GitHub method still recommended for easy updates and sharing
@@ -1331,18 +1338,30 @@ See the README template in [Output Templates](#output-templates) above.
 2. **Check file location (for local plugins - Mac/Linux only)**
    - Should be: `~/.local/share/claude/plugins/PLUGIN_NAME/`
    - Not: `~/.local/share/claude/plugins/PLUGIN_NAME/PLUGIN_NAME/`
-   
+
 3. **Windows users:** Local plugins may not work. Use GitHub marketplace instead:
    ```bash
    /plugin marketplace add YOUR_USERNAME/YOUR_REPO
    ```
 
-4. **Reload plugins:**
+4. **Git Bash/MinGW users:** Path conversion issues may prevent plugin loading:
+   ```bash
+   # Detect your shell environment
+   echo $MSYSTEM  # Should show MINGW64, MINGW32, or MSYS
+
+   # Check if path conversion is affecting plugin directory
+   echo ~/.local/share/claude/plugins
+
+   # If path looks wrong, use GitHub marketplace method instead
+   /plugin marketplace add YOUR_USERNAME/YOUR_REPO
+   ```
+
+5. **Reload plugins:**
    ```bash
    claude --reload-plugins
    ```
 
-5. **Check debug output:**
+6. **Check debug output:**
    ```bash
    claude --debug
    ```

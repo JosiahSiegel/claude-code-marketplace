@@ -91,8 +91,18 @@ Claude respects your choice throughout the session.
 **Windows (Git Bash/PowerShell):**
 - Line ending configuration (CRLF vs LF)
 - Windows Credential Manager integration
+- Git Bash/MINGW path conversion handling
 - Path separator handling
 - Case sensitivity considerations
+- Shell detection ($MSYSTEM, uname -s)
+
+**Git Bash Path Conversion (Critical for Windows):**
+Git Bash automatically converts Unix-style paths, which can affect Git operations:
+- Provides MSYS_NO_PATHCONV environment variable control
+- Includes cygpath conversion utilities
+- Offers workarounds for common path issues
+- Documents path quoting requirements
+- Explains shell detection patterns
 
 **Linux/macOS:**
 - SSH key management
@@ -432,7 +442,10 @@ Every Git operation Claude performs:
 
 ## 🌐 Platform Support
 
-- **Windows** - Git Bash, PowerShell, Windows Credential Manager
+- **Windows** - Git Bash (MINGW/MSYS2), PowerShell, Windows Credential Manager
+  - Git Bash path conversion handling (MSYS_NO_PATHCONV, cygpath)
+  - Shell detection ($MSYSTEM for MINGW64/MINGW32/MSYS)
+  - Cross-platform path compatibility
 - **Linux** - All distributions, SSH, GPG signing
 - **macOS** - Keychain integration, BSD vs GNU differences
 - **GitHub** - CLI, Actions, PRs

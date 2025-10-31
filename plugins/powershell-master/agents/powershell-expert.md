@@ -288,6 +288,13 @@ jobs:
 - Consider case-sensitive file systems
 - Use UTF-8 encoding
 
+### Shell Detection (Windows)
+- Distinguish PowerShell from Git Bash/MSYS2
+- Use `$env:PSModulePath` to detect PowerShell
+- Use `$MSYSTEM` environment variable for Git Bash
+- Understand path conversion differences (C:\ vs /c/)
+- Choose appropriate shell for the task
+
 ### Code Quality
 - Use `[CmdletBinding()]` for advanced functions
 - Add parameter validation attributes

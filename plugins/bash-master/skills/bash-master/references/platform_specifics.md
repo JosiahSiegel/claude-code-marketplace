@@ -4,12 +4,51 @@ Comprehensive guide to handling platform differences in bash scripts across Linu
 
 ---
 
+
+## ⚠️ WINDOWS GIT BASH / MINGW PATH CONVERSION
+
+**CRITICAL REFERENCE:** For complete Windows Git Bash path conversion and shell detection guidance, see:
+
+**📄 [windows-git-bash-paths.md](./windows-git-bash-paths.md)**
+
+This comprehensive guide covers:
+- **Automatic path conversion behavior** (Unix → Windows)
+- **MSYS_NO_PATHCONV and MSYS2_ARG_CONV_EXCL** usage
+- **cygpath** manual conversion tool
+- **Shell detection methods** ($OSTYPE, uname, $MSYSTEM)
+- **Claude Code specific issues** (#2602 snapshot path conversion)
+- **Common problems and solutions**
+- **Cross-platform scripting patterns**
+
+**Git Bash path conversion is the #1 source of Windows bash scripting issues.** Always consult the dedicated guide when working with Windows/Git Bash.
+
+---
+
+## WARNING: WINDOWS GIT BASH / MINGW PATH CONVERSION
+
+**CRITICAL REFERENCE:** For complete Windows Git Bash path conversion and shell detection guidance, see:
+
+**[windows-git-bash-paths.md](./windows-git-bash-paths.md)**
+
+This comprehensive guide covers:
+- **Automatic path conversion behavior** (Unix to Windows)
+- **MSYS_NO_PATHCONV and MSYS2_ARG_CONV_EXCL** usage
+- **cygpath** manual conversion tool
+- **Shell detection methods** ($OSTYPE, uname, $MSYSTEM)
+- **Claude Code specific issues** (#2602 snapshot path conversion)
+- **Common problems and solutions**
+- **Cross-platform scripting patterns**
+
+**Git Bash path conversion is the #1 source of Windows bash scripting issues.** Always consult the dedicated guide when working with Windows/Git Bash.
+
+---
+
 ## Table of Contents
 
 1. [Platform Detection](#platform-detection)
 2. [Linux Specifics](#linux-specifics)
 3. [macOS Specifics](#macos-specifics)
-4. [Windows (Git Bash)](#windows-git-bash)
+4. [Windows (Git Bash)](#windows-git-bash) - **See windows-git-bash-paths.md for complete guide** - **See windows-git-bash-paths.md for complete guide**
 5. [Windows (WSL)](#windows-wsl)
 6. [Container Environments](#container-environments)
 7. [Cross-Platform Patterns](#cross-platform-patterns)

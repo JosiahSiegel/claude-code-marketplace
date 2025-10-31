@@ -4,6 +4,16 @@ Complete SQL Server Data Tools (SSDT) expertise with **SQL Server 2025 RC** and 
 
 ## Latest 2025 Updates
 
+### Version 1.6.0 (October 2025) - Windows/Git Bash Path Handling
+- **NEW: Git Bash/MINGW Path Support** - Comprehensive guidance for SqlPackage on Git Bash/MSYS2
+- **Shell Detection** - Automatic detection and workarounds for Windows shell environments
+- **MSYS_NO_PATHCONV** - Documented path conversion fixes for all SqlPackage actions
+- **Double-Slash Method** - Shell-agnostic parameter syntax (//Action instead of /Action)
+- **Cross-Platform Scripts** - Examples with shell detection and path handling
+- **Enhanced Troubleshooting** - New section for Git Bash path issues in README
+- **New Skill: windows-git-bash-paths** - Complete reference for path conversion
+- **Updated Commands** - All SSDT commands now include Git Bash examples
+
 ### SQL Server 2025 RC1 Features (GA Predicted Nov 12, 2025)
 - **Optional Parameter Plan Optimization (OPPO)** - Solves parameter sniffing issues for optimal plan selection
 - **Microsoft Entra Managed Identities** - Improved credential management and security compliance
@@ -722,6 +732,52 @@ dotnet tool install -g Microsoft.SqlPackage
 # Verify installation
 sqlpackage /version
 ```
+
+### Git Bash / MINGW Path Issues on Windows
+
+**Problem**: SqlPackage fails with "Invalid parameter" or "Unknown action" when using Git Bash on Windows.
+
+**Cause**: Git Bash automatically converts paths starting with `/` (e.g., `/Action:Publish`) to Windows paths, breaking SqlPackage parameters.
+
+**Solutions**:
+
+**Option 1: Use PowerShell (Recommended)**
+```powershell
+# PowerShell - no path conversion issues
+sqlpackage /Action:Publish /SourceFile:"MyDB.dacpac" /TargetServerName:"localhost" /TargetDatabaseName:"MyDB"
+```
+
+**Option 2: Disable Path Conversion in Git Bash**
+```bash
+# Set MSYS_NO_PATHCONV=1 before SqlPackage commands
+MSYS_NO_PATHCONV=1 sqlpackage /Action:Publish \
+  /SourceFile:"MyDB.dacpac" \
+  /TargetServerName:"localhost" \
+  /TargetDatabaseName:"MyDB"
+```
+
+**Option 3: Use Double Slashes**
+```bash
+# Use // instead of / (works in all shells)
+sqlpackage //Action:Publish //SourceFile:MyDB.dacpac //TargetServerName:localhost //TargetDatabaseName:MyDB
+```
+
+**Shell Detection Script**:
+```bash
+#!/bin/bash
+# Detect Git Bash and disable path conversion
+if [ -n "$MSYSTEM" ]; then
+  export MSYS_NO_PATHCONV=1
+fi
+
+# Now SqlPackage works correctly
+sqlpackage /Action:Publish /SourceFile:"MyDB.dacpac" /TargetServerName:"localhost" /TargetDatabaseName:"MyDB"
+```
+
+**For comprehensive Git Bash guidance**, see plugin commands with examples:
+- `/ssdt-master:build` - Build with shell detection
+- `/ssdt-master:publish` - Publish with Git Bash workarounds
+- `/ssdt-master:sqlpackage` - Complete SqlPackage reference with path handling
 
 ### Build Errors
 

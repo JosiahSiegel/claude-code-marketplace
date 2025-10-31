@@ -619,3 +619,117 @@ Provide:
 - Network and firewall considerations
 - Agent pools and capabilities
 - Maintenance and updates
+
+## Windows Agent & Git Bash Compatibility
+
+**CRITICAL: Path handling on Windows agents**
+
+When using Bash tasks on Windows agents, MINGW/Git Bash performs automatic path conversion that can cause failures:
+
+### Common Windows Issues and Solutions
+
+**Issue 1: Backslash Escape in Bash**
+```yaml
+# ❌ FAILS - Backslashes removed
+- bash: cd $(System.DefaultWorkingDirectory)
+
+# ✅ CORRECT - Quote the variable
+- bash: cd "$(System.DefaultWorkingDirectory)"
+```
+
+**Issue 2: Path Conversion in Arguments**
+```yaml
+# ❌ FAILS - MINGW converts /d argument
+- bash: dotnet build /d:Configuration=Release
+
+# ✅ CORRECT - Disable path conversion
+- bash: |
+    export MSYS_NO_PATHCONV=1
+    dotnet build /d:Configuration=Release
+```
+
+**Issue 3: Docker Volume Mounts**
+```yaml
+# ❌ FAILS - Path conversion breaks Docker mounts
+- bash: docker run -v $(Build.SourcesDirectory):/app myimage
+
+# ✅ CORRECT - Disable conversion
+- bash: |
+    export MSYS_NO_PATHCONV=1
+    docker run -v "$(Build.SourcesDirectory):/app" myimage
+```
+
+### Cross-Platform Script Pattern
+
+Use this template for scripts that run on any agent:
+
+```yaml
+- bash: |
+    #!/bin/bash
+    set -euo pipefail
+
+    # Auto-detect Windows and configure MINGW
+    if [ "$(Agent.OS)" = "Windows_NT" ]; then
+      echo "Windows agent detected"
+      export MSYS_NO_PATHCONV=1
+    fi
+
+    # Your cross-platform script here
+    cd "$(Build.SourcesDirectory)"
+    npm install
+    npm run build
+  displayName: 'Cross-platform build'
+```
+
+### Platform Detection with Conditions
+
+```yaml
+jobs:
+  - job: MultiPlatformBuild
+    strategy:
+      matrix:
+        Linux:
+          imageName: 'ubuntu-24.04'
+        Windows:
+          imageName: 'windows-2025'
+        macOS:
+          imageName: 'macOS-15'
+    pool:
+      vmImage: $(imageName)
+
+    steps:
+      # Windows-specific setup
+      - bash: export MSYS_NO_PATHCONV=1
+        condition: eq(variables['Agent.OS'], 'Windows_NT')
+        displayName: 'Configure Git Bash for Windows'
+
+      # Cross-platform build
+      - bash: |
+          echo "Building on: $(Agent.OS)"
+          npm install
+          npm test
+        displayName: 'Build and test'
+```
+
+### Git Configuration for Windows Agents
+
+```yaml
+- bash: |
+    # Recommended Git settings for Windows agents
+    git config --global core.autocrlf true
+    git config --global core.longpaths true
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
+  displayName: 'Configure Git for Windows'
+```
+
+### Quick Reference
+
+| Problem | Solution |
+|---------|----------|
+| Backslashes removed | Quote path variables: `"$(Build.SourcesDirectory)"` |
+| Argument conversion | Use `export MSYS_NO_PATHCONV=1` |
+| Docker volume paths | Disable conversion before docker commands |
+| Detect Windows agent | Check `$(Agent.OS)` = `Windows_NT` |
+| Cross-platform paths | Use forward slashes when possible |
+
+**See the `ado-windows-git-bash-compatibility` skill for comprehensive Windows/Git Bash guidance.**

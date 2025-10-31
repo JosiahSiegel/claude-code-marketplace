@@ -381,4 +381,105 @@ After successful build, provide:
 - **Linux/macOS**: Only SDK-style projects supported via dotnet CLI
 - **Containers**: SDK-style projects can be built in Docker using .NET SDK images
 
+## Windows Shell Considerations (Git Bash/MINGW/MSYS2)
+
+### Git Bash on Windows
+
+Git Bash users on Windows may encounter path issues when building projects with paths containing spaces or when using tools that expect Windows-style paths.
+
+**Recommended Approach**: Use PowerShell or CMD for SSDT workflows on Windows to avoid path conversion issues.
+
+**If using Git Bash:**
+
+```bash
+# dotnet CLI handles paths correctly in Git Bash
+dotnet build MyDatabase.sqlproj
+
+# For paths with spaces, always quote
+dotnet build "D:/Program Files/MyProject/Database.sqlproj"
+
+# Detect Git Bash and provide guidance
+if [ -n "$MSYSTEM" ]; then
+  echo "Git Bash detected. Using dotnet CLI (recommended for cross-shell compatibility)"
+fi
+```
+
+**Shell Detection in Build Scripts:**
+
+```bash
+#!/bin/bash
+# Cross-platform build script with shell detection
+
+# Detect shell environment
+case "$OSTYPE" in
+  msys*)
+    echo "Git Bash/MSYS detected on Windows"
+    SHELL_TYPE="git-bash"
+    ;;
+  linux-gnu*)
+    echo "Linux detected"
+    SHELL_TYPE="linux"
+    ;;
+  darwin*)
+    echo "macOS detected"
+    SHELL_TYPE="macos"
+    ;;
+esac
+
+# Build with dotnet CLI (works on all platforms)
+echo "Building database project..."
+dotnet build Database.sqlproj -c Release
+
+# Verify DACPAC
+if [ -f "bin/Release/Database.dacpac" ]; then
+  echo "Build successful: bin/Release/Database.dacpac"
+else
+  echo "Build failed: DACPAC not found"
+  exit 1
+fi
+```
+
+**Alternative: PowerShell (Recommended for Windows)**
+
+```powershell
+# PowerShell script - no path conversion issues
+$projectPath = "D:\Program Files\MyProject\Database.sqlproj"
+dotnet build $projectPath -c Release
+
+if (Test-Path "bin\Release\Database.dacpac") {
+    Write-Host "Build successful"
+} else {
+    Write-Error "Build failed"
+}
+```
+
+### GitHub Actions Build Example (Windows)
+
+```yaml
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh  # Use PowerShell - recommended for Windows SSDT
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build Database Project
+        run: dotnet build Database.sqlproj -c Release
+
+      # Alternative: Use bash if needed (dotnet CLI works correctly)
+      # defaults:
+      #   run:
+      #     shell: bash
+```
+
 IMPORTANT: Always research latest Microsoft.Build.Sql documentation if encountering issues with SDK-style projects, as this is an actively evolving technology.
+
+**For comprehensive Git Bash path handling guidance**, see the `windows-git-bash-paths` skill documentation.

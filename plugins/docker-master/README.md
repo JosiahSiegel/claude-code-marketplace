@@ -38,6 +38,7 @@ The Docker Master plugin equips Claude Code with comprehensive Docker expertise,
 - **docker-best-practices** - Comprehensive Docker best practices for images, containers, and production deployments
 - **docker-security-guide** - Complete security guidelines and threat mitigation strategies
 - **docker-platform-guide** - Platform-specific considerations for Windows, Linux, and macOS
+- **docker-git-bash-guide** - Comprehensive Windows Git Bash/MINGW path conversion guide for Docker volume mounts (NEW)
 
 ## Installation
 
@@ -201,8 +202,37 @@ The Docker Expert agent can help with:
 - Path format handling
 - Windows containers support
 - Cross-platform compatibility
+- **Git Bash/MINGW path conversion fixes** (MSYS_NO_PATHCONV)
 
-## What's New in 2025 (v1.4.0)
+## What's New in 2025
+
+### v1.5.0 - Git Bash/MINGW Path Conversion Support
+
+**NEW: Comprehensive Windows Git Bash compatibility:**
+- **docker-git-bash-guide skill** - Complete guide to MSYS_NO_PATHCONV and Docker volume mount path conversion
+- **Shell detection** - Automatic detection of Git Bash/MINGW environments
+- **Path conversion fixes** - Solutions for `$(pwd)`, bind mounts, and absolute paths
+- **Troubleshooting guidance** - Common issues and step-by-step solutions
+- **Best practices** - Recommended ~/.bashrc configuration for Git Bash users
+
+**Updates:**
+- **docker-run.md** - Added Git Bash path conversion section with MSYS_NO_PATHCONV examples
+- **docker-compose.md** - Added Git Bash command-line override guidance
+- **docker-platform-guide.md** - Expanded Windows section with comprehensive Git Bash coverage
+- **README.md** - Updated platform support and skill list
+
+**Problem Solved:**
+Git Bash on Windows automatically converts Docker volume mount paths incorrectly:
+```bash
+# Before (BROKEN):
+docker run -v $(pwd):/app myimage
+# Converts to: C:\Program Files\Git\d\repos\project:/app
+
+# After (WORKS):
+MSYS_NO_PATHCONV=1 docker run -v $(pwd):/app myimage
+```
+
+### v1.4.0 - Docker Engine 28 & Desktop 4.47
 
 This plugin includes the latest Docker 2025 features:
 

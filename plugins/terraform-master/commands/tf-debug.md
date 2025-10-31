@@ -368,6 +368,92 @@ terraform state push terraform.tfstate.backup
 
 **Windows Issues**:
 
+**Git Bash Path Conversion Issues**:
+```bash
+# Symptom: "No such file or directory" when using -chdir in Git Bash
+# Error: terraform -chdir=/c/terraform/prod plan
+
+# Root cause: Git Bash converts /c/terraform/prod incorrectly
+
+# Solutions:
+# 1. Use Windows-style paths (forward slashes work)
+terraform -chdir=C:/terraform/prod plan
+
+# 2. Use Windows-style paths (backslashes, quoted)
+terraform -chdir="C:\terraform\prod" plan
+
+# 3. Disable MSYS path conversion
+export MSYS_NO_PATHCONV=1
+terraform -chdir=/c/terraform/prod plan
+
+# 4. Use relative paths
+cd /c/terraform
+terraform -chdir=prod plan
+
+# 5. Detect shell and adjust paths
+if [ -n "$MSYSTEM" ]; then
+  # Git Bash detected
+  TF_DIR="C:/terraform/prod"
+else
+  # Other shells
+  TF_DIR="/c/terraform/prod"
+fi
+terraform -chdir="$TF_DIR" plan
+```
+
+**Backend Path Issues in Git Bash**:
+```bash
+# Symptom: State file not found with local backend
+
+# Check backend.tf configuration
+# Bad for Git Bash:
+terraform {
+  backend "local" {
+    path = "/c/terraform/state/terraform.tfstate"
+  }
+}
+
+# Good for all Windows shells:
+terraform {
+  backend "local" {
+    path = "C:/terraform/state/terraform.tfstate"
+  }
+}
+```
+
+**Module Source Path Issues**:
+```bash
+# Symptom: Module not found in Git Bash
+
+# Bad:
+module "networking" {
+  source = "/c/terraform/modules/networking"
+}
+
+# Good (relative):
+module "networking" {
+  source = "../modules/networking"
+}
+
+# Good (Windows path):
+module "networking" {
+  source = "C:/terraform/modules/networking"
+}
+```
+
+**Variable File Path Issues**:
+```bash
+# Symptom: terraform plan -var-file fails in Git Bash
+
+# Problem:
+terraform plan -var-file=/c/terraform/prod.tfvars
+
+# Solutions:
+terraform plan -var-file=C:/terraform/prod.tfvars
+terraform plan -var-file="C:\terraform\prod.tfvars"
+MSYS_NO_PATHCONV=1 terraform plan -var-file=/c/terraform/prod.tfvars
+```
+
 **Path Length Limitations**:
 ```powershell
 # Error: Path too long (260 character limit in some cases)

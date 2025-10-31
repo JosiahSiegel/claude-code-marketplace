@@ -238,12 +238,90 @@ az vm create \
 vmId=$(az vm show --name MyVM --resource-group MyRG --query id --output tsv)
 ```
 
+**Git Bash / MINGW on Windows:**
+
+Git Bash automatically converts Unix-style paths to Windows paths, which can cause issues with Azure CLI commands, especially when passing resource IDs starting with forward slashes.
+
+**Common Issues:**
+- Resource IDs like `/subscriptions/...` get converted to `C:/Program Files/Git/subscriptions/...`
+- ARM template paths with forward slashes are converted unexpectedly
+- Arguments starting with `/` trigger automatic path conversion
+
+**Solutions:**
+
+```bash
+# Method 1: Disable path conversion globally
+export MSYS_NO_PATHCONV=1
+az vm start --ids /subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Compute/virtualMachines/myvm
+
+# Method 2: Disable for single command
+MSYS_NO_PATHCONV=1 az vm start --ids /subscriptions/xxx/...
+
+# Method 3: Use double slashes for switches (when applicable)
+az vm create --name myvm --resource-group MyRG //parameter //value
+
+# Method 4: Detect Git Bash and set environment
+if [[ "$OSTYPE" == "msys" ]] || [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+    echo "Git Bash detected - path conversion disabled"
+fi
+
+# Method 5: Use cygpath for explicit path conversion
+templatePath=$(cygpath -w "./template.json")  # Convert to Windows path
+az deployment group create --template-file "$templatePath"
+```
+
+**Shell Detection Pattern:**
+```bash
+#!/usr/bin/env bash
+
+# Detect Git Bash/MINGW environment
+detect_shell() {
+    # Check MSYSTEM (most reliable for Git Bash)
+    if [[ -n "$MSYSTEM" ]]; then
+        echo "git-bash"
+        export MSYS_NO_PATHCONV=1  # Disable path conversion
+        return 0
+    fi
+
+    # Check OSTYPE
+    case "$OSTYPE" in
+        msys*)    echo "git-bash"; export MSYS_NO_PATHCONV=1 ;;
+        cygwin*)  echo "cygwin"; export MSYS_NO_PATHCONV=1 ;;
+        linux*)   echo "linux" ;;
+        darwin*)  echo "macos" ;;
+        win32*)   echo "windows" ;;
+        *)        echo "unknown" ;;
+    esac
+}
+
+# Use in scripts
+SHELL_TYPE=$(detect_shell)
+echo "Running on: $SHELL_TYPE"
+
+# Now safe to use Azure CLI with resource IDs
+az vm start --ids /subscriptions/xxx/...
+```
+
+**Best Practices for Git Bash:**
+- ✅ Set `MSYS_NO_PATHCONV=1` at script start for Azure CLI operations
+- ✅ Use `cygpath -w` to convert Unix paths to Windows when needed
+- ✅ Quote paths with spaces: `"C:\Program Files\..."`
+- ✅ Test scripts in both Git Bash and PowerShell
+- ❌ Avoid hardcoded Windows paths (C:\) in portable scripts
+- ❌ Don't assume forward slashes work everywhere
+
 **Cross-Platform Scripts:**
 ```bash
 #!/usr/bin/env bash
 # Use bash shebang for consistency
 # Avoid platform-specific features
 # Test on all target platforms
+
+# Disable Git Bash path conversion if detected
+if [[ -n "$MSYSTEM" ]]; then
+    export MSYS_NO_PATHCONV=1
+fi
 ```
 
 ### 8. **CI/CD Integration Patterns**

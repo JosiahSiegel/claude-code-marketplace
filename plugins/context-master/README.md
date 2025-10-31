@@ -1,6 +1,6 @@
 # Context Master Plugin
 
-Optimal planning and context management for multi-file projects, website creation, and complex coding tasks.
+Optimal planning and context management for multi-file projects, website creation, and complex coding tasks. Full cross-platform support including Windows with Git Bash.
 
 ## Overview
 
@@ -10,8 +10,9 @@ Context Master helps Claude Code work more efficiently on multi-file projects by
 - **Saving context tokens** (62% reduction on average)
 - **Providing extended thinking delegation** patterns
 - **Verifying project structures** automatically
+- **Supporting Windows/Git Bash workflows** with path conversion guidance
 
-## ⚡ Quick Start
+## Quick Start
 
 ### When to Use
 
@@ -27,16 +28,16 @@ Context Master activates automatically for:
 For ANY multi-file project, follow these 5 steps:
 
 ```
-1️⃣ STOP - Don't create files yet
-2️⃣ PLAN - Use /plan-project command
-3️⃣ ANNOUNCE - Tell user your file creation order
-4️⃣ CREATE - Make files in optimal order (dependencies first)
-5️⃣ VERIFY - Use /verify-structure to check all references work
+1. STOP - Don't create files yet
+2. PLAN - Use /plan-project command
+3. ANNOUNCE - Tell user your file creation order
+4. CREATE - Make files in optimal order (dependencies first)
+5. VERIFY - Use /verify-structure to check all references work
 ```
 
 ## Installation
 
-### Option 1: GitHub Marketplace (Recommended)
+### Option 1: GitHub Marketplace (Recommended for All Platforms)
 
 1. **Add this marketplace:**
    ```bash
@@ -48,14 +49,21 @@ For ANY multi-file project, follow these 5 steps:
    /plugin install context-master@claude-code-marketplace
    ```
 
-### Option 2: Local Installation (Mac/Linux Only)
-
-⚠️ **Windows users:** Use GitHub installation method instead (local paths may have issues).
+### Option 2: Local Installation (Mac/Linux)
 
 ```bash
 # Extract to plugins directory
 unzip context-master.zip -d ~/.local/share/claude/plugins/
 ```
+
+### Windows Users
+
+**Important:** Use GitHub marketplace installation method (Option 1) for best compatibility. Local installation may encounter path conversion issues with Git Bash.
+
+If you encounter path-related issues:
+- See **WINDOWS_GIT_BASH_GUIDE.md** for troubleshooting
+- Consider upgrading Claude Code to v1.0.72+
+- Ensure Git Bash is properly configured
 
 ## Features
 
@@ -64,23 +72,13 @@ unzip context-master.zip -d ~/.local/share/claude/plugins/
 #### `/plan-project`
 Plan optimal file creation order for multi-file projects before implementation.
 
-**Example:**
-```
-User: "Create a portfolio with home, about, and projects pages"
-You: /plan-project
-
-[Extended thinking plans architecture]
-[Announces: "I'll create: 1. styles.css, 2. index.html, 3. about.html, 4. projects.html"]
-[Creates files in optimal order]
-```
-
 **Token Savings:** ~5,000 tokens (62% reduction) per multi-file project
 
 #### `/verify-structure`
 Verify multi-file project structure and cross-file references after creation.
 
 **Checks:**
-- File paths are correct
+- File paths are correct (cross-platform compatible)
 - CSS/JS references load properly
 - Navigation between pages works
 - Cross-file dependencies resolve
@@ -89,11 +87,8 @@ Verify multi-file project structure and cross-file references after creation.
 #### `/context-analysis`
 Analyze context usage and suggest optimization strategies for ongoing session.
 
-**Provides:**
-- Session efficiency metrics
-- Token savings achieved
-- Recommendations for remaining work
-- Context optimization opportunities
+#### `/optimize-context`
+Real-time context optimization for ongoing sessions with metrics and recommendations.
 
 ### Skills
 
@@ -104,53 +99,7 @@ Comprehensive knowledge about:
 - Context-efficient patterns and strategies
 - Extended thinking delegation architecture
 - CLI-specific tooling (for Claude Code users)
-
-**Includes:**
-- Main skill documentation (SKILL.md)
-- Context strategies reference
-- Subagent patterns guide
-- Python scripts for CLAUDE.md generation and subagent creation
-
-## Usage Examples
-
-### Example 1: Portfolio Website
-
-**User Request:** "Create a portfolio website with home, about, projects, and contact pages"
-
-**With Context Master:**
-```bash
-/plan-project
-# Extended thinking plans: CSS first, then HTML pages
-# Announces creation order
-# Creates styles.css → index.html → about.html → projects.html → contact.html
-/verify-structure
-# Verifies all HTML files reference styles.css correctly
-```
-
-**Result:** Efficient creation, no refactoring needed!
-
-### Example 2: React Application
-
-**User Request:** "Build a React app with multiple components"
-
-**With Context Master:**
-```bash
-/plan-project
-# Plans: package.json → App.js → layout components → page components → styles
-# Creates foundation files before dependent components
-/verify-structure
-# Checks imports and component references
-```
-
-### Example 3: Context Optimization
-
-**During Long Session:**
-```bash
-/context-analysis
-# Shows token savings achieved
-# Recommends delegation strategies
-# Suggests when to use /clear
-```
+- Windows/Git Bash path compatibility
 
 ## Token Savings
 
@@ -171,49 +120,34 @@ Comprehensive knowledge about:
 - With planning: ~12,000 tokens
 - **Savings: ~23,000 tokens (66%)**
 
-### Context Window Capacity
+## Platform Support
 
-- Standard: 200K tokens
-- With planning: Complete 16-17 medium projects
-- Without planning: Only 7-8 medium projects
-- **Effective capacity increase: 2.1x**
+### Cross-Platform Compatibility
 
-## Advanced Features (Claude Code CLI Only)
+Context Master works identically on:
+- **macOS** - Full support, no path issues
+- **Linux** - Full support, no path issues
+- **Windows with Git Bash** - Full support with path conversion guidance
+- **Windows with PowerShell/CMD** - Full support
 
-### Generate Project-Specific CLAUDE.md
+### Windows/Git Bash Specific Notes
 
-```bash
-python skills/context-master/scripts/generate_claude_md.py --type fullstack --output ./CLAUDE.md
-```
+Context Master fully supports Windows development with Git Bash. Understanding automatic path conversion helps optimize workflows:
 
-**Available types:**
-- `general` - General-purpose projects
-- `backend` - API/service projects
-- `frontend` - Web applications
-- `fullstack` - Full-stack applications
-- `data` - Data science/ML projects
-- `library` - Library/package development
+**Automatic Path Conversion:**
+- Git Bash converts Unix-style paths to Windows paths automatically
+- This usually works transparently with Context Master
+- See WINDOWS_GIT_BASH_GUIDE.md for advanced scenarios
 
-### Create Thinking-Enabled Subagents
+**Known Issues (mostly resolved in Claude Code v1.0.72+):**
+- Path conversion failure in snapshot operations
+- Drive letter duplication errors
+- Spaces in paths
 
-```bash
-python skills/context-master/scripts/create_subagent.py architecture-advisor --type deep_analyzer
-python skills/context-master/scripts/create_subagent.py pattern-researcher --type researcher
-```
-
-**Available types:**
-- `researcher` - Documentation searches with deep analysis
-- `tester` - Test execution with failure analysis
-- `analyzer` - Code analysis with architectural insights
-- `builder` - Build and deployment tasks
-- `deep_analyzer` - Complex decisions requiring extensive thinking
-
-**Usage:**
-```bash
-/agent architecture-advisor "Analyze microservices vs monolith for e-commerce platform"
-# Deep thinking happens in isolation, returns concise recommendation
-# Context efficiency: ~23x improvement (5K tokens → 200 tokens)
-```
+**Workarounds:**
+- Use GitHub marketplace installation
+- Upgrade Claude Code to v1.0.72+
+- See WINDOWS_GIT_BASH_GUIDE.md for detailed troubleshooting
 
 ## Best Practices
 
@@ -227,57 +161,40 @@ python skills/context-master/scripts/create_subagent.py pattern-researcher --typ
 - Use `/verify-structure` to catch errors early
 - Check all file paths and references
 - Ensure navigation and imports work
-- Fix issues before considering project complete
 
 ### Optimize Context Throughout Session
 - Use `/context-analysis` periodically
 - Create artifacts for code and documents
 - Break complex tasks into phases
-- Delegate complex analysis when possible
 
 ## Troubleshooting
 
-### "Plugin Not Loading"
-- Check plugin.json syntax with JSON validator
-- Ensure correct file location (for local installs)
+### Plugin Not Loading
+- Check plugin.json syntax
 - Windows users: Use GitHub marketplace instead
-- Run with `--debug` flag for details
+- Run with --debug flag for details
 
-### "Commands Not Showing"
+### Commands Not Showing
 - Verify commands directory contains .md files
-- Check frontmatter has `description` field
-- Reload plugins: `claude --reload-plugins`
+- Reload plugins: claude --reload-plugins
 
-### "Still Creating Files Without Planning"
-- Explicitly use `/plan-project` command
-- Review skill activation triggers in SKILL.md
-- Practice the 5-step workflow
-- Check context-master skill is loaded
+### Windows/Git Bash Issues
+- Check WINDOWS_GIT_BASH_GUIDE.md for detailed solutions
+- Verify Git Bash installation
+- Check environment variables
 
-## Platform Notes
+## Documentation
 
-- **macOS/Linux:** All installation methods supported
-- **Windows:** GitHub marketplace installation recommended (local paths may have issues)
-- **All Platforms:** Commands and skills work identically once installed
-
-## Contributing
-
-Contributions welcome! This plugin packages the context-master skill for easy distribution and use.
+- **SKILL.md** - Comprehensive skill documentation
+- **WINDOWS_GIT_BASH_GUIDE.md** - Windows/Git Bash compatibility guide
+- **commands/** - Individual command documentation
 
 ## License
 
 MIT
 
-## Links
-
-- **Plugin Directory:** Add to https://claudecodemarketplace.com/
-- **Marketplace Directory:** List at https://claudemarketplaces.com/
-- **Issues:** Report problems via `/bug` command in Claude Code
-
-## Credits
-
-Context Master skill and methodology developed to optimize Claude Code workflows for multi-file projects and context management.
-
 ---
 
 **Get Started:** Install the plugin and try `/plan-project` on your next multi-file task!
+
+**Windows Users:** See WINDOWS_GIT_BASH_GUIDE.md for Git Bash compatibility notes.

@@ -198,6 +198,58 @@ find . -name "*.sh" -exec shellcheck {} +
 
 ## Platform-Specific Considerations
 
+
+### Windows (Git Bash) Path Conversion - CRITICAL
+
+**ESSENTIAL KNOWLEDGE:** Git Bash/MINGW automatically converts Unix-style paths to Windows paths. This is the most common source of cross-platform scripting errors on Windows.
+
+**Complete Guide:** See `references/windows-git-bash-paths.md` for comprehensive documentation.
+
+**Quick Reference:**
+
+```bash
+# Automatic conversion happens for:
+/foo → C:/Program Files/Git/usr/foo
+--dir=/tmp → --dir=C:/msys64/tmp
+
+# Disable conversion when needed
+MSYS_NO_PATHCONV=1 command /path/that/should/not/convert
+
+# Manual conversion with cygpath
+unix_path=$(cygpath -u "C:\Windows\System32")  # Windows to Unix
+win_path=$(cygpath -w "/c/Users/username")        # Unix to Windows
+
+# Shell detection (fastest method)
+if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "mingw"* ]]; then
+    echo "Git Bash detected"
+    # Use path conversion
+fi
+
+# Or check $MSYSTEM variable (Git Bash/MSYS2 specific)
+case "${MSYSTEM:-}" in
+    MINGW64|MINGW32|MSYS)
+        echo "MSYS2/Git Bash environment: $MSYSTEM"
+        ;;
+esac
+```
+
+**Common Issues:**
+
+```bash
+# Problem: Flags converted to paths
+command /e /s  # /e becomes C:/Program Files/Git/e
+
+# Solution: Use double slashes or dashes
+command //e //s  # OR: command -e -s
+
+# Problem: Spaces in paths
+cd C:\Program Files\Git  # Fails
+
+# Solution: Quote paths
+cd "C:\Program Files\Git"  # OR: cd /c/Program\ Files/Git
+```
+
+
 ### Linux
 
 **Primary target for most bash scripts:**

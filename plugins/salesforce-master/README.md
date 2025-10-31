@@ -38,6 +38,34 @@ git clone https://github.com/JosiahSiegel/claude-code-marketplace.git
 cp -r claude-code-marketplace/plugins/salesforce-master ~/.local/share/claude/plugins/
 ```
 
+## Windows & Git Bash Compatibility
+
+This plugin provides comprehensive guidance for **Windows Git Bash/MINGW environments**, which are commonly used for Salesforce CLI development on Windows.
+
+### Key Features for Windows Developers
+
+**Path Conversion Handling**: Automatic path conversion in Git Bash can cause issues with Salesforce CLI commands. The plugin includes:
+- Shell detection patterns ($MSYSTEM, uname -s)
+- MSYS_NO_PATHCONV usage for disabling path conversion
+- Cross-platform deployment script examples
+- cygpath usage for manual path conversion
+
+**SF CLI Best Practices**: Windows-specific guidance for:
+- `sf project deploy start` with proper path handling
+- `sf project retrieve start` with manifest files
+- CI/CD pipelines on Windows runners
+- Relative vs absolute path strategies
+
+**Cross-Platform Integration**: Node.js integration code with:
+- path.resolve() for cross-platform compatibility
+- Shell environment detection (Git Bash, WSL, PowerShell)
+- File system operations that work on all platforms
+
+**Affected Commands**: Windows path guidance is integrated into:
+- `/sf-deploy` - Deployment with Git Bash path handling
+- `/sf-integrate` - Integration scripts with shell detection
+- All commands include cross-platform examples
+
 ## Features
 
 ### Slash Commands

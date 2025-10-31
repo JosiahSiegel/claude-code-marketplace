@@ -102,3 +102,71 @@ If tests fail:
 - Use `--reporter=dot` for faster output in CI
 - Enable parallel execution with appropriate worker count
 - Consider `--bail` flag to stop on first failure
+
+## Windows and Git Bash Execution
+
+### Cross-Platform Test Execution
+
+When running tests on Windows, especially in Git Bash/MINGW:
+
+**✅ Recommended Approach - Use NPM Scripts:**
+```bash
+# Always prefer npm scripts (handles path conversion automatically)
+npm test
+npm run test:unit
+npm run test:e2e
+```
+
+**✅ Alternative - Disable Path Conversion:**
+```bash
+# If running vitest/playwright directly in Git Bash
+MSYS_NO_PATHCONV=1 vitest run
+MSYS_NO_PATHCONV=1 playwright test
+```
+
+**⚠️ Direct Commands May Have Issues:**
+```bash
+# May encounter path conversion issues in Git Bash
+vitest run
+playwright test
+```
+
+### Common Git Bash Issues
+
+**Issue: "No such file or directory" errors**
+```bash
+# Solution: Use npm scripts
+npm test
+
+# Or disable path conversion
+MSYS_NO_PATHCONV=1 npm test
+```
+
+**Issue: Test files not found**
+- Ensure vitest.config.js uses relative paths
+- Check that include patterns use forward slashes: `tests/unit/**/*.test.js`
+- Avoid absolute paths starting with /c/ or C:\
+
+**Issue: Playwright browser launch failures**
+```bash
+# Clear interfering environment variables
+unset DISPLAY
+npm run test:e2e
+```
+
+### Shell Detection
+
+Tests can detect Git Bash environment if needed:
+
+```javascript
+// In test setup or configuration
+function isGitBash() {
+  return !!(process.env.MSYSTEM); // MINGW64, MINGW32, MSYS
+}
+
+if (isGitBash()) {
+  console.log('Running tests in Git Bash/MINGW');
+}
+```
+
+For comprehensive Windows/Git Bash testing guidance, see `skills/windows-git-bash-testing.md`.
