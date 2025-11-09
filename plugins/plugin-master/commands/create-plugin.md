@@ -57,7 +57,13 @@ Guides Claude through the complete plugin creation workflow: fetching latest doc
    - Configure hooks for automated validation and testing
    - Support repository-level plugin configuration via .claude/settings.json
    - Use ${CLAUDE_PLUGIN_ROOT} environment variable for portable paths
-6. **Validate** - Ensure plugin.json schema is correct (author as object, version as string, keywords as array)
+6. **Validate plugin.json schema** - **CRITICAL RULES**:
+   - ✅ `repository` must be a **string URL**, NOT an object
+   - ✅ `agents` field is **NOT needed** - auto-discovered from `agents/` directory
+   - ✅ `skills` field is **NOT needed** - auto-discovered from `skills/` directory
+   - ✅ `commands` field is **optional** - auto-discovered from `commands/` directory by default
+   - ✅ Only include: name, version, description, author (object), homepage, repository (string), license, keywords (array)
+   - ❌ NEVER include `agents: {...}` or `skills: {...}` in plugin.json - these cause validation errors
 7. **CRITICAL: Update BOTH marketplace files**:
    - Update `.claude-plugin/marketplace.json` (if exists) - Add plugin entry to plugins array
    - Update `README.md` - Add plugin to appropriate category
@@ -66,8 +72,30 @@ Guides Claude through the complete plugin creation workflow: fetching latest doc
 
 ## Best Practices
 
-- Default to action, not questions - infer intent from context
-- Include commands, agents, Agent Skills, and README by default for comprehensive plugins
+### Plugin Design Philosophy (2025)
+
+**Agent-First, Minimal Commands:**
+- **Primary interface:** Expert agent that users interact with conversationally
+- **Minimal commands:** Only 0-2 slash commands per plugin for specific, high-value workflows
+- **Why:** Users want to invoke domain expertise, not navigate command menus
+- **Commands only for:** Automated workflows, batch operations, or specialized utilities
+- **Agent handles:** Questions, guidance, code generation, troubleshooting, best practices
+
+**Agent Naming Standard:**
+- **CRITICAL:** Every plugin must have exactly ONE primary agent named `{domain}-expert`
+- **Pattern:** `docker-master` → agent named `docker-expert`
+- **Pattern:** `terraform-master` → agent named `terraform-expert`
+- **Why:** Predictable names allow Claude to reliably invoke the correct agent
+- **Never:** Use multiple specialized agents or non-standard names
+
+**Examples:**
+- ✅ `dotnet-microservices-master`: 0 commands, 1 agent (`dotnet-microservices-expert`)
+- ✅ `docker-master`: 0 commands, 1 agent (`docker-expert`)
+- ❌ OLD: 10+ commands + multiple agents - overwhelming and unpredictable!
+
+**Default to action, not questions** - infer intent from context
+- Include agent and Agent Skills by default
+- Commands only when genuinely needed for automation
 - Use detected git config values for author fields (never use placeholders)
 - Create in plugins/ subdirectory if marketplace.json exists at repo root
 - **ALWAYS update `.claude-plugin/marketplace.json` when adding plugins to a marketplace repository**

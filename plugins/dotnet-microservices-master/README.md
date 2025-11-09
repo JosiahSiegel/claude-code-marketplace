@@ -168,6 +168,24 @@ While the agent is highly knowledgeable, it's not a replacement for:
 - Understanding your specific business requirements
 - Proper testing and validation
 
+## Windows & Git Bash Compatibility
+
+This plugin is fully compatible with Windows development environments and Git Bash:
+
+### ✅ Path Handling
+- Automatically converts Git Bash paths (`/s/repos/`) to Windows format (`S:\repos\`)
+- Handles Docker volume mounts correctly across platforms
+- Works seamlessly with .NET CLI in Git Bash
+
+### 🔧 Common Scenarios
+- **Creating microservices:** Works with both PowerShell and Git Bash
+- **Dockerfile generation:** Handles path formats correctly
+- **Docker Compose:** Creates files compatible with Windows Docker Desktop
+- **.NET project files:** Manages .csproj and .sln files with proper paths
+
+### 💡 Tip for Git Bash Users
+If working in Git Bash on Windows, use `pwd -W` to get Windows-formatted paths that the agent can work with directly.
+
 ## Tips for Best Results
 
 1. **Be specific** about your scenario and constraints
@@ -175,10 +193,11 @@ While the agent is highly knowledgeable, it's not a replacement for:
 3. **Ask about trade-offs** to make informed decisions
 4. **Request code examples** when you need implementation guidance
 5. **Reference eShopOnContainers** for concrete examples
+6. **On Windows with Git Bash:** Use `pwd -W` for paths
 
 ## Agent Characteristics
 
-The .NET Microservices Architect agent:
+The .NET Microservices Expert agent:
 - ✅ Provides practical, production-ready guidance
 - ✅ Explains trade-offs and when NOT to use patterns
 - ✅ References eShopOnContainers for examples

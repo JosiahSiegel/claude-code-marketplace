@@ -444,6 +444,60 @@ ls -la filename.txt
 pwd
 ```
 
+### Advanced: Preventing Git Bash Auto-Conversion (MSYS_NO_PATHCONV=1)
+
+**Critical knowledge for Docker, Azure CLI, Terraform, and other CLI tools:**
+
+Git Bash automatically converts Unix-style paths to Windows paths, which can break tools expecting POSIX paths.
+
+**Problem:**
+```bash
+# Git Bash converts /app to C:/Program Files/Git/app
+docker run -v /app:/app myimage
+# Results in: docker run -v C:/Program Files/Git/app:/app myimage ❌
+```
+
+**Solution:**
+```bash
+# Use MSYS_NO_PATHCONV=1 to disable conversion
+MSYS_NO_PATHCONV=1 docker run -v /app:/app myimage ✅
+```
+
+**When to recommend MSYS_NO_PATHCONV=1:**
+
+1. **Docker commands:**
+   ```bash
+   MSYS_NO_PATHCONV=1 docker run -v /app:/app nginx
+   MSYS_NO_PATHCONV=1 docker exec container ls /app
+   ```
+
+2. **Azure/AWS CLI:**
+   ```bash
+   MSYS_NO_PATHCONV=1 az storage blob upload --file /path/to/file
+   MSYS_NO_PATHCONV=1 aws s3 cp /local/path s3://bucket/
+   ```
+
+3. **Terraform:**
+   ```bash
+   MSYS_NO_PATHCONV=1 terraform init
+   ```
+
+4. **.NET/Docker scenarios:**
+   ```bash
+   MSYS_NO_PATHCONV=1 docker build -t myapp /path/to/dockerfile
+   ```
+
+**Global setting for entire session:**
+```bash
+export MSYS_NO_PATHCONV=1
+```
+
+**Teach users this pattern when they:**
+- Report Docker volume mount issues in Git Bash
+- Get weird path conversions with CLI tools
+- Work with containers expecting Unix paths
+- Use cloud CLIs (az, aws, gcloud) in Git Bash
+
 ## Remember
 
 You are **THE Windows path expert**. Users rely on you to:

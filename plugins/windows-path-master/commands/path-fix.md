@@ -203,6 +203,67 @@ Then execute the intended file operation using the converted path.
 **This conversion is automatic when you use the /path-fix command!**
 ```
 
+### Step 8: Prevent Automatic Path Conversion (Advanced)
+
+**For command-line operations that need POSIX paths:**
+
+When running commands in Git Bash that interact with tools expecting Unix-style paths (like Docker, WSL tools, or certain CLIs), Git Bash may automatically convert paths, which can cause issues.
+
+**Use MSYS_NO_PATHCONV=1 to disable automatic conversion:**
+
+```bash
+# Problem: Git Bash converts /app to C:/Program Files/Git/app
+docker run -v /app:/app myimage
+
+# Solution: Disable path conversion for this command
+MSYS_NO_PATHCONV=1 docker run -v /app:/app myimage
+```
+
+**Common scenarios where MSYS_NO_PATHCONV=1 is needed:**
+
+1. **Docker volume mounts:**
+   ```bash
+   # ✅ Correct
+   MSYS_NO_PATHCONV=1 docker run -v /app:/app nginx
+
+   # ❌ Wrong - Git Bash converts /app to C:/Program Files/Git/app
+   docker run -v /app:/app nginx
+   ```
+
+2. **Docker exec commands:**
+   ```bash
+   MSYS_NO_PATHCONV=1 docker exec container ls /app
+   ```
+
+3. **Azure CLI with paths:**
+   ```bash
+   MSYS_NO_PATHCONV=1 az storage blob upload --file /path/to/file
+   ```
+
+4. **Terraform with module sources:**
+   ```bash
+   MSYS_NO_PATHCONV=1 terraform init
+   ```
+
+**When to recommend MSYS_NO_PATHCONV=1:**
+- User reports Docker commands failing with weird paths
+- Commands expecting Unix paths get Windows paths instead
+- Azure CLI, AWS CLI, or other cloud tools show path errors
+- Terraform or other IaC tools fail with path conversion issues
+
+**Example explanation for users:**
+```
+💡 Pro Tip for Git Bash Users:
+
+Git Bash automatically converts Unix-style paths to Windows paths, which can
+break Docker and other tools. Use MSYS_NO_PATHCONV=1 to prevent this:
+
+MSYS_NO_PATHCONV=1 docker run -v /app:/app myimage
+
+Or set it globally for your Git Bash session:
+export MSYS_NO_PATHCONV=1
+```
+
 ## Common Scenarios
 
 ### Scenario 1: User Reports "File Not Found" Error

@@ -74,6 +74,52 @@ WebFetch: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
 3. Use skill templates as starting points only
 4. Follow official structure from docs
 
+### 🎨 Plugin Design Philosophy (2025)
+
+**Agent-First, Minimal Commands:**
+
+Users want **domain experts**, not command menus. The 2025 plugin design prioritizes conversational interaction with expert agents over memorizing slash commands.
+
+**Core Principles:**
+1. **Primary Interface = Expert Agent** - Users interact conversationally with domain expert
+2. **Commands = 0-2 max** - Only for automation workflows, batch operations, or high-value utilities
+3. **Why?** Users don't want to be "overly precise" about which command to call - they want to ask the expert
+
+**Good Plugin Structure:**
+```
+✅ dotnet-microservices-master:
+   - 1 agent: dotnet-microservices-expert (predictable name)
+   - 0 commands (all interaction conversational)
+
+✅ docker-master:
+   - 1 agent: docker-expert (follows {domain}-expert pattern)
+   - 0 commands (expert handles everything)
+
+❌ OLD: 10+ commands + multiple agents
+   - Overwhelming menu of commands
+   - Unpredictable agent names
+   - Breaks conversational flow
+```
+
+**Agent Naming Standard (CRITICAL):**
+- **Pattern:** Every plugin has exactly ONE agent named `{domain}-expert`
+- **Examples:**
+  - `terraform-master` → `terraform-expert`
+  - `test-master` → `test-expert`
+  - `azure-master` → `azure-expert`
+- **Why:** Predictable names allow Claude to reliably guess and invoke the correct agent
+- **Never:** Create multiple specialized agents or use non-standard names
+
+**When to Create Commands:**
+- ✅ Automated workflows (e.g., `/terraform:init-workspace` - sets up complete environment)
+- ✅ Batch operations (e.g., `/docker:cleanup-all` - removes unused resources)
+- ✅ High-value utilities (e.g., `/git:safe-rebase` - interactive with guardrails)
+- ❌ Individual operations that agent can handle conversationally
+- ❌ Simple questions or guidance requests
+- ❌ Code generation (agent does this better)
+
+**Default:** When creating plugins, create 1 expert agent + 0 commands unless automation workflows are explicitly needed.
+
 ### Component Discovery (2025)
 
 **Convention over configuration:** Commands, agents, and Agent Skills are auto-discovered from their respective directories. Custom paths optional via plugin.json. See advanced-features-2025 skill for complete details.
@@ -81,36 +127,37 @@ WebFetch: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
 ### Autonomous Creation Principles
 
 1. **Default to action, not questions** - If you can infer what they want, just build it
-2. **Be comprehensive** - Include commands, agents, skills, and README by default
+2. **Agent-First Design (2025)** - Primary interface is expert agent, minimal slash commands (0-2 max)
 3. **Make it work** - Create functional examples, not placeholders
 4. **Infer intelligently** - Derive name, purpose, and components from their request
 5. **Only ask when truly unclear** - If "create a plugin" has no context, then ask. Otherwise, build.
 6. **Write comprehensive descriptions** - Use "PROACTIVELY activate for:" with numbered use cases, highlight ALL capabilities
 7. **Choose smart keywords** - Simple domain words (6-10), avoid overly generic terms, no unnecessary hyphens
 8. **Position as expert systems** - Frame as "Complete [domain] expertise system" not narrow helpers
-9. **🚨 CRITICAL: Detect repository context FIRST** - Before creating any files, run git commands to extract author name/email from git config, and check if `.claude-plugin/marketplace.json` exists in the repo root.
-10. **🚨 CRITICAL: Use detected values automatically** - Use git config values for author fields instead of placeholders. If in marketplace repo, use the marketplace owner name for consistency.
-11. **Synchronize marketplace.json** - Always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
+9. **Commands sparingly** - Only create commands for: batch operations, automation workflows, or high-value utilities. Most interaction through agent.
+10. **🚨 CRITICAL: Detect repository context FIRST** - Before creating any files, run git commands to extract author name/email from git config, and check if `.claude-plugin/marketplace.json` exists in the repo root.
+11. **🚨 CRITICAL: Use detected values automatically** - Use git config values for author fields instead of placeholders. If in marketplace repo, use the marketplace owner name for consistency.
+12. **Synchronize marketplace.json** - Always update marketplace.json with the SAME description and keywords from plugin.json (they don't auto-sync!)
 
 ### Examples of Autonomous Inference
 
 **User says:** "Create a plugin for Git workflows"
-**Claude does:** Immediately creates git-workflow-helper with:
+**Claude does:** Immediately creates git-workflow-master with:
 - **Description:** "Complete Git workflow automation system. PROACTIVELY activate for: (1) ANY Git workflow task, (2) Pull request management, (3) Commit operations, (4) Branch management, (5) Code review automation. Provides: PR creation/review, commit templates, branch strategies, Git hooks integration, and workflow automation. Ensures professional Git practices."
 - **Keywords:** `["git", "workflow", "pullrequest", "commit", "branch", "review", "automation"]`
-- PR, commit, and branch commands + workflow agent
+- **Components:** 1 expert agent + 0-1 commands (e.g., automated PR creation workflow)
 
 **User says:** "Make a deployment plugin"
-**Claude does:** Creates deployment-helper with:
+**Claude does:** Creates deployment-master with:
 - **Description:** "Complete deployment automation system across ALL platforms. PROACTIVELY activate for: (1) ANY deployment task, (2) Production releases, (3) Rollback operations, (4) Deployment verification, (5) Blue-green/canary strategies. Provides: automated deployment, rollback safety, health checks, multi-environment support, and deployment orchestration. Ensures safe, reliable deployments."
 - **Keywords:** `["deployment", "deploy", "release", "rollback", "production", "staging", "automation"]`
-- deploy, rollback, status commands + deployment agent
+- **Components:** 1 expert agent + 0-2 commands (e.g., automated deploy, automated rollback)
 
-**User says:** "Build a code review plugin"
-**Claude does:** Creates code-review-helper with:
-- **Description:** "Complete code review system with security and quality analysis. PROACTIVELY activate for: (1) ANY code review task, (2) Security scanning, (3) Quality assessment, (4) Pull request reviews, (5) Code standards enforcement. Provides: automated security analysis, quality metrics, best practice checks, vulnerability scanning, and comprehensive review workflows. Ensures thorough, consistent code reviews."
-- **Keywords:** `["review", "codereview", "security", "quality", "analysis", "scanning", "pullrequest"]`
-- review commands + security/quality agents
+**User says:** "Build a .NET microservices expert"
+**Claude does:** Creates dotnet-microservices-master with:
+- **Description:** "Expert agent on .NET microservices architecture, containerization, Docker, DDD, CQRS, and cloud-native patterns based on Microsoft's official guide..."
+- **Keywords:** `[".net", "microservices", "docker", "containers", "kubernetes", "ddd", "cqrs", "architecture"]`
+- **Components:** 1 expert agent + 0 commands (all interaction conversational)
 
 **When to ask:** "Create a plugin" (no context) → Ask what it should do
 

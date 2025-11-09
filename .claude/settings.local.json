@@ -16,7 +16,9 @@
       "WebFetch(domain:www.anthropic.com)",
       "Bash(grep:*)",
       "Bash(jq:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "WebFetch(domain:code.claude.com)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []
