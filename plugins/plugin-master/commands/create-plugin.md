@@ -58,7 +58,10 @@ Guides Claude through the complete plugin creation workflow: fetching latest doc
    - Support repository-level plugin configuration via .claude/settings.json
    - Use ${CLAUDE_PLUGIN_ROOT} environment variable for portable paths
 6. **Validate** - Ensure plugin.json schema is correct (author as object, version as string, keywords as array)
-7. **Update marketplace.json** if creating in an existing marketplace repository
+7. **CRITICAL: Update BOTH marketplace files**:
+   - Update `.claude-plugin/marketplace.json` (if exists) - Add plugin entry to plugins array
+   - Update `README.md` - Add plugin to appropriate category
+   - Synchronize descriptions and keywords between both files
 8. **Provide clear instructions** for GitHub-first installation and repository-level configuration
 
 ## Best Practices
@@ -67,7 +70,8 @@ Guides Claude through the complete plugin creation workflow: fetching latest doc
 - Include commands, agents, Agent Skills, and README by default for comprehensive plugins
 - Use detected git config values for author fields (never use placeholders)
 - Create in plugins/ subdirectory if marketplace.json exists at repo root
-- Synchronize descriptions and keywords between plugin.json and marketplace.json
+- **ALWAYS update `.claude-plugin/marketplace.json` when adding plugins to a marketplace repository**
+- Synchronize descriptions and keywords between plugin.json, marketplace.json, and README.md
 - Add hooks for common automation needs (testing, linting, validation)
 - Use ${CLAUDE_PLUGIN_ROOT} for all internal paths (scripts, configs, MCP servers)
 - Include .claude/settings.json template for team distribution

@@ -44,6 +44,10 @@
 
 - **[test-master](./plugins/test-master)** `v1.6.0` ([Docs](./plugins/test-master/README.md)) - Vitest 4.0 + Playwright 1.56 AI agents with Windows/Git Bash test execution compatibility and cross-platform testing
 
+### Backend & Microservices
+
+- **[dotnet-microservices-master](./plugins/dotnet-microservices-master)** `v1.0.0` ([Docs](./plugins/dotnet-microservices-master/README.md)) - .NET microservices architecture expert with Docker, DDD, CQRS, and cloud-native patterns based on Microsoft's official guide
+
 ### Database & Data
 
 - **[ssdt-master](./plugins/ssdt-master)** `v1.6.0` ([Docs](./plugins/ssdt-master/README.md)) - SQL Server with Git Bash SqlPackage compatibility, path conversion for database deployments, and Windows shell detection

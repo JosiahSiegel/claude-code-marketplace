@@ -15,7 +15,8 @@
       "mcp__context7__resolve-library-id",
       "WebFetch(domain:www.anthropic.com)",
       "Bash(grep:*)",
-      "Bash(jq:*)"
+      "Bash(jq:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []

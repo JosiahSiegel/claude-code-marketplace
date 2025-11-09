@@ -402,6 +402,32 @@
         "filepath",
         "crossplatform"
       ]
+    },
+    {
+      "name": "dotnet-microservices-master",
+      "source": "./plugins/dotnet-microservices-master",
+      "description": "Expert agent on .NET microservices architecture, containerization, Docker, DDD, CQRS, and cloud-native patterns based on Microsoft's official guide. PROACTIVELY activate for: (1) ANY .NET microservices architecture task, (2) Docker containerization for .NET applications, (3) Domain-Driven Design (DDD) tactical and strategic patterns, (4) CQRS and Event Sourcing implementation, (5) Microservices communication patterns (sync/async), (6) API Gateway design with Ocelot, (7) Event-driven architecture with message brokers, (8) Resilience patterns (Circuit Breaker, Retry, Bulkhead) with Polly, (9) Entity Framework Core and Dapper for CQRS, (10) Kubernetes and Azure deployment strategies, (11) eShopOnContainers reference application guidance. Provides: comprehensive Microsoft .NET Microservices Architecture guide (v7.0), 350-page reference material via Agent Skill, Docker and container fundamentals, .NET 7+ best practices, microservices design patterns, DDD aggregate and repository patterns, CQRS read/write model separation, integration events and event bus patterns, security with IdentityServer and OAuth 2.0, health checks and monitoring, production-ready architecture guidance. Ensures scalable, resilient, maintainable microservices systems using .NET and Docker following Microsoft official guidance.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Josiah Siegel"
+      },
+      "keywords": [
+        ".net",
+        "microservices",
+        "docker",
+        "containers",
+        "kubernetes",
+        "ddd",
+        "cqrs",
+        "architecture",
+        "azure",
+        "eshop",
+        "event-driven",
+        "resilience",
+        "polly",
+        "ocelot",
+        "entityframework"
+      ]
     }
   ]
 }
