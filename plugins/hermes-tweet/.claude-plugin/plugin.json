@@ -1,0 +1,28 @@
+{
+  "name": "hermes-tweet",
+  "version": "1.0.0",
+  "description": "Hermes Agent X/Twitter automation guidance through Hermes Tweet and Xquik. PROACTIVELY activate for Hermes Tweet installs, XQUIK_API_KEY setup, tweet_explore/read/action routing, social monitoring, and action-gated posting workflows. Provides public-safe setup, safety checks, and troubleshooting.",
+  "author": {
+    "name": "Burak",
+    "email": "kriptoburak@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/Xquik-dev/hermes-tweet",
+  "repository": "https://github.com/Xquik-dev/hermes-tweet",
+  "license": "MIT",
+  "keywords": [
+    "hermes",
+    "hermes-agent",
+    "x",
+    "twitter",
+    "tweet",
+    "xquik",
+    "automation",
+    "social",
+    "plugin",
+    "api",
+    "safety"
+  ],
+  "skills": {
+    "hermes-tweet-knowledge": "./skills/hermes-tweet-knowledge"
+  }
+}

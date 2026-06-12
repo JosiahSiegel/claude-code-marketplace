@@ -310,6 +310,28 @@
       ]
     },
     {
+      "name": "hermes-tweet",
+      "source": "./plugins/hermes-tweet",
+      "description": "Hermes Agent X/Twitter automation guidance through Hermes Tweet and Xquik. PROACTIVELY activate for Hermes Tweet installs, XQUIK_API_KEY setup, tweet_explore/read/action routing, social monitoring, and action-gated posting workflows. Provides public-safe setup, safety checks, and troubleshooting.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Burak"
+      },
+      "keywords": [
+        "hermes",
+        "hermes-agent",
+        "x",
+        "twitter",
+        "tweet",
+        "xquik",
+        "automation",
+        "social",
+        "plugin",
+        "api",
+        "safety"
+      ]
+    },
+    {
       "name": "terraform-master",
       "source": "./plugins/terraform-master",
       "description": "Complete Terraform expertise for Azure, AWS, and Google Cloud. PROACTIVELY activate for: (1) any Terraform task (init/plan/apply/validate), (2) IaC design, (3) resource import and state management, (4) multi-environment architectures, (5) CI/CD integration, (6) security scanning, (7) version-aware code generation, (8) CLI mastery. Provides: provider knowledge (AzureRM/AWS/GCP), state operations, bulk import (Terraformer/aztfexport), tfsec/Checkov, enterprise patterns, full CLI reference.",

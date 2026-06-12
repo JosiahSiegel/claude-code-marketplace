@@ -44,6 +44,7 @@ Plugin versions are defined in [`.claude-plugin/marketplace.json`](./.claude-plu
 
 - **[bash-master](./plugins/bash-master)** ([Docs](./plugins/bash-master/README.md)) - Bash and shell scripting, ShellCheck guidance, POSIX portability, security-first patterns, and cross-platform execution.
 - **[powershell-master](./plugins/powershell-master)** ([Docs](./plugins/powershell-master/README.md)) - PowerShell scripting, modules, CI/CD automation, cloud administration, debugging, and cross-platform patterns.
+- **[hermes-tweet](./plugins/hermes-tweet)** ([Docs](./plugins/hermes-tweet/README.md)) - Hermes Agent X/Twitter automation with Xquik setup, tweet_explore/read/action routing, and action-gated safety checks.
 
 ### Testing and quality
 
