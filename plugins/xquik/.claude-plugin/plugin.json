@@ -1,0 +1,23 @@
+{
+  "name": "xquik",
+  "version": "0.1.0",
+  "description": "Xquik X data workflow plugin for REST API, MCP, webhooks, SDKs, monitoring, exports, and confirmation-gated actions. PROACTIVELY activate for X profile, post, search, media, monitoring, and agent workflow tasks.",
+  "author": {
+    "name": "Xquik"
+  },
+  "homepage": "https://docs.xquik.com",
+  "repository": "https://github.com/Xquik-dev/x-twitter-scraper",
+  "license": "MIT",
+  "keywords": [
+    "xquik",
+    "x",
+    "twitter",
+    "social-data",
+    "api",
+    "mcp",
+    "webhooks",
+    "monitoring",
+    "exports",
+    "sdk"
+  ]
+}
