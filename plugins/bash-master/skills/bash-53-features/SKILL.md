@@ -49,52 +49,72 @@ Bash 5.3 (released July 2025) introduces significant new features that improve p
 **New: ${ command; } syntax** - Executes without forking a subshell (runs in current shell context):
 
 ```bash
-# OLD way (Bash < 5.3) - Creates subshell
+# (Bash < 5.3) - Creates subshell
 output=$(expensive_command)
 
-# NEW way (Bash 5.3+) - Runs in current shell, faster
+# (Bash 5.3+) - Bash code runs in the current shell. Stdout is redirected to a memfd. For external commands there is no advantage.
 output=${ expensive_command; }
 ```
 
-**Benefits:**
-- No subshell overhead (faster)
-- Preserves variable scope
-- Better performance in loops
+**Wrong example:**
+- the shell will fork and directly exec wc in both cases.
+- No shell state to isolate means the `${ ...; }` is pointless.
+- No performance advantage. memfd creation is likely slightly slower. Bash falls back to temp files if memfds are unsupported.
+- Syntax is not backwards compatible.
 
 **Example:**
 ```bash
 #!/usr/bin/env bash
 
-# Traditional approach
+# normal comsub
 count=0
 for file in *.txt; do
-    lines=$(wc -l < "$file")  # Subshell created
+    lines=$(wc -l < "$file")  # forks and execs wc
     ((count += lines))
 done
 
-# Bash 5.3 approach (faster)
+# pointless use of ${ ; }
 count=0
 for file in *.txt; do
-    lines=${ wc -l < "$file"; }  # No subshell
+    lines=${ wc -l < "$file"; }  # identical
     ((count += lines))
 done
 ```
 
+2 x `clone()` and 2 x `execve()` each.
+```bash
+ $ ( for c in 'printf %s\\n {0..9} | x=$(wc -l)' 'printf %s\\n {0..9} | x=${ wc -l; }'; do strace --seccomp-bpf -cDDqqqfe t=%process,pipe2,memfd_create bash -O lastpipe -c "$c"; echo; done )
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 84.26    0.000091          45         2           clone
+  8.33    0.000009           2         4         1 wait4
+  7.41    0.000008           4         2           pipe2
+  0.00    0.000000           0         2           execve
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000108          10        10         1 total
+
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 57.79    0.000167          83         2           execve
+ 33.91    0.000098          49         2           clone
+  4.84    0.000014           4         3         1 wait4
+  1.73    0.000005           5         1           pipe2
+  1.73    0.000005           5         1           memfd_create
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000289          32         9         1 total
+```
+
 ### 2. REPLY Variable Command Substitution
 
-**New: ${| command; } syntax** - Stores result in REPLY variable:
+**New: ${| command; } syntax** - Expands the value of REPLY:
 
 ```bash
 # Runs command, result goes to $REPLY automatically
-${| complex_calculation; }
-echo "Result: $REPLY"
+printf %s\\n "${|(( REPLY = complex_calculation * 42))}"
 
-# Multiple operations
-${|
-    local_var="processing"
-    echo "$local_var: $((42 * 2))"
-}
-echo "Got: $REPLY"
+# Multiple commands using a locally scoped variable.
+printf 'Got: %s\n' "${| typeset local_var=processing; printf -v REPLY '%s: %s' "$local_var" "$((42 * 2))"; }"
 ```
 
 **Use Cases:**
@@ -144,15 +164,15 @@ source -p "$CUSTOM_PATH" database.sh
 
 ### 5. Enhanced `compgen` Builtin
 
-**New: Variable output option** - Store completions in variable:
+**New: Variable output option** - Store completions in indexed array:
 
 ```bash
 # OLD way - Output to stdout
 completions=$(compgen -f)
 
-# NEW way - Directly to variable
-compgen -v completions_var -f
-# Results now in $completions_var
+# NEW way - Assigns directly to array variable
+compgen -V completions_var -f
+# Results now in completions_var
 ```
 
 **Benefits:**
@@ -223,11 +243,11 @@ trap handle_signal SIGTERM SIGINT SIGHUP
 enable -f /usr/lib/bash/fltexpr fltexpr
 
 # Perform calculations
-fltexpr result = 42.5 * 1.5
+fltexpr 'result = 42.5 * 1.5'
 echo "$result"  # 63.75
 
 # Complex expressions
-fltexpr pi_area = 3.14159 * 5 * 5
+printf 'Area: %f\\n' "${| fltexpr 'REPLY = 3.14159 * 5 * 5'; }"
 echo "Area: $pi_area"
 ```
 
@@ -398,68 +418,6 @@ process_items() {
         echo "$result"
     done
 }
-```
-
-## Real-World Examples
-
-### Fast Log Parser
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Parse log file (Bash 5.3 optimized)
-parse_log() {
-    local file="$1"
-    local stats_errors=0
-    local stats_warnings=0
-    local stats_lines=0
-
-    while IFS= read -r line; do
-        ((stats_lines++))
-
-        # Fast pattern matching (no subshell)
-        ${| grep -q "ERROR" <<< "$line"; } && ((stats_errors++))
-        ${| grep -q "WARN" <<< "$line"; }  && ((stats_warnings++))
-    done < "$file"
-
-    echo "Lines: $stats_lines, Errors: $stats_errors, Warnings: $stats_warnings"
-}
-
-parse_log /var/log/application.log
-```
-
-### Interactive Configuration
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Interactive setup with readline
-setup_config() {
-    echo "Configuration Setup"
-    echo "==================="
-
-    # Tab completion for paths
-    read -E -p "Data directory: " data_dir
-    read -E -p "Config file: " config_file
-
-    # Validate and store
-    ${|
-        [[ -d "$data_dir" ]] && echo "valid" || echo "invalid"
-    }
-
-    if [[ "$REPLY" == "valid" ]]; then
-        echo "DATA_DIR=$data_dir" > config.env
-        echo "CONFIG_FILE=$config_file" >> config.env
-        echo "✓ Configuration saved"
-    else
-        echo "✗ Invalid directory" >&2
-        return 1
-    fi
-}
-
-setup_config
 ```
 
 ## Resources
