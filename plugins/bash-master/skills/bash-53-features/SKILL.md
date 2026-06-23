@@ -46,23 +46,27 @@ Bash 5.3 (released July 2025) introduces significant new features that improve p
 
 ### 1. In-Shell Command Substitution
 
-**New: ${ command; } syntax** - Executes without forking a subshell (runs in current shell context):
+**New: ${ command; } syntax** - "nofork comsub" - Executes without forking a subshell (runs in current shell context):
 
 ```bash
 # (Bash < 5.3) - Creates subshell
-output=$(expensive_command)
+var=$(cmds...)
 
 # (Bash 5.3+) - Bash code runs in the current shell. Stdout is redirected to a memfd. For external commands there is no advantage.
-output=${ expensive_command; }
+var=${ cmds...; }
 ```
+**When to use:**
+- For running "native" bash code in the current shell environment - capturing and expanding output.
+- Useful for builtins that only write a result to stdout and cannot perform direct assignments. E.g. `
 
-**Wrong example:**
-- the shell will fork and directly exec wc in both cases.
+**When not to use:**
+- Single external command invocations where no side-effects to the shell environment need to be propagated.
+- the shell will fork and directly exec wc in both cases below
 - No shell state to isolate means the `${ ...; }` is pointless.
 - No performance advantage. memfd creation is likely slightly slower. Bash falls back to temp files if memfds are unsupported.
 - Syntax is not backwards compatible.
 
-**Example:**
+**Bad Example:**
 ```bash
 #!/usr/bin/env bash
 
@@ -104,6 +108,69 @@ done
 ------ ----------- ----------- --------- --------- ----------------
 100.00    0.000289          32         9         1 total
 ```
+
+** Advanced I/O **
+Example 1: stealing the output fd
+
+Since there's no subshell, nothing stops us from repurposing the output fd we're expected to be writing to.
+```bash
+( bash -x /proc/self/fd/9 9<<\_EOF )
+function f {
+        typeset x y z=moo
+        local -p ${ exec 3<&1; } ${| exec <&3-; } 1<&0
+        ksh -c "exec <##(())" # lseek()
+        cat
+}
+f
+_EOF
++ f
++ typeset x y z=moo
+++ exec
+++ exec
++ local -p
++ ksh -c 'exec <##(())'
++ cat
+declare -- x
+declare -- y
+declare -- z="moo"
+```
+
+Note: bash does ruin the fun by calling `memfd_create` with `MFD_NOEXEC_SEAL`, which means it can never be `exec`'d, and since the seal is sealed on creation this is irreversable.
+
+Example 2: pipe -> memfd zero-copy splice
+
+```bash
+ $ time ( echo; bash /proc/self/fd/9 9<<\_EOF 8<<\_EOF )
+shopt -s lastpipe
+{
+        pipesz -n 1
+        pipesz -gn 3 3<&1 1<&2;
+        head -c "$(( 4 * 2 ** 31 ))" </dev/urandom
+} | len=${ python3 /proc/self/fd/8 "${| ${ exec {REPLY}<&1; }; }"; } fd=$_ || exit # Inner assignment to `REPLY` falls through to ${|; }
+printf 'bytes copied: %d\n' "$len"
+lsfd -p "$BASHPID" -Q "FD==${fd}" -o +flags,pos,size
+exec {fd}<&-
+_EOF
+from os import (splice, lseek, fsencode, isatty, SEEK_SET)
+from sys import (stdout, argv, exit)
+s = 0
+try: stdout.buffer.write(fsencode(str(sum(iter(lambda: splice(0, int(argv[1]), 2 ** 31), 0))) + ("\n" * isatty(1))))
+except: s = 1
+lseek(int(argv[1]), 0, SEEK_SET)
+exit(s)
+_EOF
+
+fd 3    1048576 0
+bytes copied: 8589934592
+COMMAND     PID   USER ASSOC  XMODE TYPE SOURCE MNTID     INODE NAME                      FLAGS POS       SIZE
+bash    1029883 ormaaj    10 rw-D--  REG    0:1     0 139515462 /memfd:anonopen  rdwr,largefile   0 8589934592
+
+real    0m20.290s
+user    0m1.605s
+sys     0m23.344s
+```
+
+The end result is a seekable read/write `$fd` containing everything that was in the pipe, with the total read bytes captured into `$len`. Bash has the seek position rewound to zero so the shell is free to use it as it wants. 
 
 ### 2. REPLY Variable Command Substitution
 
